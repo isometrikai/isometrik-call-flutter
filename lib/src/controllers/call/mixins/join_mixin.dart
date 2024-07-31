@@ -1,0 +1,286 @@
+part of '../call_controller.dart';
+
+mixin IsmCallJoinMixin {
+  IsmCallController get _controller => Get.find();
+
+  // Join a stream
+  Future<void> joinCall({
+    required String meetingId,
+    required IsmAcceptCallModel call,
+    required IsmCallUserInfoModel userInfo,
+    required IsmCallType callType,
+    String? imageUrl,
+    bool hdBroadcast = false,
+    bool callingOutSide = false,
+  }) async {
+    // Get the token for the stream based on whether the user is a host or not
+
+    var startTime = call.joinTime == null
+        ? DateTime.now()
+        : DateTime.fromMillisecondsSinceEpoch(call.joinTime!);
+    var now = DateTime.now();
+    _controller.callDuration = now.difference(startTime);
+
+    // Connect to the stream
+    await _connectStream(
+        meetingId: meetingId,
+        call: call,
+        imageUrl: imageUrl,
+        hdBroadcast: hdBroadcast,
+        userInfo: userInfo,
+        callType: callType,
+        callingOutSide: callingOutSide);
+  }
+
+  Future<void> _initializeTracks(
+    Room room, {
+    required IsmCallType callType,
+  }) async {
+    room.localParticipant?.setTrackSubscriptionPermissions(
+      allParticipantsAllowed: true,
+      trackPermissions: [
+        const ParticipantTrackPermission(
+          'allowed-identity',
+          true,
+          null,
+        ),
+      ],
+    );
+
+    unawaited(publishTracks(callType.trackType).then(
+      (_) => _enableTracks(callType.trackType),
+    ));
+    _controller.toggleSpeaker(true);
+  }
+
+  // Enable the user's video
+  Future<void> publishTracks(IsmCallTrackType trackType) async {
+    final tracks = await Future.wait([
+      if (trackType.hasAudio) ...[
+        LocalAudioTrack.create(),
+      ],
+      if (trackType.hasVideo) ...[
+        LocalVideoTrack.createCameraTrack(),
+      ],
+    ]);
+
+    LocalAudioTrack? localAudio;
+    LocalVideoTrack? localVideo;
+
+    if (trackType.hasAudio) {
+      localAudio = tracks[0] as LocalAudioTrack;
+    }
+    if (trackType.hasVideo) {
+      var index = trackType.hasAudio ? 1 : 0;
+      localVideo = tracks[index] as LocalVideoTrack;
+    }
+
+    await Future.wait<dynamic>([
+      if (trackType.hasAudio) ...[
+        _controller.room!.localParticipant!.publishAudioTrack(localAudio!),
+      ],
+      if (trackType.hasVideo && localVideo != null) ...[
+        _controller.room!.localParticipant!.publishVideoTrack(localVideo),
+      ],
+    ]);
+  }
+
+  Future<void> _enableTracks(IsmCallTrackType trackType) async {
+    await Future.wait<dynamic>([
+      if (trackType.hasVideo) ...[
+        _controller.room!.localParticipant!.setCameraEnabled(true),
+      ],
+      if (trackType.hasAudio) ...[
+        _controller.room!.localParticipant!.setMicrophoneEnabled(true),
+      ],
+    ]);
+  }
+
+  // Connect to the stream
+  Future<void> _connectStream({
+    required String meetingId,
+    required IsmAcceptCallModel call,
+    required IsmCallUserInfoModel userInfo,
+    required IsmCallType callType,
+    String? imageUrl,
+    bool hdBroadcast = false,
+    bool callingOutSide = false,
+  }) async {
+    final message =
+        Get.context?.translations?.joining ?? IsmCallStrings.joining;
+    IsmCallUtility.showLoader(message);
+
+    try {
+      final videoQuality = hdBroadcast
+          ? VideoParametersPresets.h720_169
+          : VideoParametersPresets.h540_169;
+      var room = Room(
+        roomOptions: RoomOptions(
+          defaultCameraCaptureOptions: CameraCaptureOptions(
+            cameraPosition: CameraPosition.front,
+            params: videoQuality,
+          ),
+          defaultAudioCaptureOptions: const AudioCaptureOptions(
+            noiseSuppression: true,
+            echoCancellation: true,
+            autoGainControl: true,
+            highPassFilter: true,
+            typingNoiseDetection: true,
+          ),
+          defaultVideoPublishOptions: VideoPublishOptions(
+            videoEncoding: videoQuality.encoding,
+          ),
+          defaultAudioPublishOptions: const AudioPublishOptions(
+            dtx: true,
+          ),
+        ),
+        connectOptions: ConnectOptions(
+          timeouts: Timeouts.defaultTimeouts.ismCallCopyWith(
+            connection: const Duration(seconds: 30),
+            peerConnection: const Duration(seconds: 30),
+            publish: const Duration(seconds: 30),
+            iceRestart: const Duration(seconds: 30),
+          ),
+        ),
+      );
+
+      _controller.room = room;
+
+      // Create a Listener before connecting
+      _controller.listener = room.createListener();
+
+      // Try to connect to the room
+      try {
+        unawaited(room
+            .connect(
+              IsmCallEndpoints.wsUrl,
+              call.rtcToken,
+            )
+            .then(
+              (_) => _initializeTracks(room, callType: callType),
+            ));
+      } catch (e, st) {
+        IsmCallLog.error(e, st);
+        IsmCallUtility.closeLoader();
+        return;
+      }
+
+      _controller.isVideoOn = callType.isVideo;
+
+      IsmCallUtility.closeLoader();
+
+      if (callingOutSide) {
+        unawaited(IsmCallUtility.playAudioFromAssets(Assets.callingMp3));
+      } else {
+        startStreamTimer();
+      }
+      _controller.isRemoteVideoLarge = true;
+      unawaited(
+        IsmCallRouteManagement.goToCall(
+          userInfo: userInfo,
+          audioOnly: !callType.isVideo,
+          meetingId: meetingId,
+        ),
+      );
+    } catch (e, st) {
+      IsmCallLog.error(e, st);
+    }
+  }
+
+  void startStreamTimer() {
+    _controller.$callTimer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        _controller.callDuration += const Duration(
+          seconds: 1,
+        );
+      },
+    );
+  }
+
+  // Function to set up event listeners
+  void setUpListeners(String meetingId) => _controller.listener
+    ?..on<RoomDisconnectedEvent>((event) async {
+      IsmCallLog.highlight('RoomDisconnectedEvent: $event');
+      if (event.reason == DisconnectReason.roomDeleted) {
+        IsmCallLog.success('Room Deleted');
+      }
+    })
+    ..on<ParticipantEvent>((event) {
+      IsmCallLog.highlight('ParticipantEvent: $event');
+      sortParticipants();
+    })
+    ..on<ParticipantDisconnectedEvent>((event) {
+      IsmCallLog.highlight('ParticipantDisconnectedEvent: $event');
+      final showOpponentLeft =
+          Get.context?.properties?.showOpponentLeft ?? true;
+      if (showOpponentLeft) {
+        final opponentLeft = Get.context?.translations?.opponentLeft ??
+            IsmCallStrings.opponentLeft;
+        IsmCallUtility.showToast(
+          opponentLeft,
+          color: Colors.orange,
+        );
+      }
+      _controller.disconnectCall(
+        meetingId: meetingId,
+        showAddNotes: true,
+      );
+    });
+
+  Future<void> sortParticipants() async {
+    _controller._participantDebouncer.run(_sortParticipants);
+  }
+
+  Future<void> _sortParticipants() async {
+    var userMediaTracks = <IsmCallParticipantTrack>[];
+
+    final localTracks = <TrackPublication>[
+      ...?_controller.room?.localParticipant?.videoTrackPublications,
+      ...?_controller.room?.localParticipant?.audioTrackPublications,
+    ];
+    for (final participant in _controller.room!.remoteParticipants.values) {
+      localTracks.addAll([
+        ...participant.videoTrackPublications,
+        ...participant.audioTrackPublications
+      ]);
+    }
+
+    var screenTracks = <IsmCallParticipantTrack>[];
+
+    for (var track in localTracks) {
+      final sid = track.participant.sid;
+      if (userMediaTracks.any((e) => e.id == sid) && !track.isScreenShare) {
+        var index = userMediaTracks.indexWhere((e) => e.id == sid);
+        var mediaTrack = userMediaTracks[index];
+        userMediaTracks[index] = mediaTrack.copyWith(
+          tracks: track.track != null
+              ? [...mediaTrack.tracks!, track.track!]
+              : null,
+        );
+      } else {
+        final screen = IsmCallParticipantTrack(
+          id: sid,
+          participant: track.participant,
+          tracks: track.track != null ? [track.track!] : [],
+          isScreenShare: track.isScreenShare,
+        );
+        if (track.isScreenShare) {
+          screenTracks.add(screen);
+        } else {
+          userMediaTracks.add(screen);
+        }
+      }
+    }
+    userMediaTracks.addAll(screenTracks);
+
+    if (_controller.participantTracks.length != userMediaTracks.length) {
+      _controller.showFullVideo = userMediaTracks.length != 1;
+      _controller.isRemoteVideoLarge = userMediaTracks.length >= 2;
+    }
+
+    _controller.participantTracks = [...userMediaTracks];
+
+    _controller.update([IsmCallView.updateId]);
+  }
+}

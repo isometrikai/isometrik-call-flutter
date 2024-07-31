@@ -20,10 +20,11 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    IsometrikCallFlutter isometrikCallFlutterPlugin = IsometrikCallFlutter();
+    IsmCall ismCallPlugin = IsmCall();
     MockIsometrikCallFlutterPlatform fakePlatform = MockIsometrikCallFlutterPlatform();
     IsometrikCallFlutterPlatform.instance = fakePlatform;
 
-    expect(await isometrikCallFlutterPlugin.getPlatformVersion(), '42');
+    expect(await ismCallPlugin.getPlatformVersion(), '42');
   });
 }
+

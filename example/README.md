@@ -1,6 +1,6 @@
-# isometrik_call_flutter_example
+# call_qwik_example
 
-Demonstrates how to use the isometrik_call_flutter plugin.
+Demonstrates how to use the call_qwik plugin.
 
 ## Getting Started
 

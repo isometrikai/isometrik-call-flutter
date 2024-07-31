@@ -14,6 +14,26 @@ dependencies:
     sdk: flutter
   web: ^0.5.1
   plugin_platform_interface: ^2.0.2
+  cached_network_image: ^3.3.1
+  connectivity_plus: ^6.0.3
+  collection: ^1.18.0
+  custom_will_pop_scope: ^2.1.1
+  flutter_background: ^1.2.0
+  flutter_callkit_incoming: ^2.0.4+1
+  flutter_screenutil: ^5.9.3
+  flutter_svg: ^2.0.10+1
+  flutter_webrtc: ^0.11.5
+  fluttertoast: ^8.2.6
+  just_audio: ^0.9.39
+  livekit_client: ^2.2.2
+  mqtt_helper: ^0.0.8
+  uuid: ^4.4.2
+  get: ^4.6.6
+  http: ^1.2.2
+  pip_view: ^0.9.7
+  intl: ^0.19.0
+  pull_to_refresh: ^2.0.0
+  flutter_secure_storage: ^9.2.2
 
 dev_dependencies:
   flutter_test:
@@ -31,3 +51,7 @@ flutter:
       web:
         pluginClass: IsometrikCallFlutterWeb
         fileName: isometrik_call_flutter_web.dart
+  assets:
+    - assets/
+    - assets/icons/
+    - assets/mp3/        

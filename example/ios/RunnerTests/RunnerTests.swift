@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import XCTest
 
-@testable import isometrik_call_flutter
+@testable import call_qwik
 
 // This demonstrates a simple unit test of the Swift portion of this plugin's implementation.
 //
@@ -11,7 +11,7 @@ import XCTest
 class RunnerTests: XCTestCase {
 
   func testGetPlatformVersion() {
-    let plugin = IsometrikCallFlutterPlugin()
+    let plugin = CallQwikPlugin()
 
     let call = FlutterMethodCall(methodName: "getPlatformVersion", arguments: [])
 
