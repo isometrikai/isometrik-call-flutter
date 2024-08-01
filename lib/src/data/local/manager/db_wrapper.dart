@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class IsmCallDBWrapper {
@@ -38,7 +36,6 @@ class IsmCallDBWrapper {
       await saveValueSecurely(IsmCallLocalKeys.apnsToken, token);
 
   Future<bool> addConfig(IsmCallConfig config) async {
-    return await saveValueSecurely(
-        IsmCallLocalKeys.config, jsonEncode(config.toJson()));
+    return await saveValueSecurely(IsmCallLocalKeys.config, config.toJson());
   }
 }

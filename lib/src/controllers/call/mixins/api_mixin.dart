@@ -15,9 +15,18 @@ mixin IsmCallApiMixin {
             ? _controller.currentPushToken
             : _controller.prevPushToken) ??
         '';
-    if (token.trim().isEmpty) {
+    if (isLoggingOut && token.isEmpty) {
+      token = _controller.prevPushToken ?? '';
+    }
+    if (!isLoggingOut && token.isEmpty) {
+      token = _controller.currentPushToken ?? '';
+    }
+    if (token.isEmpty) {
       token =
           await IsmCallDBWrapper.i.getSecuredValue(IsmCallLocalKeys.apnsToken);
+    }
+    if (token.isEmpty) {
+      token = await IsmCallHelper.getPushToken();
     }
     return _controller._viewModel.updatePushToken(
       add: false,
