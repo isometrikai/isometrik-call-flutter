@@ -89,15 +89,18 @@ class IsmCallDelegate {
     _refreshToken = onRefreshToken;
     IsmCallHelper.requestNotification();
     IsmCallHelper.listenCallEvents();
-    unawaited(Future.wait([
-      _connectMqtt(
-        shouldInitialize: shouldInitializeMqtt,
-        config: config,
-        topics: topics,
-        topicChannels: topicChannels,
-      ),
-      _checkPushToken(),
-    ]));
+    unawaited(
+      Future.wait([
+        _connectMqtt(
+          shouldInitialize: shouldInitializeMqtt,
+          config: config,
+          topics: topics,
+          topicChannels: topicChannels,
+        ),
+        _checkPushToken(),
+        _db.addConfig(config),
+      ]),
+    );
   }
 
   Future<void> _connectMqtt({
@@ -180,7 +183,6 @@ class IsmCallDelegate {
       return;
     }
     var token = await getToken();
-
     var pushToken = await IsmCallHelper.getPushToken() as String;
 
     while (!Get.isRegistered<IsmCallController>()) {
@@ -195,6 +197,11 @@ class IsmCallDelegate {
 
   Future<String> getToken() async =>
       await _db.getSecuredValue(IsmCallLocalKeys.apnsToken);
+
+  Future<bool> updateConfig(IsmCallConfig config) async {
+    _config = config;
+    return await _db.addConfig(config);
+  }
 
   void onConnectivityChange(
     Function(bool) onChange,
