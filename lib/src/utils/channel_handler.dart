@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class IsmCallChannelHandler {
-  static const MethodChannel _channel = MethodChannel('com.appscrip.callqwik');
+  static const MethodChannel _channel = MethodChannel('com.isometrik.call');
 
   static void initialize() {
     _channel.setMethodCallHandler((call) async {
