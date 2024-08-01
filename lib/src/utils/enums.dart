@@ -26,32 +26,32 @@ enum IsmCallImageType {
 
 enum IsmCallControl {
   record(
-    Assets.record,
-    Assets.record,
+    IsmCallAssets.record,
+    IsmCallAssets.record,
   ),
   video(
-    Assets.video,
-    Assets.videoOff,
+    IsmCallAssets.video,
+    IsmCallAssets.videoOff,
   ),
   mic(
-    Assets.mic,
-    Assets.micOff,
+    IsmCallAssets.mic,
+    IsmCallAssets.micOff,
   ),
   chat(
-    Assets.message,
-    Assets.message,
+    IsmCallAssets.message,
+    IsmCallAssets.message,
   ),
   speaker(
-    Assets.speaker,
-    Assets.speakerOff,
+    IsmCallAssets.speaker,
+    IsmCallAssets.speakerOff,
   ),
   screenShare(
-    Assets.stopScreenShare,
-    Assets.screenShare,
+    IsmCallAssets.stopScreenShare,
+    IsmCallAssets.screenShare,
   ),
   filpCamera(
-    Assets.flipCamera,
-    Assets.flipCamera,
+    IsmCallAssets.flipCamera,
+    IsmCallAssets.flipCamera,
   );
 
   const IsmCallControl(

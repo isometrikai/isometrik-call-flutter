@@ -170,7 +170,7 @@ mixin IsmCallJoinMixin {
       IsmCallUtility.closeLoader();
 
       if (callingOutSide) {
-        unawaited(IsmCallUtility.playAudioFromAssets(Assets.callingMp3));
+        unawaited(IsmCallUtility.playAudioFromAssets(IsmCallAssets.callingMp3));
       } else {
         startStreamTimer();
       }

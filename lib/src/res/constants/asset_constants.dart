@@ -1,12 +1,10 @@
 // coverage:ignore-file
 // ignore_for_file: constant_identifier_names
 
-class Assets {
-  const Assets._();
+class IsmCallAssets {
+  const IsmCallAssets._();
 
   static const String _packageName = 'isometrik_call_flutter';
-
-  // Pacakage Assets
 
   static const String _callingMp3 = 'assets/mp3/calling.mp3';
   static const String callingMp3 = 'packages/$_packageName/$_callingMp3';
