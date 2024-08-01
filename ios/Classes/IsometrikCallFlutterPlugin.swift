@@ -1,78 +1,68 @@
-import Flutter
 import UIKit
 import CallKit
 import AVFAudio
 import PushKit
+import Flutter
 import flutter_callkit_incoming
 
-
 public class IsometrikCallFlutterPlugin: NSObject, FlutterPlugin, PKPushRegistryDelegate {
-  private let channel = "com.isometrik.call"
-  private var flutterEngine: FlutterEngine?
-  private var ongoingCall: IncomingCall?
-  private var incomingCalls = [String: IncomingCall]()
-  private var pushRegistry: PKPushRegistry?
-
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let instance = IsometrikCallFlutterPlugin()
-    let channel = FlutterMethodChannel(name: instance.channel, binaryMessenger: registrar.messenger())
-  
-    registrar.addMethodCallDelegate(instance, channel: channel)
-    // Initialize PushKit registry
-    instance.pushRegistry = PKPushRegistry(queue: DispatchQueue.main)
-    instance.pushRegistry?.delegate = instance
-    instance.pushRegistry?.desiredPushTypes = Set([.voIP])
-  }
-
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    let channel = "com.isometrik.call"
+    
+    var flutterEngine: FlutterEngine?
+    
+    var ongoingCall: IncomingCall?
+    var incomingCalls = [String: IncomingCall]()
+    
+    var pushRegistry: PKPushRegistry?
+    
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let instance = IsometrikCallFlutterPlugin()
+        
+        // Initialize PushKit registry
+        instance.pushRegistry = PKPushRegistry(queue: DispatchQueue.main)
+        instance.pushRegistry?.delegate = instance
+        instance.pushRegistry?.desiredPushTypes = Set([.voIP])
+        
+        // Set up method channel
+        let methodChannel = FlutterMethodChannel(name: instance.channel, binaryMessenger: registrar.messenger())
+        registrar.addMethodCallDelegate(instance, channel: methodChannel)
+    }
+    
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let arguments = call.arguments as? [String: Any],
               let callId = arguments["callId"] as? String else {
             result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing or invalid arguments", details: nil))
             return
         }
-
+        
         switch call.method {
         case "handleRinging":
-            handleRinging(callId)
+            self.handleRinging(callId)
             result(nil)
+            
         case "handleCallDeclined":
-            handleCallDeclined(callId)
+            self.handleCallDeclined(callId)
             result(nil)
+            
         case "handleCallStarted":
-            handleCallStarted(callId)
+            self.handleCallStarted(callId)
             result(nil)
+            
         case "handleTimeout":
-            handleTimeout(callId)
+            self.handleTimeout(callId)
             result(nil)
+            
         case "handleCallEnd":
-            handleCallEnd(callId)
+            self.handleCallEnd(callId)
             result(nil)
+            
         default:
             result(FlutterMethodNotImplemented)
+            return
         }
     }
-
-    private func startFlutterEngineIfNeeded(_ call: IncomingCall) {
-        if flutterEngine == nil {
-            flutterEngine = FlutterEngine(name: "io.flutter", project: nil)
-            flutterEngine?.run()
-            if let flutterEngine = flutterEngine {
-                GeneratedPluginRegistrant.register(with: flutterEngine)
-            }
-        }
-
-        if let flutterEngine = flutterEngine {
-            if let controller = UIApplication.shared.keyWindow?.rootViewController as? FlutterViewController {
-                let methodChannel = FlutterMethodChannel(name: channel, binaryMessenger: controller.binaryMessenger)
-                DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
-                    methodChannel.invokeMethod("handleIncomingPush", arguments: call.data.toJSON())
-                }
-            }
-        }
-    }
-
-    // ------- PKPushRegistryDelegate Functions --------
     
+    // PKPushRegistryDelegate Functions
     public func pushRegistry(_ registry: PKPushRegistry, didUpdate credentials: PKPushCredentials, for type: PKPushType) {
         print("didUpdatePushTokenFor")
         let deviceToken = credentials.token.map { String(format: "%02x", $0) }.joined()
@@ -93,10 +83,9 @@ public class IsometrikCallFlutterPlugin: NSObject, FlutterPlugin, PKPushRegistry
             completion()
         }
     }
-
-    // ------- Custom Functions --------
     
-    private func handleIncomingPush(with payload: PKPushPayload) {
+    // Custom Functions
+    func handleIncomingPush(with payload: PKPushPayload) {
         print("didReceiveIncomingPushWith \(payload.dictionaryPayload)")
         
         guard let metaData = payload.dictionaryPayload["metaData"] as? [String: Any] ?? payload.dictionaryPayload["payload"] as? [String: Any] else { return }
@@ -155,13 +144,15 @@ public class IsometrikCallFlutterPlugin: NSObject, FlutterPlugin, PKPushRegistry
         handleIncomingCalls(call: call)
     }
     
-    private func handleIncomingCalls(call: IncomingCall) {
+    func handleIncomingCalls(call: IncomingCall) {
         print("LOG: handleIncomingCalls \(call.id)")
+        
         incomingCalls[call.id] = call
+        
         startRinging(call: call)
     }
     
-    private func startRinging(call: IncomingCall) {
+    func startRinging(call: IncomingCall) {
         print("LOG: startRinging \(call.id)")
         SwiftFlutterCallkitIncomingPlugin.sharedInstance?.showCallkitIncoming(call.data, fromPushKit: true)
         DispatchQueue.main.async {
@@ -170,7 +161,7 @@ public class IsometrikCallFlutterPlugin: NSObject, FlutterPlugin, PKPushRegistry
         }
     }
     
-    private func checkCallQueue() {
+    func checkCallQueue() {
         print("LOG: checkCallQueue")
         let now = Date()
         
@@ -185,37 +176,53 @@ public class IsometrikCallFlutterPlugin: NSObject, FlutterPlugin, PKPushRegistry
         }
     }
     
-    private func removeCall(_ id: String) {
+    func removeCall(_ id: String) {
         print("LOG: removeCall")
         incomingCalls.removeValue(forKey: id)
     }
-
-    // ------- Method Channel Functions --------
     
-    private func handleRinging(_ callId: String) {
+    // Method Channel Functions
+    func handleRinging(_ callId: String) {
         print("LOG: Handling ringing event for: \(callId)")
     }
     
-    private func handleCallDeclined(_ callId: String) {
+    func handleCallDeclined(_ callId: String) {
         print("LOG: Handling call declined event for: \(callId)")
         removeCall(callId)
         checkCallQueue()
     }
     
-    private func handleCallStarted(_ callId: String) {
+    func handleCallStarted(_ callId: String) {
         print("LOG: Handling call started/accepted event for: \(callId)")
         ongoingCall = incomingCalls[callId]
     }
     
-    private func handleTimeout(_ callId: String) {
+    func handleTimeout(_ callId: String) {
         print("LOG: Handling timeout event for: \(callId)")
         removeCall(callId)
         checkCallQueue()
     }
     
-    private func handleCallEnd(_ callId: String) {
+    func handleCallEnd(_ callId: String) {
         print("LOG: Handling call end event for: \(callId)")
         ongoingCall = nil
         checkCallQueue()
+    }
+    
+    func startFlutterEngineIfNeeded(_ call: IncomingCall) {
+        if flutterEngine == nil {
+            flutterEngine = FlutterEngine(name: "io.flutter", project: nil)
+            flutterEngine?.run()
+            GeneratedPluginRegistrant.register(with: flutterEngine!)
+        }
+        
+        if let flutterEngine {
+            let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
+            let methodChannel = FlutterMethodChannel(name: channel, binaryMessenger: controller.binaryMessenger)
+            
+            DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
+                methodChannel.invokeMethod("handleIncomingPush", arguments: call.data.toJSON())
+            }
+        }
     }
 }
