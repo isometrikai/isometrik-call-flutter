@@ -109,6 +109,7 @@ mixin IsmCallJoinMixin {
     final message =
         Get.context?.translations?.joining ?? IsmCallStrings.joining;
     IsmCallUtility.showLoader(message);
+    _controller.currentMeetingId = meetingId;
 
     try {
       final videoQuality = hdBroadcast

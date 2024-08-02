@@ -5,6 +5,8 @@ mixin IsmCallVariableMixin {
 
   String? prevPushToken;
 
+  String? currentMeetingId;
+
 
   final RxBool _isFrontCamera = true.obs;
   bool get isFrontCamera => _isFrontCamera.value;
