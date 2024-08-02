@@ -3,7 +3,7 @@ import UIKit
 
 public class IsometrikCallFlutterPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "isometrik_call_flutter", binaryMessenger: registrar.messenger())
+    let channel = FlutterMethodChannel(name: "com.isometrik.call", binaryMessenger: registrar.messenger())
     let instance = IsometrikCallFlutterPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
@@ -17,3 +17,8 @@ public class IsometrikCallFlutterPlugin: NSObject, FlutterPlugin {
     }
   }
 }
+
+
+
+
+
