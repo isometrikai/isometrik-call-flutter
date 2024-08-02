@@ -37,8 +37,8 @@ class IsmCallUtility {
   }
 
   static Future<String?> getMimetype(String mediaExtension) async {
-    final jsondata =
-        await rootBundle.loadString('packages/isometrik_call_flutter/assets/mimetypes.json');
+    final jsondata = await rootBundle
+        .loadString('packages/isometrik_call_flutter/assets/mimetypes.json');
     //decode json data as list
     final response = json.decode(jsondata) as Map<String, dynamic>;
 

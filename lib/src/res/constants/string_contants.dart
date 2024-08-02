@@ -24,5 +24,9 @@ class IsmCallStrings {
 
   static const String opponentLeft = 'User left the call';
 
+  static const String youMissedCall = 'You Missed a Call';
+
+  static const String meetingEndedHost = 'Meeting endded by Host';
+
   static const String enablingVideo = 'Enabling Video';
 }

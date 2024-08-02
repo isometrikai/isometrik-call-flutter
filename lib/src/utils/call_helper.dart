@@ -246,11 +246,15 @@ class IsmCallHelper {
   }
 
   static void callMissed(String meetingId) {
-    unawaited(IsmCallUtility.showToast(
-      'You Missed a Call',
-      color: Colors.orange,
-    ));
-
+    final showMissCall = Get.context?.properties?.showMissCall ?? true;
+    if (showMissCall) {
+      final misscalled =
+          Get.context?.translations?.misscalled ?? IsmCallStrings.youMissedCall;
+      unawaited(IsmCallUtility.showToast(
+        misscalled,
+        color: Colors.orange,
+      ));
+    }
     incomingCalls.remove(meetingId);
     unawaited(FlutterCallkitIncoming.endCall(meetingId));
     unawaited(IsmCallChannelHandler.handleCallEnd(meetingId));
@@ -265,7 +269,13 @@ class IsmCallHelper {
     if (ongoingMeetingId != meetingId) {
       return;
     }
-    unawaited(IsmCallUtility.showToast('Meeting endded by Host'));
+    final showOpponentCallEnded =
+        Get.context?.properties?.showOpponentCallEnded ?? true;
+    if (showOpponentCallEnded) {
+      final opponentCallEnded = Get.context?.translations?.opponentCallEnded ??
+          IsmCallStrings.meetingEndedHost;
+      unawaited(IsmCallUtility.showToast(opponentCallEnded));
+    }
     _endAllCalls();
   }
 

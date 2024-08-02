@@ -70,19 +70,18 @@ import flutter_callkit_incoming
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    func startFlutterEngineIfNeeded(_ call: IncomingCall) {
+    func startFlutterEngineIfNeeded(_ payload: PKPushPayload) {
         if flutterEngine == nil {
             flutterEngine = FlutterEngine(name: "io.flutter", project: nil)
             flutterEngine?.run()
             GeneratedPluginRegistrant.register(with: flutterEngine!)
         }
         
-        if let flutterEngine {
-            let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-            let methodChannel = FlutterMethodChannel(name: channel, binaryMessenger: controller.binaryMessenger)
+        if let flutterEngine = flutterEngine, let controller = flutterEngine.viewController {
+            let channel = FlutterMethodChannel(name: channel, binaryMessenger: controller.binaryMessenger)
             
-            DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
-                methodChannel.invokeMethod("handleIncomingPush", arguments: call.data.toJSON())
+            DispatchQueue.global().asyncAfter(deadline: .now()) {
+                channel.invokeMethod("handleIncomingPush", arguments: payload.dictionaryPayload)
             }
         }
     }
@@ -168,10 +167,10 @@ import flutter_callkit_incoming
         
         let call = IncomingCall(id: id, data: data, expirationTime: Date().addingTimeInterval(TimeInterval(duration / 1000)))
         
-        handleIncomingCalls(call: call)
+        handleIncomingCalls(call: call, payload: payload)
     }
     
-    func handleIncomingCalls(call: IncomingCall) {
+    func handleIncomingCalls(call: IncomingCall, payload: PKPushPayload) {
         print("LOG: handleIncomingCalls \(call.id)")
 //        if ongoingCall == nil && incomingCalls.isEmpty {
 //            startRinging(call: call, payload: payload)
@@ -179,17 +178,14 @@ import flutter_callkit_incoming
         
         incomingCalls[call.id] = call
         
-        startRinging(call: call)
+        startRinging(call: call, payload: payload)
     }
     
-    func startRinging(call: IncomingCall) {
+    func startRinging(call: IncomingCall, payload: PKPushPayload) {
         print("LOG: startRinging \(call.id)")
         SwiftFlutterCallkitIncomingPlugin.sharedInstance?.showCallkitIncoming(call.data, fromPushKit: true)
-        DispatchQueue.main.async {
-            self.startFlutterEngineIfNeeded(call)
-            self.removeCall(call.id)
-        }
-        
+        startFlutterEngineIfNeeded(payload)
+        removeCall(call.id)
     }
     
     func checkCallQueue() {
@@ -201,7 +197,7 @@ import flutter_callkit_incoming
             if call.expirationTime <= now {
                 removeCall(id)
             } else {
-                startRinging(call: call)
+                startRinging(call: call, payload: PKPushPayload())
                 break
             }
         }

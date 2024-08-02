@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:custom_will_pop_scope/custom_will_pop_scope.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
@@ -225,7 +226,7 @@ class _IsmCallViewState extends State<IsmCallView> {
                           children: [
                             controller.participantTracks.isEmpty
                                 ? const Center(
-                                    child: Text('No one has joined yet'),
+                                    child: CupertinoActivityIndicator(),
                                   )
                                 : Positioned.fill(
                                     child: sharingMyScreen
