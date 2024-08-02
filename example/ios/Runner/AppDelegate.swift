@@ -7,7 +7,7 @@ import flutter_callkit_incoming
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate, PKPushRegistryDelegate {
-    let channel = "com.appscrip.callqwik"
+    let channel = "com.isometrik.call"
     
     var flutterEngine: FlutterEngine?
     
