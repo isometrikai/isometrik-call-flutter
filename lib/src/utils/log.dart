@@ -20,7 +20,7 @@ class IsmCallLog {
   ///- `AppLog.success()` - for success log
   ///- `AppLog.error()` - for error log
   IsmCallLog(this.message, [this.stackTrace]) {
-    print(
+    log(
       '\x1B[37m[${IsmCallConstants.name}] - $message\x1B[0m',
       // stackTrace: stackTrace,
       // level: 700,
@@ -42,11 +42,11 @@ class IsmCallLog {
   ///- `AppLog.info()` - for info log
   ///- `AppLog.success()` - for success log
   IsmCallLog.error(this.message, [this.stackTrace]) {
-    print(
+    log(
       '\x1B[31m[${IsmCallConstants.name}] - $message\x1B[0m',
-      // stackTrace: stackTrace,
-      // name: 'Error',
-      // level: 1200,
+      stackTrace: stackTrace,
+      name: 'Error',
+      level: 1200,
     );
   }
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -162,6 +163,9 @@ class IsmCall {
   void disconnectCall() {
     assert(_initialized, _initializedError);
   }
+
+   Future<bool> updateConfig(IsmCallConfig config) =>
+      _delegate.updateConfig(config);
 
   void onConnectivityChange(
     Function(bool) onChange,
