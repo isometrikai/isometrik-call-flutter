@@ -162,7 +162,7 @@ class IsmCallMqttController extends GetxController {
     IsmCallLog.success('MQTT Connected');
   }
 
-  void handleEvents(EventModel model) => _onEvent(model);
+  void listenMqttEvent(EventModel model) => _onEvent(model);
 
   void _onEvent(EventModel event) async {
     final payload = event.payload;

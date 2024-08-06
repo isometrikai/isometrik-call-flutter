@@ -133,9 +133,9 @@ class IsmCall {
   Future<void> removeListener(IsmCallMapFunction listener) =>
       _delegate.removeListener(listener);
 
-  void handleMqttEvent(EventModel event) {
+  void listenMqttEvent(EventModel event) {
     assert(_initialized, _initializedError);
-    _delegate.handleMqttEvent(event);
+    _delegate.listenMqttEvent(event);
   }
 
   void startCall({

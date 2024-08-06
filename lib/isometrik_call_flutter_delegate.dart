@@ -147,11 +147,11 @@ class IsmCallDelegate {
     }
   }
 
-  void handleMqttEvent(EventModel event) {
+  void listenMqttEvent(EventModel event) {
     if (!Get.isRegistered<IsmCallMqttController>()) {
       IsmCallMqttBinding().dependencies();
     }
-    Get.find<IsmCallMqttController>().handleEvents(event);
+    Get.find<IsmCallMqttController>().listenMqttEvent(event);
   }
 
   void startCall({
