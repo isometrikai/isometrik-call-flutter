@@ -4,11 +4,6 @@ import 'package:call_qwik_example/main.dart';
 import 'package:flutter/widgets.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 import 'package:livekit_client/livekit_client.dart';
-import 'package:mqtt_helper/mqtt_helper.dart';
-
-typedef MapFunction = void Function(DynamicMap);
-
-typedef EventFunction = void Function(EventModel);
 
 typedef NavIconBuilder = Widget Function(BuildContext, int);
 

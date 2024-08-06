@@ -692,7 +692,7 @@ packages:
     source: hosted
     version: "10.3.0"
   mqtt_helper:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: mqtt_helper
       sha256: b4e6f2f3eb6fb0d88dfe7fb26efb1e1deab57ef55b7ba7a1be0353ea6417136a

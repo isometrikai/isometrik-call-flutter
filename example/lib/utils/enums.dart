@@ -1,5 +1,4 @@
 import 'package:call_qwik_example/main.dart';
-import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 enum RequestType {
   get,

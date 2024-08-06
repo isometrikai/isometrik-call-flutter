@@ -1,7 +1,6 @@
 import 'package:call_qwik_example/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class AvailabilitySwitch extends StatelessWidget {
   const AvailabilitySwitch({

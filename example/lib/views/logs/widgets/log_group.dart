@@ -1,7 +1,6 @@
 import 'package:call_qwik_example/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class LogsGroup extends StatelessWidget {
   const LogsGroup({

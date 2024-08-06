@@ -2,7 +2,6 @@ import 'package:call_qwik_example/main.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class CustomInputField extends StatelessWidget {
   const CustomInputField({
