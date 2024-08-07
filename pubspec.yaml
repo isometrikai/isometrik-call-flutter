@@ -48,11 +48,10 @@ flutter:
         pluginClass: IsometrikCallFlutterPlugin
       ios:
         pluginClass: IsometrikCallFlutterPlugin
-        swift_version: 5.0
       web:
         pluginClass: IsometrikCallFlutterWeb
         fileName: isometrik_call_flutter_web.dart
   assets:
     - assets/
     - assets/icons/
-    - assets/mp3/        
+    - assets/mp3/
