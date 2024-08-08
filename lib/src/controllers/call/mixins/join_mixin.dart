@@ -51,7 +51,6 @@ mixin IsmCallJoinMixin {
       (_) => _enableTracks(callType.trackType),
     ));
     _controller.toggleSpeaker(callType == IsmCallType.video);
-    _controller.toggleVideo(callType == IsmCallType.video);
   }
 
   // Enable the user's video
@@ -93,6 +92,7 @@ mixin IsmCallJoinMixin {
       ],
       if (trackType.hasAudio) ...[
         _controller.room!.localParticipant!.setMicrophoneEnabled(true),
+        _controller.room!.setSpeakerOn(false),
       ],
     ]);
   }
