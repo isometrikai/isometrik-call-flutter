@@ -51,7 +51,6 @@ mixin IsmCallJoinMixin {
 
     unawaited(publishTracks(callType.trackType).then(
       (_) {
-        IsmCallLog.error('step1');
         if (isOutgoingCall) startCallingTimer();
         _enableTracks(callType.trackType);
         _controller.toggleSpeaker(callType == IsmCallType.video);
@@ -206,7 +205,6 @@ mixin IsmCallJoinMixin {
   }
 
   void startCallingTimer() {
-    IsmCallLog.error('step2');
     _controller._ringingTimer =
         Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timer.tick == 31) {
@@ -217,12 +215,13 @@ mixin IsmCallJoinMixin {
   }
 
   void _checkParticipants() {
-    IsmCallLog.error('step3');
     final localParticipant = _controller.room?.localParticipant;
     IsmCallLog.error(
         'check partiipants ${_controller.participantTracks.length}');
     if (_controller.participantTracks.length == 1) {
       final track = _controller.participantTracks.first;
+      IsmCallLog.error(
+          'localParticipant?.sid:-  ${localParticipant?.sid} == track.id:-  ${track.id} ');
       if (localParticipant?.sid == track.id) {
         IsmCallHelper.endCall();
       }
