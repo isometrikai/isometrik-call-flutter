@@ -5,7 +5,6 @@ mixin IsmCallVariableMixin {
 
   String? prevPushToken;
 
-
   final RxBool _isFrontCamera = true.obs;
   bool get isFrontCamera => _isFrontCamera.value;
   set isFrontCamera(bool value) {
@@ -18,7 +17,10 @@ mixin IsmCallVariableMixin {
   CameraPosition get position =>
       isFrontCamera ? CameraPosition.front : CameraPosition.back;
 
-  Timer? $callTimer;
+  Timer? $callStreamTimer;
+
+  Timer? _ringingTimer;
+
 
   final Rx<Duration> _callDuration = Duration.zero.obs;
   Duration get callDuration => _callDuration.value;

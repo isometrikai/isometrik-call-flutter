@@ -268,6 +268,7 @@ mixin IsmCallOngoingMixin {
     //   unawaited(Get.find<IsmLogsController>().refreshLogs());
     // }
 
-    _controller.$callTimer?.cancel();
+    _controller.$callStreamTimer?.cancel();
+    _controller._ringingTimer?.cancel();
   }
 }

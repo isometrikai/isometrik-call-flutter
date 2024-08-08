@@ -162,20 +162,20 @@ class IsmCallDelegate {
     List<Widget>? callActions,
     String? imageUrl,
     bool hdBroadcast = false,
-    bool callingOutSide = false,
   }) {
     if (!Get.isRegistered<IsmCallController>()) {
       IsmCallBinding().dependencies();
     }
     _callActions = callActions;
     Get.find<IsmCallController>().joinCall(
-        meetingId: meetingId,
-        call: call,
-        userInfo: userInfo,
-        callType: callType,
-        imageUrl: imageUrl,
-        hdBroadcast: hdBroadcast,
-        callingOutSide: callingOutSide);
+      meetingId: meetingId,
+      call: call,
+      userInfo: userInfo,
+      callType: callType,
+      imageUrl: imageUrl,
+      hdBroadcast: hdBroadcast,
+      isOutgoingCall: true,
+    );
   }
 
   Future<void> _checkPushToken() async {

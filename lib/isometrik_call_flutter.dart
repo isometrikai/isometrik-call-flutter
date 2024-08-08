@@ -146,7 +146,6 @@ class IsmCall {
     List<Widget>? callActions,
     String? imageUrl,
     bool hdBroadcast = false,
-    bool callingOutSide = false,
   }) {
     assert(_initialized, _initializedError);
     _delegate.startCall(
@@ -157,7 +156,7 @@ class IsmCall {
         callActions: callActions,
         imageUrl: imageUrl,
         hdBroadcast: hdBroadcast,
-        callingOutSide: callingOutSide);
+        );
   }
 
   void disconnectCall() {

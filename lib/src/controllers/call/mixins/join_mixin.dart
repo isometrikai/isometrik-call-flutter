@@ -11,7 +11,7 @@ mixin IsmCallJoinMixin {
     required IsmCallType callType,
     String? imageUrl,
     bool hdBroadcast = false,
-    bool callingOutSide = false,
+    bool isOutgoingCall = false,
   }) async {
     // Get the token for the stream based on whether the user is a host or not
 
@@ -23,18 +23,20 @@ mixin IsmCallJoinMixin {
 
     // Connect to the stream
     await _connectStream(
-        meetingId: meetingId,
-        call: call,
-        imageUrl: imageUrl,
-        hdBroadcast: hdBroadcast,
-        userInfo: userInfo,
-        callType: callType,
-        callingOutSide: callingOutSide);
+      meetingId: meetingId,
+      call: call,
+      imageUrl: imageUrl,
+      hdBroadcast: hdBroadcast,
+      userInfo: userInfo,
+      callType: callType,
+      isOutgoingCall: isOutgoingCall,
+    );
   }
 
   Future<void> _initializeTracks(
     Room room, {
     required IsmCallType callType,
+    bool isOutgoingCall = false,
   }) async {
     room.localParticipant?.setTrackSubscriptionPermissions(
       allParticipantsAllowed: true,
@@ -48,9 +50,12 @@ mixin IsmCallJoinMixin {
     );
 
     unawaited(publishTracks(callType.trackType).then(
-      (_) => _enableTracks(callType.trackType),
+      (_) {
+        if (isOutgoingCall) startCallingTimer();
+        _enableTracks(callType.trackType);
+        _controller.toggleSpeaker(callType == IsmCallType.video);
+      },
     ));
-    _controller.toggleSpeaker(callType == IsmCallType.video);
   }
 
   // Enable the user's video
@@ -92,7 +97,6 @@ mixin IsmCallJoinMixin {
       ],
       if (trackType.hasAudio) ...[
         _controller.room!.localParticipant!.setMicrophoneEnabled(true),
-        _controller.room!.setSpeakerOn(false),
       ],
     ]);
   }
@@ -105,7 +109,7 @@ mixin IsmCallJoinMixin {
     required IsmCallType callType,
     String? imageUrl,
     bool hdBroadcast = false,
-    bool callingOutSide = false,
+    bool isOutgoingCall = false,
   }) async {
     final message =
         Get.context?.translations?.joining ?? IsmCallStrings.joining;
@@ -158,7 +162,8 @@ mixin IsmCallJoinMixin {
               call.rtcToken,
             )
             .then(
-              (_) => _initializeTracks(room, callType: callType),
+              (_) => _initializeTracks(room,
+                  callType: callType, isOutgoingCall: isOutgoingCall),
             ));
       } catch (e, st) {
         IsmCallLog.error(e, st);
@@ -170,7 +175,7 @@ mixin IsmCallJoinMixin {
 
       IsmCallUtility.closeLoader();
 
-      if (callingOutSide) {
+      if (isOutgoingCall) {
         unawaited(IsmCallUtility.playAudioFromAssets(IsmCallAssets.callingMp3));
       } else {
         startStreamTimer();
@@ -189,7 +194,7 @@ mixin IsmCallJoinMixin {
   }
 
   void startStreamTimer() {
-    _controller.$callTimer = Timer.periodic(
+    _controller.$callStreamTimer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
         _controller.callDuration += const Duration(
@@ -197,6 +202,26 @@ mixin IsmCallJoinMixin {
         );
       },
     );
+  }
+
+  void startCallingTimer() {
+    _controller._ringingTimer =
+        Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timer.tick == 31) {
+        _checkParticipants();
+        _controller._ringingTimer?.cancel();
+      }
+    });
+  }
+
+  void _checkParticipants() {
+    final localParticipant = _controller.room?.localParticipant;
+    if (_controller.participantTracks.length == 1) {
+      final track = _controller.participantTracks.first;
+      if (localParticipant?.sid == track.id) {
+        IsmCallHelper.endCall();
+      }
+    }
   }
 
   // Function to set up event listeners

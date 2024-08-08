@@ -306,7 +306,7 @@ class IsmCallHelper {
     if ($callId.isNullOrEmpty) {
       return;
     }
-    print('IsmCallType mettingId $callId');
+
     if (!isMissed) {
       unawaited(FlutterCallkitIncoming.endCall($callId ?? ''));
       unawaited(IsmCallChannelHandler.handleCallEnd($callId ?? ''));
