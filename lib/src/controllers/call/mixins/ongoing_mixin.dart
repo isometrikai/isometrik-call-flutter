@@ -219,13 +219,11 @@ mixin IsmCallOngoingMixin {
   void disconnectCall({
     required String meetingId,
     bool fromPushKit = false,
-    bool showAddNotes = false,
   }) {
     _controller._disconnectDebouncer.run(
       () => _disconnectCall(
         meetingId: meetingId,
         fromPushKit: fromPushKit,
-        showAddNotes: showAddNotes,
       ),
     );
   }
@@ -233,7 +231,6 @@ mixin IsmCallOngoingMixin {
   void _disconnectCall({
     required String meetingId,
     bool fromPushKit = false,
-    bool showAddNotes = false,
   }) async {
     if (meetingId.isEmpty) {
       return;
@@ -243,9 +240,7 @@ mixin IsmCallOngoingMixin {
     if (Get.currentRoute == IsmCallRoutes.call) {
       Get.back();
     }
-    final showNotes =
-        (Get.context?.properties?.showAddNotesOnCallEnd ?? true) &&
-            showAddNotes;
+    final showNotes = (Get.context?.properties?.showAddNotesOnCallEnd ?? true);
     if (!fromPushKit && showNotes) {
       // unawaited(
       //   IsmCallUtility.openBottomSheet(

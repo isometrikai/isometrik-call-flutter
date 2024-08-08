@@ -36,6 +36,7 @@ mixin IsmCallJoinMixin {
   Future<void> _initializeTracks(
     Room room, {
     required IsmCallType callType,
+    required String meetingId,
     bool isOutgoingCall = false,
   }) async {
     room.localParticipant?.setTrackSubscriptionPermissions(
@@ -51,7 +52,7 @@ mixin IsmCallJoinMixin {
 
     unawaited(publishTracks(callType.trackType).then(
       (_) {
-        if (isOutgoingCall) startCallingTimer();
+        if (isOutgoingCall) startCallingTimer(meetingId);
         _enableTracks(callType.trackType);
         _controller.toggleSpeaker(callType == IsmCallType.video);
       },
@@ -162,8 +163,12 @@ mixin IsmCallJoinMixin {
               call.rtcToken,
             )
             .then(
-              (_) => _initializeTracks(room,
-                  callType: callType, isOutgoingCall: isOutgoingCall),
+              (_) => _initializeTracks(
+                room,
+                callType: callType,
+                isOutgoingCall: isOutgoingCall,
+                meetingId: meetingId,
+              ),
             ));
       } catch (e, st) {
         IsmCallLog.error(e, st);
@@ -204,26 +209,26 @@ mixin IsmCallJoinMixin {
     );
   }
 
-  void startCallingTimer() {
+  void startCallingTimer(String meetingId) {
     _controller._ringingTimer =
         Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timer.tick == 31) {
-        _checkParticipants();
+        _checkParticipants(meetingId);
         _controller._ringingTimer?.cancel();
       }
     });
   }
 
-  void _checkParticipants() {
+  void _checkParticipants(String meetingId) {
     final localParticipant = _controller.room?.localParticipant;
-    IsmCallLog.error(
-        'check partiipants ${_controller.participantTracks.length}');
+
     if (_controller.participantTracks.length == 1) {
       final track = _controller.participantTracks.first;
-      IsmCallLog.error(
-          'localParticipant?.sid:-  ${localParticipant?.sid} == track.id:-  ${track.id} ');
+
       if (localParticipant?.sid == track.id) {
-        IsmCallHelper.endCall();
+        _controller.disconnectCall(
+          meetingId: meetingId,
+        );
       }
     }
   }
@@ -254,7 +259,6 @@ mixin IsmCallJoinMixin {
       }
       _controller.disconnectCall(
         meetingId: meetingId,
-        showAddNotes: true,
       );
     });
 

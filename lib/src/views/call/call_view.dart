@@ -334,7 +334,6 @@ class _IsmCallViewState extends State<IsmCallView> {
                                     IsmCallRejectButton(
                                       onTap: () => controller.disconnectCall(
                                         meetingId: meetingId,
-                                        showAddNotes: true,
                                       ),
                                     ),
                                     IsmCallControlIcon(
