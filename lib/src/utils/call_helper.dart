@@ -293,8 +293,10 @@ class IsmCallHelper {
     String? meetingId,
     bool isMissed = false,
   }) async {
+    IsmCallLog.error('step1');
     var $callId = callId;
     if (ongoingMeetingId != meetingId) {
+      IsmCallLog.error('step2');
       var call = incomingCalls.values.cast<IsmNativeCallModel?>().firstWhere(
             (e) => e?.extra.meetingId == meetingId,
             orElse: () => null,
@@ -303,9 +305,11 @@ class IsmCallHelper {
         $callId = call.uuid;
       }
     }
+    IsmCallLog.error('step3');
     if ($callId.isNullOrEmpty) {
       return;
     }
+    IsmCallLog.error('step4');
 
     if (!isMissed) {
       unawaited(FlutterCallkitIncoming.endCall($callId ?? ''));
