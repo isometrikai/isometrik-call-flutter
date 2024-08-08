@@ -50,7 +50,8 @@ mixin IsmCallJoinMixin {
     unawaited(publishTracks(callType.trackType).then(
       (_) => _enableTracks(callType.trackType),
     ));
-    _controller.toggleSpeaker(true);
+    _controller.toggleSpeaker(callType == IsmCallType.video);
+    _controller.toggleVideo(callType == IsmCallType.video);
   }
 
   // Enable the user's video

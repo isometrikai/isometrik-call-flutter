@@ -11,7 +11,7 @@ PODS:
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
-  - CryptoSwift (1.8.2)
+  - CryptoSwift (1.8.3)
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -43,7 +43,7 @@ PODS:
     - Flutter
   - just_audio (0.0.1):
     - Flutter
-  - livekit_client (2.2.2):
+  - livekit_client (2.2.3):
     - Flutter
     - WebRTC-SDK (= 125.6422.04)
   - package_info_plus (0.4.5):
@@ -157,7 +157,7 @@ SPEC CHECKSUMS:
   better_player_plus: 89f911bd69171edfe6d2ee689014355036bffdb0
   Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
-  CryptoSwift: c63a805d8bb5e5538e88af4e44bb537776af11ea
+  CryptoSwift: 967f37cea5a3294d9cce358f78861652155be483
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_callkit_incoming: 417dd1b46541cdd5d855ad795ccbe97d1c18155e
@@ -168,10 +168,10 @@ SPEC CHECKSUMS:
   HLSCachingReverseProxyServer: 59935e1e0244ad7f3375d75b5ef46e8eb26ab181
   image_cropper: 37d40f62177c101ff4c164906d259ea2c3aa70cf
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
-  integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
   isometrik_call_flutter: 0d005a23b4a1924f6af9c73ef0cd6b90d6dd5809
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
-  livekit_client: c767049a635d5b6d43de3273dca3c439b8a6e970
+  livekit_client: bad83a7776a41abc42e1f26d903eeac9164c8a9f
   package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   PINCache: d9a87a0ff397acffe9e2f0db972ac14680441158

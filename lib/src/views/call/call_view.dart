@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:custom_will_pop_scope/custom_will_pop_scope.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
@@ -225,8 +224,16 @@ class _IsmCallViewState extends State<IsmCallView> {
                         body: Stack(
                           children: [
                             controller.participantTracks.isEmpty
-                                ? const Center(
-                                    child: CupertinoActivityIndicator(),
+                                ? Center(
+                                    child: IsmCallNoVideoWidget(
+                                      name:
+                                          controller.userInfoModel?.userName ??
+                                              '',
+                                      imageUrl:
+                                          controller.userInfoModel?.imageUrl ??
+                                              '',
+                                      isLargeVideo: true,
+                                    ),
                                   )
                                 : Positioned.fill(
                                     child: sharingMyScreen
