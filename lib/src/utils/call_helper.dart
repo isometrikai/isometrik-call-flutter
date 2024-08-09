@@ -217,20 +217,6 @@ class IsmCallHelper {
     } else {
       incomingCalls[call.extra.meetingId] = call;
     }
-    // IsmCallRouteManagement.goToIncomingCall(
-    //   IsmIncomingCallArgument(
-    //     id: data['id'] as String? ?? '',
-    //     meetingId: data['meetingId'] as String? ?? '',
-    //     imageUrl: data['imageUrl'] as String? ?? '',
-    //     name: data['name'] as String? ?? '',
-    //     ip: data['ip'] as String? ?? '',
-    //     isAudioOnly: false,
-    //   ),
-    // );
-  }
-
-  static void startCall() {
-    // FlutterCallkitIncoming.startCall(params);
   }
 
   static Future<void> toggleMic(bool value) => FlutterCallkitIncoming.muteCall(
@@ -257,8 +243,9 @@ class IsmCallHelper {
     }
     incomingCalls.remove(meetingId);
     unawaited(FlutterCallkitIncoming.endCall(meetingId));
-    unawaited(IsmCallChannelHandler.handleCallEnd(meetingId));
-
+    if (GetPlatform.isIOS) {
+      unawaited(IsmCallChannelHandler.handleCallEnd(meetingId));
+    }
     _callTriggerStatusStream.add((
       status: IsmCallStatus.callMissed,
       meetingId: meetingId,
