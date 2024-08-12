@@ -91,6 +91,7 @@ class HomeController extends GetxController
         ),
       );
       update();
+
       await IsmCall.i.initialize(
         config,
         appLogo: const AppLogo(),
