@@ -148,7 +148,6 @@ mixin IsmCallOngoingMixin {
         final androidConfig = FlutterBackgroundAndroidConfig(
           notificationTitle: 'Screen Sharing',
           notificationText: '$appName is sharing the screen.',
-          notificationImportance: AndroidNotificationImportance.Default,
           notificationIcon: const AndroidResource(
             name: 'ic_launcher',
             defType: 'mipmap',
