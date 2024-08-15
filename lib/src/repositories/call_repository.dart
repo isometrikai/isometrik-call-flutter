@@ -36,6 +36,7 @@ class IsmCallRepository {
         type: IsmCallRequestType.patch,
         payload: payload,
         headers: _authHeader,
+        showDialog: false,
       );
 
   Future<IsmCallResponseModel> startCall(Map<String, dynamic> payload) async =>
