@@ -19,7 +19,7 @@ extension IsmCallContextExtension on BuildContext {
 }
 
 extension IsmCallNullString on String? {
-  bool get isNullOrEmpty => this == null || this!.trim().isEmpty;
+  bool get isNullOrEmpty => this == null || this?.trim().isEmpty == true;
 
   bool get isEmpty => this?.trim().isEmpty == true;
 
