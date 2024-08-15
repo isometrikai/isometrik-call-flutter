@@ -184,11 +184,14 @@ class IsmCallDelegate {
     }
     var token = await getToken();
     var pushToken = await IsmCallHelper.getPushToken() as String;
+    if (pushToken.isNullOrEmpty) {
+      return;
+    }
 
     while (!Get.isRegistered<IsmCallController>()) {
       IsmCallBinding().dependencies();
     }
-    if (token.trim().isEmpty) {
+    if (token.isNullOrEmpty) {
       await Get.find<IsmCallController>().updatePushToken(pushToken);
     } else if (pushToken != token) {
       await Get.find<IsmCallController>().updatePushToken(pushToken, token);
