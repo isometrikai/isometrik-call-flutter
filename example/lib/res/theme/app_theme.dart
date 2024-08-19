@@ -40,9 +40,9 @@ class AppTheme {
           extensions: [
             const IsmCallExtension(
               properties: IsmCallPropertiesData(
-                controlsPosition: IsmControlPosition.right,
-                // pipView: IsmChatPageView(),
-              ),
+
+                  // pipView: IsmChatPageView(),
+                  ),
             ),
           ]);
 }

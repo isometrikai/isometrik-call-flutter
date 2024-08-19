@@ -38,10 +38,10 @@ enum IsmCallControl {
     IsmCallAssets.mic,
     IsmCallAssets.micOff,
   ),
-  chat(
-    IsmCallAssets.message,
-    IsmCallAssets.message,
-  ),
+  // chat(
+  //   IsmCallAssets.message,
+  //   IsmCallAssets.message,
+  // ),
   speaker(
     IsmCallAssets.speaker,
     IsmCallAssets.speakerOff,
@@ -53,12 +53,17 @@ enum IsmCallControl {
   filpCamera(
     IsmCallAssets.flipCamera,
     IsmCallAssets.flipCamera,
+  ),
+  callEnd(
+    '',
+    '',
   );
 
   const IsmCallControl(
     this.icon,
     this.iconOff,
   );
+
   final String icon;
   final String iconOff;
 }

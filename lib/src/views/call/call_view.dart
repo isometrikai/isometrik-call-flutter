@@ -294,7 +294,10 @@ class _IsmCallViewState extends State<IsmCallView> {
                                             ),
                                           ),
                                   ),
-                            if (!isFloating)
+                            if (!isFloating &&
+                                context.properties?.callControlFeatures
+                                        .isNotEmpty ==
+                                    true)
                               Builder(builder: (context) {
                                 final alignment = context.properties
                                         ?.controlsPosition.alignment ??
@@ -310,57 +313,9 @@ class _IsmCallViewState extends State<IsmCallView> {
                                         ...context.properties?.callControls ??
                                             []
                                       ],
-                                      IsmCallControlIcon(
-                                        IsmCallControl.record,
-                                        isActive: controller.isRecording,
-                                        onToggle: controller.toggleRecording,
-                                      ),
-                                      IsmCallControlIcon(
-                                        IsmCallControl.video,
-                                        isActive: controller.isVideoOn,
-                                        onToggle: controller.toggleVideo,
-                                      ),
-                                      IsmCallControlIcon(
-                                        IsmCallControl.mic,
-                                        isActive: controller.isMicOn,
-                                        onToggle: (value) =>
-                                            controller.toggleMic(value: value),
-                                      ),
-                                      IsmCallControlIcon(
-                                        IsmCallControl.screenShare,
-                                        isActive: controller.isScreenSharing,
-                                        onToggle: controller.toggleScreenShare,
-                                      ),
-                                      IsmCallControlIcon(
-                                        IsmCallControl.filpCamera,
-                                        isActive: controller.isVideoOn,
-                                        onToggle: controller.isVideoOn
-                                            ? (_) => _controller.flipCamera()
-                                            : null,
-                                      ),
-
-                                      // IsmCallControlIcon(
-                                      //   IsmCallControl.chat,
-                                      //   enabled: controller.isScreenSharing,
-                                      //   onToggle: (_) async {
-                                      // await controller.startChat(_);
-                                      // IsmCallUtility.updateLater(() {
-                                      //   _startPip(context);
-                                      // });
-                                      //   },
-                                      // ),
-                                      IsmCallRejectButton(
-                                        onTap: () => controller.disconnectCall(
-                                          meetingId: meetingId,
-                                        ),
-                                      ),
-                                      IsmCallControlIcon(
-                                        IsmCallControl.speaker,
-                                        isActive: controller.isSpeakerOn,
-                                        onToggle: controller.toggleSpeaker,
-                                      ),
+                                      ...ismCallControlFeatures(controller),
                                     ],
-                                    collapseIndexOrder: const [5, 4, 1, 2, 6],
+                                    collapseIndexOrder: const [6, 5, 1, 2, 4],
                                   ),
                                 );
                               }),
@@ -424,4 +379,77 @@ class _IsmCallViewState extends State<IsmCallView> {
           ),
         ),
       );
+
+  List<Widget> ismCallControlFeatures(IsmCallController controller) {
+    final features = <Widget>[];
+    final favoriteFeautre = context.properties?.callControlFeatures ?? [];
+    for (final feature in favoriteFeautre) {
+      if (feature == IsmCallControl.record) {
+        features.add(
+          IsmCallControlIcon(
+            IsmCallControl.record,
+            isActive: controller.isRecording,
+            onToggle: controller.toggleRecording,
+          ),
+        );
+      }
+      if (feature == IsmCallControl.video) {
+        features.add(
+          IsmCallControlIcon(
+            IsmCallControl.video,
+            isActive: controller.isVideoOn,
+            onToggle: controller.toggleVideo,
+          ),
+        );
+      }
+      if (feature == IsmCallControl.mic) {
+        features.add(
+          IsmCallControlIcon(
+            IsmCallControl.mic,
+            isActive: controller.isMicOn,
+            onToggle: (value) => controller.toggleMic(value: value),
+          ),
+        );
+      }
+      if (feature == IsmCallControl.screenShare) {
+        features.add(
+          IsmCallControlIcon(
+            IsmCallControl.screenShare,
+            isActive: controller.isScreenSharing,
+            onToggle: controller.toggleScreenShare,
+          ),
+        );
+      }
+      if (feature == IsmCallControl.filpCamera) {
+        features.add(
+          IsmCallControlIcon(
+            IsmCallControl.filpCamera,
+            isActive: controller.isVideoOn,
+            onToggle:
+                controller.isVideoOn ? (_) => _controller.flipCamera() : null,
+          ),
+        );
+      }
+      if (feature == IsmCallControl.speaker) {
+        features.add(
+          IsmCallControlIcon(
+            IsmCallControl.speaker,
+            isActive: controller.isSpeakerOn,
+            onToggle: controller.toggleSpeaker,
+          ),
+        );
+      }
+      if (feature == IsmCallControl.callEnd) {
+        features.add(
+          IsmCallRejectButton(
+            onTap: () => controller.disconnectCall(
+              meetingId: meetingId,
+            ),
+          ),
+        );
+      }
+    }
+
+    return features;
+  }
 }

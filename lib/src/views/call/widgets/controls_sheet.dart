@@ -3,21 +3,23 @@ import 'package:get/get.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class IsmCallControlSheet extends StatefulWidget {
-  IsmCallControlSheet({
+  const IsmCallControlSheet({
     super.key,
     required this.controls,
     required this.collapseIndexOrder,
     required this.isControlsBottom,
-  })  : assert(
-          controls.length >= collapseIndexOrder.length,
-          'Passed order must contain each index atmost once',
-        ),
-        assert(
-          collapseIndexOrder.length == collapseIndexOrder.toSet().length,
-          '`collapseIndexOrder` must not contain any duplicates',
-        ),
-        assert(collapseIndexOrder.every((e) => e < controls.length),
-            'All indexes inside `collapseIndexOrder` must be within the range of `controls` list.');
+  });
+
+  // assert(
+  //         controls.length >= collapseIndexOrder.length,
+  //         'Passed order must contain each index atmost once',
+  //       ),
+  // assert(
+  //   collapseIndexOrder.length == collapseIndexOrder.toSet().length,
+  //   '`collapseIndexOrder` must not contain any duplicates',
+  // ),
+  // assert(collapseIndexOrder.every((e) => e < controls.length),
+  //     'All indexes inside `collapseIndexOrder` must be within the range of `controls` list.');
 
   final List<Widget> controls;
   final List<int> collapseIndexOrder;
