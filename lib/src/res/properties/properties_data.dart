@@ -11,6 +11,8 @@ class IsmCallPropertiesData {
     this.showMissCall = true,
     this.showOpponentCallEnded = true,
     this.showAddNotesOnCallEnd = true,
+    this.callControls,
+    this.controlsPosition = IsmControlPosition.bottom,
   })  : assert(
           !enablePip || (enablePip && pipView != null),
           '`pipView` must be non-null, if `enablePip` is set to true',
@@ -28,6 +30,8 @@ class IsmCallPropertiesData {
   final bool showMissCall;
   final bool showOpponentCallEnded;
   final bool showAddNotesOnCallEnd;
+  final List<IsmCallControlIcon>? callControls;
+  final IsmControlPosition controlsPosition;
 
   IsmCallPropertiesData lerp(covariant IsmCallPropertiesData? other, double t) {
     if (other is! IsmCallPropertiesData) {
@@ -45,6 +49,8 @@ class IsmCallPropertiesData {
       showMissCall: t < 0.5 ? showMissCall : other.showMissCall,
       showAddNotesOnCallEnd:
           t < 0.5 ? showAddNotesOnCallEnd : other.showAddNotesOnCallEnd,
+      callControls: t < 0.5 ? callControls : other.callControls,
+      controlsPosition: t < 0.5 ? controlsPosition : other.controlsPosition,
     );
   }
 
@@ -57,6 +63,8 @@ class IsmCallPropertiesData {
     bool? showMissCallSnack,
     bool? showOpponentCallEnded,
     bool? showAddNotesOnCallEnd,
+    List<IsmCallControlIcon>? callControls,
+    IsmControlPosition controlsPosition = IsmControlPosition.bottom,
   }) =>
       IsmCallPropertiesData(
         enablePip: enablePip ?? this.enablePip,
@@ -69,5 +77,7 @@ class IsmCallPropertiesData {
             showOpponentCallEnded ?? this.showOpponentCallEnded,
         showAddNotesOnCallEnd:
             showAddNotesOnCallEnd ?? this.showAddNotesOnCallEnd,
+        callControls: callControls ?? this.callControls,
+        controlsPosition: controlsPosition,
       );
 }

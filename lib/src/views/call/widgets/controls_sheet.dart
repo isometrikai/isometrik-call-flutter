@@ -1,12 +1,13 @@
-import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class IsmCallControlSheet extends StatefulWidget {
   IsmCallControlSheet({
     super.key,
     required this.controls,
     required this.collapseIndexOrder,
+    required this.isControlsBottom,
   })  : assert(
           controls.length >= collapseIndexOrder.length,
           'Passed order must contain each index atmost once',
@@ -20,6 +21,7 @@ class IsmCallControlSheet extends StatefulWidget {
 
   final List<Widget> controls;
   final List<int> collapseIndexOrder;
+  final bool isControlsBottom;
 
   @override
   State<IsmCallControlSheet> createState() => IsmCallControlSheetState();
@@ -44,15 +46,24 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
         (index) => widget.controls[widget.collapseIndexOrder[index]],
       );
 
-  List<Widget> get controls =>
-      isCollapsed ? collapsedControls : widget.controls;
+  List<Widget> get controls => isCollapsed && widget.isControlsBottom
+      ? collapsedControls
+      : widget.controls;
+
+  @override
+  void initState() {
+    super.initState();
+    toggleCollapse(!widget.isControlsBottom);
+  }
 
   @override
   Widget build(BuildContext context) => Obx(
         () => Container(
-          width: Get.width,
+          width: widget.isControlsBottom ? Get.width : IsmCallDimens.sixty,
           decoration: BoxDecoration(
-            color: isCollapsed ? Colors.transparent : context.theme.canvasColor,
+            color: (isCollapsed || !widget.isControlsBottom)
+                ? Colors.transparent
+                : context.theme.canvasColor,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(
                 IsmCallDimens.sixteen,
@@ -64,27 +75,38 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              IsmCallTapHandler(
-                onTap: toggleCollapse,
-                child: Padding(
-                  padding: IsmCallDimens.edgeInsets8,
-                  child: Icon(
-                    isCollapsed
-                        ? Icons.keyboard_arrow_up_rounded
-                        : Icons.keyboard_arrow_down_rounded,
-                    key: const ObjectKey('sheet_icon'),
+              if (widget.isControlsBottom) ...[
+                IsmCallTapHandler(
+                  onTap: toggleCollapse,
+                  child: Padding(
+                    padding: IsmCallDimens.edgeInsets8,
+                    child: Icon(
+                      isCollapsed
+                          ? Icons.keyboard_arrow_up_rounded
+                          : Icons.keyboard_arrow_down_rounded,
+                      key: const ObjectKey('sheet_icon'),
+                    ),
                   ),
-                ),
-              ),
+                )
+              ],
               SafeArea(
                 top: false,
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: isCollapsed ? 5 : 3,
-                    childAspectRatio: isCollapsed ? 1.2 : 1.8,
+                    crossAxisCount: widget.isControlsBottom
+                        ? isCollapsed
+                            ? 5
+                            : 3
+                        : 1,
+                    childAspectRatio: widget.isControlsBottom
+                        ? isCollapsed
+                            ? 1.2
+                            : 1.8
+                        : 0.9,
                   ),
-                  padding:
-                      isCollapsed ? IsmCallDimens.edgeInsets16_0 : IsmCallDimens.edgeInsets0,
+                  padding: isCollapsed
+                      ? IsmCallDimens.edgeInsets16_0
+                      : IsmCallDimens.edgeInsets0,
                   itemCount: controls.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

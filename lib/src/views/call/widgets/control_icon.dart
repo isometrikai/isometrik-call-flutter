@@ -28,8 +28,10 @@ class IsmCallControlIcon extends StatelessWidget {
                       context.theme.scaffoldBackgroundColor),
               shape: BoxShape.circle,
             ),
-            child: UnconstrainedBox(
-              child: IsmCallImage.svg(
+            child: 
+            UnconstrainedBox(
+              child: 
+               IsmCallImage.svg(
                 isActive ? control.icon : control.iconOff,
                 dimensions: IsmCallDimens.thirtyTwo,
                 fromPackage: false,

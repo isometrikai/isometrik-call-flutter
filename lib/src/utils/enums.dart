@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
@@ -120,4 +121,16 @@ enum IsmCallStatus {
   acceptError,
   rejectSuccess,
   rejectError,
+}
+
+enum IsmControlPosition {
+  left,
+  right,
+  bottom;
+
+  AlignmentGeometry get alignment => switch (this) {
+        IsmControlPosition.left => Alignment.bottomLeft,
+        IsmControlPosition.right => Alignment.bottomRight,
+        IsmControlPosition.bottom => Alignment.bottomCenter,
+      };
 }

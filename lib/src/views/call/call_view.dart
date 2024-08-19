@@ -132,7 +132,14 @@ class _IsmCallViewState extends State<IsmCallView> {
         ?.presentBelow(context.properties?.pipView ?? const SizedBox());
   }
 
+  bool get isControlsBottom {
+    final alignment = context.properties?.controlsPosition.alignment ??
+        Alignment.bottomCenter;
+    return alignment == Alignment.bottomCenter;
+  }
+
   void _closeControlsSheet() {
+    if (!isControlsBottom) return;
     collapsedKey.currentState?.toggleCollapse(false);
   }
 
@@ -288,63 +295,75 @@ class _IsmCallViewState extends State<IsmCallView> {
                                           ),
                                   ),
                             if (!isFloating)
-                              Positioned(
-                                bottom: 0,
-                                child: IsmCallControlSheet(
-                                  key: collapsedKey,
-                                  controls: [
-                                    IsmCallControlIcon(
-                                      IsmCallControl.record,
-                                      isActive: controller.isRecording,
-                                      onToggle: controller.toggleRecording,
-                                    ),
-                                    IsmCallControlIcon(
-                                      IsmCallControl.video,
-                                      isActive: controller.isVideoOn,
-                                      onToggle: controller.toggleVideo,
-                                    ),
-                                    IsmCallControlIcon(
-                                      IsmCallControl.mic,
-                                      isActive: controller.isMicOn,
-                                      onToggle: (value) =>
-                                          controller.toggleMic(value: value),
-                                    ),
-                                    IsmCallControlIcon(
-                                      IsmCallControl.screenShare,
-                                      isActive: controller.isScreenSharing,
-                                      onToggle: controller.toggleScreenShare,
-                                    ),
-                                    IsmCallControlIcon(
-                                      IsmCallControl.filpCamera,
-                                      isActive: controller.isVideoOn,
-                                      onToggle: controller.isVideoOn
-                                          ? (_) => _controller.flipCamera()
-                                          : null,
-                                    ),
-                                    // IsmCallControlIcon(
-                                    //   IsmCallControl.chat,
-                                    //   enabled: controller.isScreenSharing,
-                                    //   onToggle: (_) async {
-                                    // await controller.startChat(_);
-                                    // IsmCallUtility.updateLater(() {
-                                    //   _startPip(context);
-                                    // });
-                                    //   },
-                                    // ),
-                                    IsmCallRejectButton(
-                                      onTap: () => controller.disconnectCall(
-                                        meetingId: meetingId,
+                              Builder(builder: (context) {
+                                final alignment = context.properties
+                                        ?.controlsPosition.alignment ??
+                                    Alignment.bottomCenter;
+                                return Align(
+                                  alignment: alignment,
+                                  child: IsmCallControlSheet(
+                                    key: collapsedKey,
+                                    isControlsBottom: isControlsBottom,
+                                    controls: [
+                                      if (context.properties?.callControls !=
+                                          null) ...[
+                                        ...context.properties?.callControls ??
+                                            []
+                                      ],
+                                      IsmCallControlIcon(
+                                        IsmCallControl.record,
+                                        isActive: controller.isRecording,
+                                        onToggle: controller.toggleRecording,
                                       ),
-                                    ),
-                                    IsmCallControlIcon(
-                                      IsmCallControl.speaker,
-                                      isActive: controller.isSpeakerOn,
-                                      onToggle: controller.toggleSpeaker,
-                                    ),
-                                  ],
-                                  collapseIndexOrder: const [5, 4, 1, 2, 6],
-                                ),
-                              ),
+                                      IsmCallControlIcon(
+                                        IsmCallControl.video,
+                                        isActive: controller.isVideoOn,
+                                        onToggle: controller.toggleVideo,
+                                      ),
+                                      IsmCallControlIcon(
+                                        IsmCallControl.mic,
+                                        isActive: controller.isMicOn,
+                                        onToggle: (value) =>
+                                            controller.toggleMic(value: value),
+                                      ),
+                                      IsmCallControlIcon(
+                                        IsmCallControl.screenShare,
+                                        isActive: controller.isScreenSharing,
+                                        onToggle: controller.toggleScreenShare,
+                                      ),
+                                      IsmCallControlIcon(
+                                        IsmCallControl.filpCamera,
+                                        isActive: controller.isVideoOn,
+                                        onToggle: controller.isVideoOn
+                                            ? (_) => _controller.flipCamera()
+                                            : null,
+                                      ),
+
+                                      // IsmCallControlIcon(
+                                      //   IsmCallControl.chat,
+                                      //   enabled: controller.isScreenSharing,
+                                      //   onToggle: (_) async {
+                                      // await controller.startChat(_);
+                                      // IsmCallUtility.updateLater(() {
+                                      //   _startPip(context);
+                                      // });
+                                      //   },
+                                      // ),
+                                      IsmCallRejectButton(
+                                        onTap: () => controller.disconnectCall(
+                                          meetingId: meetingId,
+                                        ),
+                                      ),
+                                      IsmCallControlIcon(
+                                        IsmCallControl.speaker,
+                                        isActive: controller.isSpeakerOn,
+                                        onToggle: controller.toggleSpeaker,
+                                      ),
+                                    ],
+                                    collapseIndexOrder: const [5, 4, 1, 2, 6],
+                                  ),
+                                );
+                              }),
                             if (!isFloating &&
                                 controller.participantTracks.length > 1)
                               Positioned(
