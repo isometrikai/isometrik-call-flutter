@@ -298,27 +298,29 @@ class _IsmCallViewState extends State<IsmCallView> {
                                 context.properties?.callControlFeatures
                                         .isNotEmpty ==
                                     true)
-                              Builder(builder: (context) {
-                                final alignment = context.properties
-                                        ?.controlsPosition.alignment ??
-                                    Alignment.bottomCenter;
-                                return Align(
-                                  alignment: alignment,
-                                  child: IsmCallControlSheet(
-                                    key: collapsedKey,
-                                    isControlsBottom: isControlsBottom,
-                                    controls: [
-                                      if (context.properties?.callControls !=
-                                          null) ...[
-                                        ...context.properties?.callControls ??
-                                            []
+                              Builder(
+                                builder: (context) {
+                                  final alignment = context.properties
+                                          ?.controlsPosition.alignment ??
+                                      Alignment.bottomCenter;
+                                  return Align(
+                                    alignment: alignment,
+                                    child: IsmCallControlSheet(
+                                      key: collapsedKey,
+                                      isControlsBottom: isControlsBottom,
+                                      controls: [
+                                        if (context.properties?.callControls !=
+                                            null) ...[
+                                          ...context.properties?.callControls ??
+                                              []
+                                        ],
+                                        ...ismCallControlFeatures(controller),
                                       ],
-                                      ...ismCallControlFeatures(controller),
-                                    ],
-                                    collapseIndexOrder: const [6, 5, 1, 2, 4],
-                                  ),
-                                );
-                              }),
+                                      collapseIndexOrder: const [6, 5, 1, 2, 4],
+                                    ),
+                                  );
+                                },
+                              ),
                             if (!isFloating &&
                                 controller.participantTracks.length > 1)
                               Positioned(

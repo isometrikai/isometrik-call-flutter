@@ -239,15 +239,6 @@ mixin IsmCallOngoingMixin {
     if (Get.currentRoute == IsmCallRoutes.call) {
       Get.back();
     }
-    final showNotes = (Get.context?.properties?.showAddNotesOnCallEnd ?? true);
-    if (!fromPushKit && showNotes) {
-      // unawaited(
-      //   IsmCallUtility.openBottomSheet(
-      //     IsmCallAddNoteSheet(meetingId: meetingId),
-      //     isScrollControlled: true,
-      //   ),
-      // );
-    }
 
     await Future.wait([
       if (!fromPushKit) ...[
@@ -258,9 +249,6 @@ mixin IsmCallOngoingMixin {
         _controller.room!.disconnect(),
       ],
     ]);
-    // if (Get.isRegistered<IsmLogsController>()) {
-    //   unawaited(Get.find<IsmLogsController>().refreshLogs());
-    // }
 
     _controller.$callStreamTimer?.cancel();
     _controller._ringingTimer?.cancel();

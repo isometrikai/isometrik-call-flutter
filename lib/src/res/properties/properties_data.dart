@@ -10,7 +10,6 @@ class IsmCallPropertiesData {
     this.showOpponentLeft = true,
     this.showMissCall = true,
     this.showOpponentCallEnded = true,
-    this.showAddNotesOnCallEnd = true,
     this.callControls,
     this.controlsPosition = IsmControlPosition.bottom,
     this.callControlFeatures = IsmCallControl.values,
@@ -30,7 +29,6 @@ class IsmCallPropertiesData {
   final bool showOpponentLeft;
   final bool showMissCall;
   final bool showOpponentCallEnded;
-  final bool showAddNotesOnCallEnd;
   final List<IsmCallControlIcon>? callControls;
   final IsmControlPosition controlsPosition;
   final List<IsmCallControl> callControlFeatures;
@@ -49,8 +47,6 @@ class IsmCallPropertiesData {
       showOpponentCallEnded:
           t < 0.5 ? showOpponentCallEnded : other.showOpponentCallEnded,
       showMissCall: t < 0.5 ? showMissCall : other.showMissCall,
-      showAddNotesOnCallEnd:
-          t < 0.5 ? showAddNotesOnCallEnd : other.showAddNotesOnCallEnd,
       callControls: t < 0.5 ? callControls : other.callControls,
       controlsPosition: t < 0.5 ? controlsPosition : other.controlsPosition,
       callControlFeatures:
@@ -66,7 +62,6 @@ class IsmCallPropertiesData {
     bool? showOpponentLeft,
     bool? showMissCallSnack,
     bool? showOpponentCallEnded,
-    bool? showAddNotesOnCallEnd,
     List<IsmCallControlIcon>? callControls,
     IsmControlPosition? controlsPosition,
     final List<IsmCallControl>? callControlFeatures,
@@ -80,8 +75,6 @@ class IsmCallPropertiesData {
         showMissCall: showMissCallSnack ?? showMissCall,
         showOpponentCallEnded:
             showOpponentCallEnded ?? this.showOpponentCallEnded,
-        showAddNotesOnCallEnd:
-            showAddNotesOnCallEnd ?? this.showAddNotesOnCallEnd,
         callControls: callControls ?? this.callControls,
         controlsPosition: controlsPosition ?? this.controlsPosition,
         callControlFeatures: callControlFeatures ?? this.callControlFeatures,

@@ -48,21 +48,6 @@ mixin IsmCallApiMixin {
         meetingId,
       );
 
-  // TODO: Implement this API call in plugin
-  Future<IsmAcceptCallModel?> startCall({
-    required String imageUrl,
-    required String userId,
-    required String conversationId,
-    required bool audioOnly,
-  }) =>
-      _controller._viewModel.startCall(
-        imageUrl: imageUrl,
-        userId: userId,
-        conversationId: conversationId,
-        deviceId: IsmCall.i.config?.projectConfig.deviceId ?? '',
-        audioOnly: audioOnly,
-      );
-
   Future<bool> endCall(String meetingId) =>
       _controller._viewModel.endCall(meetingId);
 
