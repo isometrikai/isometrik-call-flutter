@@ -166,6 +166,7 @@ class IsmCallDelegate {
     bool hdBroadcast = false,
     isOutgoingCall = true,
   }) {
+    setup();
     if (!Get.isRegistered<IsmCallController>()) {
       IsmCallBinding().dependencies();
     }
