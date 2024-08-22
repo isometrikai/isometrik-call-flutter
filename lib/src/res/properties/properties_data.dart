@@ -4,7 +4,7 @@ import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 class IsmCallPropertiesData {
   const IsmCallPropertiesData({
     this.enablePip = false,
-    this.pipView,
+    this.pipBuilder,
     this.enableVideoFitChange = false,
     this.videoFit,
     this.showOpponentLeft = true,
@@ -15,7 +15,7 @@ class IsmCallPropertiesData {
     this.allowedCallActions = IsmCallControl.values,
     this.controlProperties,
   })  : assert(
-          !enablePip || (enablePip && pipView != null),
+          !enablePip || (enablePip && pipBuilder != null),
           '`pipView` must be non-null, if `enablePip` is set to true',
         ),
         assert(
@@ -24,7 +24,7 @@ class IsmCallPropertiesData {
         );
 
   final bool enablePip;
-  final Widget? pipView;
+  final Widget Function(BuildContext)? pipBuilder;
   final bool enableVideoFitChange;
   final IsmCallVideoFit? videoFit;
   final bool showOpponentLeft;
@@ -41,7 +41,7 @@ class IsmCallPropertiesData {
     }
     return IsmCallPropertiesData(
       enablePip: t < 0.5 ? enablePip : other.enablePip,
-      pipView: t < 0.5 ? pipView : other.pipView,
+      pipBuilder: t < 0.5 ? pipBuilder : other.pipBuilder,
       enableVideoFitChange:
           t < 0.5 ? enableVideoFitChange : other.enableVideoFitChange,
       videoFit: t < 0.5 ? videoFit : other.videoFit,
@@ -59,7 +59,7 @@ class IsmCallPropertiesData {
 
   IsmCallPropertiesData copyWith({
     bool? enablePip,
-    Widget? pipView,
+    Widget Function(BuildContext)? pipBuilder,
     bool? enableVideoFitChange,
     IsmCallVideoFit? videoFit,
     bool? showOpponentLeft,
@@ -72,7 +72,7 @@ class IsmCallPropertiesData {
   }) =>
       IsmCallPropertiesData(
         enablePip: enablePip ?? this.enablePip,
-        pipView: pipView ?? this.pipView,
+        pipBuilder: pipBuilder ?? this.pipBuilder,
         enableVideoFitChange: enableVideoFitChange ?? this.enableVideoFitChange,
         videoFit: videoFit ?? this.videoFit,
         showOpponentLeft: showOpponentLeft ?? this.showOpponentLeft,

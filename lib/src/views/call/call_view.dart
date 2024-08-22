@@ -127,8 +127,8 @@ class _IsmCallViewState extends State<IsmCallView> {
       return;
     }
     _calculateSize(context);
-    PIPView.of(context)
-        ?.presentBelow(context.properties?.pipView ?? const SizedBox());
+    PIPView.of(context)?.presentBelow(
+        context.properties?.pipBuilder?.call(context) ?? const SizedBox());
   }
 
   bool get isControlsBottom {
