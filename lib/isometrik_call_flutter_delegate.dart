@@ -54,6 +54,8 @@ class IsmCallDelegate {
 
   IsmCallDBWrapper get _db => IsmCallDBWrapper.instance;
 
+  static final callKey = GlobalKey<IsmCallViewState>();
+
   void setup() async {
     IsmCallChannelHandler.initialize();
     if (!Get.isRegistered<IsmCallApiWrapper>()) {
@@ -223,5 +225,9 @@ class IsmCallDelegate {
         ],
       ],
     ]);
+  }
+
+  void startPip(BuildContext context) {
+    callKey.currentState?.startPip(context);
   }
 }

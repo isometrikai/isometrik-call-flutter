@@ -412,4 +412,8 @@ class IsmCall {
     await _delegate.dispose();
     _initialized = false;
   }
+
+  void startPip(BuildContext context) {
+    _delegate.startPip(context);
+  }
 }

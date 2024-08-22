@@ -24,10 +24,10 @@ class IsmCallView extends StatefulWidget {
   final IsmCallUserInfoModel? userInfo;
 
   @override
-  State<IsmCallView> createState() => _IsmCallViewState();
+  State<IsmCallView> createState() => IsmCallViewState();
 }
 
-class _IsmCallViewState extends State<IsmCallView> {
+class IsmCallViewState extends State<IsmCallView> {
   late final AppLifecycleListener _listener;
   IsmCallController get _controller => Get.find();
 
@@ -122,7 +122,7 @@ class _IsmCallViewState extends State<IsmCallView> {
     }
   }
 
-  void _startPip(BuildContext context) {
+  void startPip(BuildContext context) {
     if (!(context.properties?.enablePip ?? false)) {
       return;
     }
@@ -157,7 +157,7 @@ class _IsmCallViewState extends State<IsmCallView> {
           floatingWidth: pipSize?.width,
           builder: (context, isFloating) => CustomWillPopScope(
             onWillPop: () async {
-              _startPip(context);
+              // startPip(context);
               return false;
             },
             canReturn: false,
@@ -181,11 +181,11 @@ class _IsmCallViewState extends State<IsmCallView> {
                                   'End-to-end Encrypted',
                                   style: context.textTheme.bodyMedium,
                                 ),
-                                leading: IconButton(
-                                  onPressed: () => _startPip(context),
-                                  icon:
-                                      const Icon(Icons.arrow_back_ios_rounded),
-                                ),
+                                // leading: IconButton(
+                                //   onPressed: () => startPip(context),
+                                //   icon:
+                                //       const Icon(Icons.arrow_back_ios_rounded),
+                                // ),
                                 bottom: PreferredSize(
                                   preferredSize: Size(
                                       double.maxFinite, IsmCallDimens.twenty),

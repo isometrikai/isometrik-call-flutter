@@ -12,7 +12,7 @@ class IsmCallPages {
   static final pages = [
     GetPage<IsmCallView>(
       name: IsmCallView.route,
-      page: IsmCallView.new,
+      page: () => IsmCallView(key: IsmCallDelegate.callKey),
       bindings: [
         IsmCallBinding(),
         IsmCallMqttBinding(),

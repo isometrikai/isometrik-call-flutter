@@ -1,7 +1,6 @@
 import 'package:call_qwik_example/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class AppTheme {
   const AppTheme._();
@@ -38,11 +37,11 @@ class AppTheme {
             displayColor: CallColors.white,
           ),
           extensions: [
-            const IsmCallExtension(
-              properties: IsmCallPropertiesData(
+            // const IsmCallExtension(
+            //   properties: IsmCallPropertiesData(
 
-                  // pipView: IsmChatPageView(),
-                  ),
-            ),
+            //       // pipView: IsmChatPageView(),
+            //       ),
+            // ),
           ]);
 }
