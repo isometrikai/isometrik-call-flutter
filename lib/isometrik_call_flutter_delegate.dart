@@ -164,6 +164,7 @@ class IsmCallDelegate {
     List<Widget>? callActions,
     String? imageUrl,
     bool hdBroadcast = false,
+    isOutgoingCall = true,
   }) {
     if (!Get.isRegistered<IsmCallController>()) {
       IsmCallBinding().dependencies();
@@ -176,7 +177,7 @@ class IsmCallDelegate {
       callType: callType,
       imageUrl: imageUrl,
       hdBroadcast: hdBroadcast,
-      isOutgoingCall: true,
+      isOutgoingCall: isOutgoingCall,
     );
   }
 
