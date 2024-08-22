@@ -132,6 +132,7 @@ class IsmCallViewState extends State<IsmCallView> {
     }
 
     _calculateSize(_buildContext);
+    IsmCallLog.error(_buildContext.properties?.pipBuilder?.call(_buildContext));
     PIPView.of(_buildContext)?.presentBelow(
         _buildContext.properties?.pipBuilder?.call(_buildContext) ??
             const SizedBox());

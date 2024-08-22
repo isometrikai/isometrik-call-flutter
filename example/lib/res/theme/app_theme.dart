@@ -40,9 +40,12 @@ class AppTheme {
           extensions: [
             IsmCallExtension(
               properties: IsmCallPropertiesData(
-                pipBuilder: (p0) => const Center(
+                pipBuilder: (p0) {
+                  IsmCallLog.error('Yes i am call');
+                  return const Center(
                   child: Text('PIP'),
-                ),
+                );
+                },
                 enablePip: true,
 
                 // pipView: IsmChatPageView(),
