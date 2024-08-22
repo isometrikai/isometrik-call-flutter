@@ -228,7 +228,7 @@ class IsmCallDelegate {
   }
 
   void startPip(BuildContext context) {
-    IsmCallLog.error('che currentState ${callKey.currentState}');
+  
     callKey.currentState?.startPip(context);
   }
 }

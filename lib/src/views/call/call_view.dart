@@ -120,14 +120,14 @@ class IsmCallViewState extends State<IsmCallView> {
         pipSize = Size(min, max);
       }
     }
+    IsmCallLog.error('pip size $size');
+    IsmCallLog.error('pip pipSize $pipSize');
   }
 
   void startPip(BuildContext context) {
-    IsmCallLog.error('currentState step1');
     if (!(context.properties?.enablePip ?? false)) {
       return;
     }
-    IsmCallLog.error('currentState step2');
 
     _calculateSize(context);
     PIPView.of(context)?.presentBelow(
