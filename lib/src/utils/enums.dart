@@ -38,22 +38,19 @@ enum IsmCallControl {
     IsmCallAssets.mic,
     IsmCallAssets.micOff,
   ),
-  // chat(
-  //   IsmCallAssets.message,
-  //   IsmCallAssets.message,
-  // ),
-  speaker(
-    IsmCallAssets.speaker,
-    IsmCallAssets.speakerOff,
+  filpCamera(
+    IsmCallAssets.flipCamera,
+    IsmCallAssets.flipCamera,
   ),
   screenShare(
     IsmCallAssets.stopScreenShare,
     IsmCallAssets.screenShare,
   ),
-  filpCamera(
-    IsmCallAssets.flipCamera,
-    IsmCallAssets.flipCamera,
+  speaker(
+    IsmCallAssets.speaker,
+    IsmCallAssets.speakerOff,
   ),
+
   callEnd(
     '',
     '',

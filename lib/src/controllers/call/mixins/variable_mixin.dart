@@ -39,6 +39,9 @@ mixin IsmCallVariableMixin {
   final _disconnectDebouncer = IsmCallDebouncer(milliseconds: 500);
   final _micDebouncer = IsmCallDebouncer();
 
+
+  late String meetingId;
+
   final RxBool _isMicOn = true.obs;
   bool get isMicOn => _isMicOn.value;
   set isMicOn(bool value) => _isMicOn.value = value;

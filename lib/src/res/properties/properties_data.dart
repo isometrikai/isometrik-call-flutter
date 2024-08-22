@@ -12,7 +12,8 @@ class IsmCallPropertiesData {
     this.showOpponentCallEnded = true,
     this.callControls,
     this.controlsPosition = IsmControlPosition.bottom,
-    this.callControlFeatures = IsmCallControl.values,
+    this.allowedCallActions = IsmCallControl.values,
+    this.controlProperties,
   })  : assert(
           !enablePip || (enablePip && pipView != null),
           '`pipView` must be non-null, if `enablePip` is set to true',
@@ -29,9 +30,10 @@ class IsmCallPropertiesData {
   final bool showOpponentLeft;
   final bool showMissCall;
   final bool showOpponentCallEnded;
-  final List<IsmCallControlIcon>? callControls;
+  final List<IsmCallUserControlWidget>? callControls;
   final IsmControlPosition controlsPosition;
-  final List<IsmCallControl> callControlFeatures;
+  final List<IsmCallControl> allowedCallActions;
+  final IsmCallControlProperty? controlProperties;
 
   IsmCallPropertiesData lerp(covariant IsmCallPropertiesData? other, double t) {
     if (other is! IsmCallPropertiesData) {
@@ -49,8 +51,9 @@ class IsmCallPropertiesData {
       showMissCall: t < 0.5 ? showMissCall : other.showMissCall,
       callControls: t < 0.5 ? callControls : other.callControls,
       controlsPosition: t < 0.5 ? controlsPosition : other.controlsPosition,
-      callControlFeatures:
-          t < 0.5 ? callControlFeatures : other.callControlFeatures,
+      allowedCallActions:
+          t < 0.5 ? allowedCallActions : other.allowedCallActions,
+      controlProperties: t < 0.5 ? controlProperties : other.controlProperties,
     );
   }
 
@@ -62,9 +65,10 @@ class IsmCallPropertiesData {
     bool? showOpponentLeft,
     bool? showMissCallSnack,
     bool? showOpponentCallEnded,
-    List<IsmCallControlIcon>? callControls,
+    List<IsmCallUserControlWidget>? callControls,
     IsmControlPosition? controlsPosition,
-    final List<IsmCallControl>? callControlFeatures,
+    final List<IsmCallControl>? allowedCallActions,
+    IsmCallControlProperty? controlProperties,
   }) =>
       IsmCallPropertiesData(
         enablePip: enablePip ?? this.enablePip,
@@ -77,6 +81,7 @@ class IsmCallPropertiesData {
             showOpponentCallEnded ?? this.showOpponentCallEnded,
         callControls: callControls ?? this.callControls,
         controlsPosition: controlsPosition ?? this.controlsPosition,
-        callControlFeatures: callControlFeatures ?? this.callControlFeatures,
+        allowedCallActions: allowedCallActions ?? this.allowedCallActions,
+        controlProperties: controlProperties ?? this.controlProperties,
       );
 }

@@ -31,8 +31,6 @@ class _IsmCallViewState extends State<IsmCallView> {
   late final AppLifecycleListener _listener;
   IsmCallController get _controller => Get.find();
 
-  late String meetingId;
-
   final collapsedKey = GlobalKey<IsmCallControlSheetState>();
 
   @override
@@ -40,7 +38,7 @@ class _IsmCallViewState extends State<IsmCallView> {
     super.initState();
     _listener = AppLifecycleListener(
       onDetach: () {
-        _controller.disconnectCall(meetingId: meetingId);
+        _controller.disconnectCall(meetingId: _controller.meetingId);
       },
       onHide: () {
         IsmCallLog.success('onHide');
@@ -69,12 +67,13 @@ class _IsmCallViewState extends State<IsmCallView> {
         widget.audioOnly ?? Get.arguments['audioOnly'] as bool? ?? true;
     _controller.userInfoModel =
         widget.userInfo ?? IsmCallUserInfoModel.fromMap(Get.arguments);
-    meetingId = widget.meetingId ?? Get.arguments['meetingId'] as String? ?? '';
+    _controller.meetingId =
+        widget.meetingId ?? Get.arguments['meetingId'] as String? ?? '';
     _controller.isRecording = false;
     _controller.isMicOn = true;
     _controller.showFullVideo = true;
     _controller.isFrontCamera = true;
-    _controller.setUpListeners(meetingId);
+    _controller.setUpListeners(_controller.meetingId);
     _controller.sortParticipants();
     _controller.videoPositionX = 20;
     _controller.videoPositionY = 20;
@@ -295,7 +294,7 @@ class _IsmCallViewState extends State<IsmCallView> {
                                           ),
                                   ),
                             if (!isFloating &&
-                                context.properties?.callControlFeatures
+                                context.properties?.allowedCallActions
                                         .isNotEmpty ==
                                     true)
                               Builder(
@@ -314,9 +313,9 @@ class _IsmCallViewState extends State<IsmCallView> {
                                           ...context.properties?.callControls ??
                                               []
                                         ],
-                                        ...ismCallControlFeatures(controller),
+                                        ...ismCallControlFeatures(),
                                       ],
-                                      collapseIndexOrder: const [6, 5, 1, 2, 4],
+                                      collapseIndexOrder: const [6, 3, 1, 2, 5],
                                     ),
                                   );
                                 },
@@ -382,76 +381,83 @@ class _IsmCallViewState extends State<IsmCallView> {
         ),
       );
 
-  List<Widget> ismCallControlFeatures(IsmCallController controller) {
+  List<Widget> ismCallControlFeatures() {
+    final controller = Get.find<IsmCallController>();
     final features = <Widget>[];
-    final favoriteFeautre = context.properties?.callControlFeatures ?? [];
-    for (final feature in favoriteFeautre) {
+    final allowedCallActions = context.properties?.allowedCallActions ?? [];
+    final controlProperties = context.properties?.controlProperties;
+    for (final feature in allowedCallActions) {
       if (feature == IsmCallControl.record) {
         features.add(
-          IsmCallControlIcon(
-            IsmCallControl.record,
-            isActive: controller.isRecording,
-            onToggle: controller.toggleRecording,
-          ),
+          controlProperties?.recordingControl ??
+              RecordControl(
+                onChange: controller.toggleRecording,
+                isActive: controller.isRecording,
+              ),
         );
       }
       if (feature == IsmCallControl.video) {
         features.add(
-          IsmCallControlIcon(
-            IsmCallControl.video,
-            isActive: controller.isVideoOn,
-            onToggle: controller.toggleVideo,
-          ),
+          controlProperties?.videoControl ??
+              VideoControl(
+                onChange: controller.toggleVideo,
+                isActive: controller.isVideoOn,
+              ),
         );
       }
       if (feature == IsmCallControl.mic) {
         features.add(
-          IsmCallControlIcon(
-            IsmCallControl.mic,
-            isActive: controller.isMicOn,
-            onToggle: (value) => controller.toggleMic(value: value),
-          ),
-        );
-      }
-      if (feature == IsmCallControl.screenShare) {
-        features.add(
-          IsmCallControlIcon(
-            IsmCallControl.screenShare,
-            isActive: controller.isScreenSharing,
-            onToggle: controller.toggleScreenShare,
-          ),
-        );
-      }
-      if (feature == IsmCallControl.filpCamera) {
-        features.add(
-          IsmCallControlIcon(
-            IsmCallControl.filpCamera,
-            isActive: controller.isVideoOn,
-            onToggle:
-                controller.isVideoOn ? (_) => _controller.flipCamera() : null,
-          ),
+          controlProperties?.micControl ??
+              MicControl(
+                onChange: (value) {
+                  controller.toggleMic(value: value);
+                },
+                isActive: controller.isMicOn,
+              ),
         );
       }
       if (feature == IsmCallControl.speaker) {
         features.add(
-          IsmCallControlIcon(
-            IsmCallControl.speaker,
-            isActive: controller.isSpeakerOn,
-            onToggle: controller.toggleSpeaker,
-          ),
+          controlProperties?.speakerControl ??
+              SpeakerControl(
+                onChange: controller.toggleSpeaker,
+                isActive: controller.isSpeakerOn,
+              ),
+        );
+      }
+      if (feature == IsmCallControl.screenShare) {
+        features.add(
+          controlProperties?.screenShareControl ??
+              ScreenShareControl(
+                onChange: controller.toggleScreenShare,
+                isActive: controller.isScreenSharing,
+              ),
+        );
+      }
+      if (feature == IsmCallControl.filpCamera) {
+        features.add(
+          controlProperties?.cameraControl ??
+              FilpCameraControl(
+                onChange: controller.isVideoOn
+                    ? (_) => _controller.flipCamera()
+                    : null,
+                isActive: controller.isVideoOn,
+              ),
         );
       }
       if (feature == IsmCallControl.callEnd) {
         features.add(
-          IsmCallRejectButton(
-            onTap: () => controller.disconnectCall(
-              meetingId: meetingId,
-            ),
-          ),
+          controlProperties?.callEndControl ??
+              EndCallControl(
+                onChange: (_) {
+                  controller.disconnectCall(
+                    meetingId: _controller.meetingId,
+                  );
+                },
+              ),
         );
       }
     }
-
     return features;
   }
 }

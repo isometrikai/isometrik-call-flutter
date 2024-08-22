@@ -104,7 +104,7 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
                         ? isCollapsed
                             ? 1.2
                             : 1.8
-                        : 0.9,
+                        : 1,
                   ),
                   padding: isCollapsed
                       ? IsmCallDimens.edgeInsets16_0
