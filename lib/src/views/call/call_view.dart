@@ -123,9 +123,12 @@ class IsmCallViewState extends State<IsmCallView> {
   }
 
   void startPip(BuildContext context) {
+    IsmCallLog.error('currentState step1');
     if (!(context.properties?.enablePip ?? false)) {
       return;
     }
+    IsmCallLog.error('currentState step2');
+
     _calculateSize(context);
     PIPView.of(context)?.presentBelow(
         context.properties?.pipBuilder?.call(context) ?? const SizedBox());
