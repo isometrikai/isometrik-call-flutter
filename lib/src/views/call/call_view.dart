@@ -33,6 +33,8 @@ class IsmCallViewState extends State<IsmCallView> {
 
   final collapsedKey = GlobalKey<IsmCallControlSheetState>();
 
+  late BuildContext _buildContext;
+
   @override
   void initState() {
     super.initState();
@@ -125,13 +127,14 @@ class IsmCallViewState extends State<IsmCallView> {
   }
 
   void startPip(BuildContext context) {
-    if (!(context.properties?.enablePip ?? false)) {
+    if (!(_buildContext.properties?.enablePip ?? false)) {
       return;
     }
 
-    _calculateSize(context);
-    PIPView.of(context)?.presentBelow(
-        context.properties?.pipBuilder?.call(context) ?? const SizedBox());
+    _calculateSize(_buildContext);
+    PIPView.of(_buildContext)?.presentBelow(
+        _buildContext.properties?.pipBuilder?.call(_buildContext) ??
+            const SizedBox());
   }
 
   bool get isControlsBottom {
@@ -152,244 +155,236 @@ class IsmCallViewState extends State<IsmCallView> {
   }
 
   @override
-  Widget build(BuildContext context) => Obx(
-        () => PIPView(
-          avoidKeyboard: true,
-          initialCorner: PIPViewCorner.bottomRight,
-          floatingHeight: pipSize?.height,
-          floatingWidth: pipSize?.width,
-          builder: (context, isFloating) => CustomWillPopScope(
-            onWillPop: () async {
-              // startPip(context);
+  Widget build(BuildContext context) {
+    _buildContext = context;
+    return Obx(
+      () => PIPView(
+        avoidKeyboard: true,
+        initialCorner: PIPViewCorner.bottomRight,
+        floatingHeight: pipSize?.height,
+        floatingWidth: pipSize?.width,
+        builder: (context, isFloating) => CustomWillPopScope(
+          onWillPop: () async {
+            // startPip(context);
 
-              return false;
-            },
-            canReturn: false,
-            child: GetX<IsmCallController>(
-                builder: (controller) => IsmCallTapHandler(
-                      onTap: _closeControlsSheet,
-                      child: Scaffold(
-                        backgroundColor: controller.participantTracks.isEmpty
-                            ? context.theme.scaffoldBackgroundColor
-                            : IsmCallColors.black,
-                        extendBody: true,
-                        extendBodyBehindAppBar: true,
-                        appBar: isFloating
-                            ? null
-                            : AppBar(
-                                elevation: 0,
-                                backgroundColor: Colors.transparent,
-                                centerTitle: true,
-                                automaticallyImplyLeading: false,
-                                title: Text(
-                                  'End-to-end Encrypted',
-                                  style: context.textTheme.bodyMedium,
-                                ),
-                                leading: IconButton(
-                                  onPressed: () {
-                                    IsmCall.i.startPip(Get.context!);
-                                    // startPip(context);
-                                  },
-                                  icon:
-                                      const Icon(Icons.arrow_back_ios_rounded),
-                                ),
-                                bottom: PreferredSize(
-                                  preferredSize: Size(
-                                      double.maxFinite, IsmCallDimens.twenty),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        controller.callDuration.inSeconds < 1
-                                            ? Get.context?.translations
-                                                    ?.joining ??
-                                                IsmCallStrings.joining
-                                            : controller
-                                                .callDuration.formatTime,
-                                      ),
-                                      if (controller.isRecording) ...[
-                                        IsmCallDimens.boxWidth8,
-                                        DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                                IsmCallDimens.fifty),
-                                            color: context.theme.cardColor,
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                IsmCallDimens.edgeInsets12_4,
-                                            child: Text(
-                                              controller.recordingText,
-                                              style:
-                                                  context.textTheme.labelSmall,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                ),
-                                actions: IsmCall.i.callActions,
+            return false;
+          },
+          canReturn: false,
+          child: GetX<IsmCallController>(
+              builder: (controller) => IsmCallTapHandler(
+                    onTap: _closeControlsSheet,
+                    child: Scaffold(
+                      backgroundColor: controller.participantTracks.isEmpty
+                          ? context.theme.scaffoldBackgroundColor
+                          : IsmCallColors.black,
+                      extendBody: true,
+                      extendBodyBehindAppBar: true,
+                      appBar: isFloating
+                          ? null
+                          : AppBar(
+                              elevation: 0,
+                              backgroundColor: Colors.transparent,
+                              centerTitle: true,
+                              automaticallyImplyLeading: false,
+                              title: Text(
+                                'End-to-end Encrypted',
+                                style: context.textTheme.bodyMedium,
                               ),
-                        body: Stack(
-                          children: [
-                            controller.participantTracks.isEmpty
-                                ? Center(
-                                    child: IsmCallNoVideoWidget(
-                                      name:
-                                          controller.userInfoModel?.userName ??
-                                              '',
-                                      imageUrl:
-                                          controller.userInfoModel?.imageUrl ??
-                                              '',
-                                      isLargeVideo: true,
-                                    ),
-                                  )
-                                : Positioned.fill(
-                                    child: sharingMyScreen
-                                        ? IsmCallScreenShared(
-                                            onStop: () => controller
-                                                .toggleScreenShare(false),
-                                          )
-                                        : InteractiveViewer(
-                                            maxScale: _isScreenShared ? 3 : 1,
-                                            panEnabled: _isScreenShared,
-                                            scaleEnabled: _isScreenShared,
-                                            child: IsmCallTapHandler(
-                                              onDoubleTap: (context.properties
-                                                          ?.enableVideoFitChange ??
-                                                      false)
-                                                  ? () {
-                                                      if (controller
-                                                          .isRemoteVideoLarge) {
-                                                        _controller
-                                                                .showFullVideo =
-                                                            !_controller
-                                                                .showFullVideo;
-                                                      }
-                                                    }
-                                                  : null,
-                                              child: IsmCallParticipantView(
-                                                _largeVideoTrack,
-                                                imageUrl: controller
-                                                        .isRemoteVideoLarge
-                                                    ? null
-                                                    : IsmCall
-                                                        .i
-                                                        .config
-                                                        ?.userConfig
-                                                        .userProfile,
-                                                videoFit: context.properties
-                                                    ?.videoFit?.rtcFit,
-                                                showFullVideo:
-                                                    _controller.showFullVideo ||
-                                                        _isScreenShared,
-                                                backgroundColor: context
-                                                        .callTheme
-                                                        ?.videoBackgroundColor ??
-                                                    IsmCallColors.black,
-                                                videoOffBackgroundColor: context
-                                                        .callTheme
-                                                        ?.videoOffBackgroundColor ??
-                                                    IsmCallColors.background,
-                                                isLargeVideo: true,
-                                              ),
-                                            ),
-                                          ),
-                                  ),
-                            if (!isFloating &&
-                                context.properties?.allowedCallActions
-                                        .isNotEmpty ==
-                                    true)
-                              Builder(
-                                builder: (context) {
-                                  final alignment = context.properties
-                                          ?.controlsPosition.alignment ??
-                                      Alignment.bottomCenter;
-                                  return Align(
-                                    alignment: alignment,
-                                    child: IsmCallControlSheet(
-                                      key: collapsedKey,
-                                      isControlsBottom: isControlsBottom,
-                                      controls: [
-                                        if (context.properties
-                                                ?.callControlsBuilder !=
-                                            null) ...[
-                                          ...context.properties
-                                                  ?.callControlsBuilder
-                                                  ?.call(context) ??
-                                              []
-                                        ],
-                                        ...ismCallControlFeatures(),
-                                      ],
-                                      collapseIndexOrder: const [6, 3, 1, 2, 5],
-                                    ),
-                                  );
+                              leading: IconButton(
+                                onPressed: () {
+                                  IsmCall.i.startPip(Get.context!);
+                                  // startPip(context);
                                 },
+                                icon: const Icon(Icons.arrow_back_ios_rounded),
                               ),
-                            if (!isFloating &&
-                                controller.participantTracks.length > 1)
-                              Positioned(
-                                left: controller.videoPositionX,
-                                top: controller.videoPositionY,
-                                child: GestureDetector(
-                                  onPanUpdate: controller.onVideoPan,
-                                  onTap: _isScreenShared
-                                      ? null
-                                      : controller.toggleLargeVideo,
-                                  child: SafeArea(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                          IsmCallDimens.eight),
-                                      child: SizedBox(
-                                        height: min(Get.height * 0.25,
-                                            IsmCallDimens.oneHundredSeventy),
-                                        child: ListView.builder(
-                                          itemCount: _smallVideoTrack.length,
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemBuilder: (_, index) {
-                                            final participant =
-                                                _smallVideoTrack[index];
-                                            return AspectRatio(
-                                              aspectRatio: 9 / 16,
-                                              child: IsmCallParticipantView(
-                                                participant,
-                                                isLargeVideo: false,
-                                                imageUrl:
-                                                    participant.participant
-                                                            is LocalParticipant
-                                                        ? IsmCall
-                                                            .i
-                                                            .config
-                                                            ?.userConfig
-                                                            .userProfile
-                                                        : null,
-                                                videoOffBackgroundColor: context
-                                                        .callTheme
-                                                        ?.videoOffCardColor ??
-                                                    IsmCallColors.card,
-                                              ),
-                                            );
-                                          },
+                              bottom: PreferredSize(
+                                preferredSize: Size(
+                                    double.maxFinite, IsmCallDimens.twenty),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      controller.callDuration.inSeconds < 1
+                                          ? Get.context?.translations
+                                                  ?.joining ??
+                                              IsmCallStrings.joining
+                                          : controller.callDuration.formatTime,
+                                    ),
+                                    if (controller.isRecording) ...[
+                                      IsmCallDimens.boxWidth8,
+                                      DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              IsmCallDimens.fifty),
+                                          color: context.theme.cardColor,
                                         ),
+                                        child: Padding(
+                                          padding: IsmCallDimens.edgeInsets12_4,
+                                          child: Text(
+                                            controller.recordingText,
+                                            style: context.textTheme.labelSmall,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                              actions: IsmCall.i.callActions,
+                            ),
+                      body: Stack(
+                        children: [
+                          controller.participantTracks.isEmpty
+                              ? Center(
+                                  child: IsmCallNoVideoWidget(
+                                    name: controller.userInfoModel?.userName ??
+                                        '',
+                                    imageUrl:
+                                        controller.userInfoModel?.imageUrl ??
+                                            '',
+                                    isLargeVideo: true,
+                                  ),
+                                )
+                              : Positioned.fill(
+                                  child: sharingMyScreen
+                                      ? IsmCallScreenShared(
+                                          onStop: () => controller
+                                              .toggleScreenShare(false),
+                                        )
+                                      : InteractiveViewer(
+                                          maxScale: _isScreenShared ? 3 : 1,
+                                          panEnabled: _isScreenShared,
+                                          scaleEnabled: _isScreenShared,
+                                          child: IsmCallTapHandler(
+                                            onDoubleTap: (context.properties
+                                                        ?.enableVideoFitChange ??
+                                                    false)
+                                                ? () {
+                                                    if (controller
+                                                        .isRemoteVideoLarge) {
+                                                      _controller
+                                                              .showFullVideo =
+                                                          !_controller
+                                                              .showFullVideo;
+                                                    }
+                                                  }
+                                                : null,
+                                            child: IsmCallParticipantView(
+                                              _largeVideoTrack,
+                                              imageUrl:
+                                                  controller.isRemoteVideoLarge
+                                                      ? null
+                                                      : IsmCall
+                                                          .i
+                                                          .config
+                                                          ?.userConfig
+                                                          .userProfile,
+                                              videoFit: context
+                                                  .properties?.videoFit?.rtcFit,
+                                              showFullVideo:
+                                                  _controller.showFullVideo ||
+                                                      _isScreenShared,
+                                              backgroundColor: context.callTheme
+                                                      ?.videoBackgroundColor ??
+                                                  IsmCallColors.black,
+                                              videoOffBackgroundColor: context
+                                                      .callTheme
+                                                      ?.videoOffBackgroundColor ??
+                                                  IsmCallColors.background,
+                                              isLargeVideo: true,
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                          if (!isFloating &&
+                              context.properties?.allowedCallActions
+                                      .isNotEmpty ==
+                                  true)
+                            Builder(
+                              builder: (context) {
+                                final alignment = context.properties
+                                        ?.controlsPosition.alignment ??
+                                    Alignment.bottomCenter;
+                                return Align(
+                                  alignment: alignment,
+                                  child: IsmCallControlSheet(
+                                    key: collapsedKey,
+                                    isControlsBottom: isControlsBottom,
+                                    controls: [
+                                      if (context.properties
+                                              ?.callControlsBuilder !=
+                                          null) ...[
+                                        ...context
+                                                .properties?.callControlsBuilder
+                                                ?.call(context) ??
+                                            []
+                                      ],
+                                      ...ismCallControlFeatures(),
+                                    ],
+                                    collapseIndexOrder: const [6, 3, 1, 2, 5],
+                                  ),
+                                );
+                              },
+                            ),
+                          if (!isFloating &&
+                              controller.participantTracks.length > 1)
+                            Positioned(
+                              left: controller.videoPositionX,
+                              top: controller.videoPositionY,
+                              child: GestureDetector(
+                                onPanUpdate: controller.onVideoPan,
+                                onTap: _isScreenShared
+                                    ? null
+                                    : controller.toggleLargeVideo,
+                                child: SafeArea(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        IsmCallDimens.eight),
+                                    child: SizedBox(
+                                      height: min(Get.height * 0.25,
+                                          IsmCallDimens.oneHundredSeventy),
+                                      child: ListView.builder(
+                                        itemCount: _smallVideoTrack.length,
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (_, index) {
+                                          final participant =
+                                              _smallVideoTrack[index];
+                                          return AspectRatio(
+                                            aspectRatio: 9 / 16,
+                                            child: IsmCallParticipantView(
+                                              participant,
+                                              isLargeVideo: false,
+                                              imageUrl: participant.participant
+                                                      is LocalParticipant
+                                                  ? IsmCall.i.config?.userConfig
+                                                      .userProfile
+                                                  : null,
+                                              videoOffBackgroundColor: context
+                                                      .callTheme
+                                                      ?.videoOffCardColor ??
+                                                  IsmCallColors.card,
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
                       ),
-                    )),
-          ),
+                    ),
+                  )),
         ),
-      );
+      ),
+    );
+  }
 
   List<Widget> ismCallControlFeatures() {
     final controller = Get.find<IsmCallController>();
