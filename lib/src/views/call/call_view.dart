@@ -158,6 +158,7 @@ class IsmCallViewState extends State<IsmCallView> {
           builder: (context, isFloating) => CustomWillPopScope(
             onWillPop: () async {
               // startPip(context);
+
               return false;
             },
             canReturn: false,
@@ -181,11 +182,14 @@ class IsmCallViewState extends State<IsmCallView> {
                                   'End-to-end Encrypted',
                                   style: context.textTheme.bodyMedium,
                                 ),
-                                // leading: IconButton(
-                                //   onPressed: () => startPip(context),
-                                //   icon:
-                                //       const Icon(Icons.arrow_back_ios_rounded),
-                                // ),
+                                leading: IconButton(
+                                  onPressed: () {
+                                    IsmCall.i.startPip(Get.context!);
+                                    // startPip(context);
+                                  },
+                                  icon:
+                                      const Icon(Icons.arrow_back_ios_rounded),
+                                ),
                                 bottom: PreferredSize(
                                   preferredSize: Size(
                                       double.maxFinite, IsmCallDimens.twenty),
