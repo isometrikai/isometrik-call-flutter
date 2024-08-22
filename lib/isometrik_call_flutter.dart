@@ -413,7 +413,7 @@ class IsmCall {
     _initialized = false;
   }
 
-  void startPip(BuildContext context) {
-    _delegate.startPip(context);
+  void startPip() {
+    _delegate.startPip();
   }
 }

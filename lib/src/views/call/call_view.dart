@@ -126,16 +126,29 @@ class IsmCallViewState extends State<IsmCallView> {
     IsmCallLog.error('pip pipSize $pipSize');
   }
 
-  void startPip(BuildContext context) {
+  void startPip() {
     if (!(_buildContext.properties?.enablePip ?? false)) {
       return;
     }
 
     _calculateSize(_buildContext);
-    IsmCallLog.error(_buildContext.properties?.pipBuilder?.call(_buildContext));
+    IsmCallLog.error(
+        'pip Builder ${_buildContext.properties?.pipBuilder?.call(_buildContext)}');
     PIPView.of(_buildContext)?.presentBelow(
         _buildContext.properties?.pipBuilder?.call(_buildContext) ??
             const SizedBox());
+  }
+
+  void _startPip(BuildContext context) {
+    if (!(context.properties?.enablePip ?? false)) {
+      return;
+    }
+
+    _calculateSize(context);
+    IsmCallLog.error(
+        'pip Builder ${context.properties?.pipBuilder?.call(_buildContext)}');
+    PIPView.of(context)?.presentBelow(
+        context.properties?.pipBuilder?.call(context) ?? const SizedBox());
   }
 
   bool get isControlsBottom {
@@ -167,7 +180,6 @@ class IsmCallViewState extends State<IsmCallView> {
         builder: (context, isFloating) => CustomWillPopScope(
           onWillPop: () async {
             // startPip(context);
-
             return false;
           },
           canReturn: false,
@@ -193,8 +205,7 @@ class IsmCallViewState extends State<IsmCallView> {
                               ),
                               leading: IconButton(
                                 onPressed: () {
-                                  IsmCall.i.startPip(Get.context!);
-                                  // startPip(context);
+                                  _startPip(context);
                                 },
                                 icon: const Icon(Icons.arrow_back_ios_rounded),
                               ),

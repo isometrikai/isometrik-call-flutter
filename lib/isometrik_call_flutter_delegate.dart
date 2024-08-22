@@ -227,8 +227,7 @@ class IsmCallDelegate {
     ]);
   }
 
-  void startPip(BuildContext context) {
-  
-    callKey.currentState?.startPip(context);
+  void startPip() {
+    callKey.currentState?.startPip();
   }
 }
