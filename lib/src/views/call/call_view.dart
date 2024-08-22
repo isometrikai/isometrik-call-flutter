@@ -134,18 +134,6 @@ class IsmCallViewState extends State<IsmCallView> {
             const SizedBox());
   }
 
-  void _startPip(BuildContext context) {
-    if (!(context.properties?.enablePip ?? false)) {
-      return;
-    }
-
-    _calculateSize(context);
-    IsmCallLog.error(
-        'pip Builder ${context.properties?.pipBuilder?.call(_buildContext)}');
-    PIPView.of(context)?.presentBelow(
-        context.properties?.pipBuilder?.call(context) ?? const SizedBox());
-  }
-
   bool get isControlsBottom {
     final alignment = context.properties?.controlsPosition.alignment ??
         Alignment.bottomCenter;
@@ -199,13 +187,13 @@ class IsmCallViewState extends State<IsmCallView> {
                                   'End-to-end Encrypted',
                                   style: context.textTheme.bodyMedium,
                                 ),
-                                leading: IconButton(
-                                  onPressed: () {
-                                    _startPip(context);
-                                  },
-                                  icon:
-                                      const Icon(Icons.arrow_back_ios_rounded),
-                                ),
+                                // leading: IconButton(
+                                //   onPressed: () {
+                                //     _startPip(context);
+                                //   },
+                                //   icon:
+                                //       const Icon(Icons.arrow_back_ios_rounded),
+                                // ),
                                 bottom: PreferredSize(
                                   preferredSize: Size(
                                       double.maxFinite, IsmCallDimens.twenty),
