@@ -308,9 +308,12 @@ class IsmCallViewState extends State<IsmCallView> {
                                       key: collapsedKey,
                                       isControlsBottom: isControlsBottom,
                                       controls: [
-                                        if (context.properties?.callControls !=
+                                        if (context.properties
+                                                ?.callControlsBuilder !=
                                             null) ...[
-                                          ...context.properties?.callControls ??
+                                          ...context.properties
+                                                  ?.callControlsBuilder
+                                                  ?.call(context) ??
                                               []
                                         ],
                                         ...ismCallControlFeatures(),

@@ -10,7 +10,7 @@ class IsmCallPropertiesData {
     this.showOpponentLeft = true,
     this.showMissCall = true,
     this.showOpponentCallEnded = true,
-    this.callControls,
+    this.callControlsBuilder,
     this.controlsPosition = IsmControlPosition.bottom,
     this.allowedCallActions = IsmCallControl.values,
     this.controlProperties,
@@ -30,7 +30,7 @@ class IsmCallPropertiesData {
   final bool showOpponentLeft;
   final bool showMissCall;
   final bool showOpponentCallEnded;
-  final List<IsmCallUserControlWidget>? callControls;
+  final List<IsmCallUserControlWidget> Function(BuildContext)? callControlsBuilder;
   final IsmControlPosition controlsPosition;
   final List<IsmCallControl> allowedCallActions;
   final IsmCallControlProperty? controlProperties;
@@ -49,7 +49,7 @@ class IsmCallPropertiesData {
       showOpponentCallEnded:
           t < 0.5 ? showOpponentCallEnded : other.showOpponentCallEnded,
       showMissCall: t < 0.5 ? showMissCall : other.showMissCall,
-      callControls: t < 0.5 ? callControls : other.callControls,
+      callControlsBuilder: t < 0.5 ? callControlsBuilder : other.callControlsBuilder,
       controlsPosition: t < 0.5 ? controlsPosition : other.controlsPosition,
       allowedCallActions:
           t < 0.5 ? allowedCallActions : other.allowedCallActions,
@@ -65,7 +65,7 @@ class IsmCallPropertiesData {
     bool? showOpponentLeft,
     bool? showMissCallSnack,
     bool? showOpponentCallEnded,
-    List<IsmCallUserControlWidget>? callControls,
+    List<IsmCallUserControlWidget>  Function(BuildContext)? callControlsBuilder,
     IsmControlPosition? controlsPosition,
     final List<IsmCallControl>? allowedCallActions,
     IsmCallControlProperty? controlProperties,
@@ -79,7 +79,7 @@ class IsmCallPropertiesData {
         showMissCall: showMissCallSnack ?? showMissCall,
         showOpponentCallEnded:
             showOpponentCallEnded ?? this.showOpponentCallEnded,
-        callControls: callControls ?? this.callControls,
+        callControlsBuilder: callControlsBuilder ?? this.callControlsBuilder,
         controlsPosition: controlsPosition ?? this.controlsPosition,
         allowedCallActions: allowedCallActions ?? this.allowedCallActions,
         controlProperties: controlProperties ?? this.controlProperties,
