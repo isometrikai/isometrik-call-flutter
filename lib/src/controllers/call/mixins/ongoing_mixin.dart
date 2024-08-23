@@ -100,9 +100,11 @@ mixin IsmCallOngoingMixin {
     Color? color;
     if (triggerAPI) {
       _controller.recordingText = "You're recording";
+      final meetingId = IsmCallHelper.ongoingMeetingId ?? '';
       if (value) {
-        var isStarted = await _controller
-            ._startRecording(IsmCallHelper.ongoingMeetingId ?? '');
+        var isStarted = await _controller._startRecording(
+          meetingId.isNotEmpty ? meetingId : _controller.meetingId,
+        );
         msg = 'Recording started';
         if (!isStarted) {
           msg = 'Error starting recording';
@@ -110,8 +112,9 @@ mixin IsmCallOngoingMixin {
           _controller.isRecording = false;
         }
       } else {
-        var isStopped = await _controller
-            ._stopRecording(IsmCallHelper.ongoingMeetingId ?? '');
+        var isStopped = await _controller._stopRecording(
+          meetingId.isNotEmpty ? meetingId : _controller.meetingId,
+        );
         msg = 'Recording stopped';
         if (!isStopped) {
           color = IsmCallColors.red;
