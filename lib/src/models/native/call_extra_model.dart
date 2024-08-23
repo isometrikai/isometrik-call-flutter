@@ -29,7 +29,7 @@ class IsmCallExtraModel {
         userIdentifier: map['userIdentifier'] as String? ?? '',
         name: map['name'] as String? ?? '',
         ip: map['ip'] as String? ?? '',
-        metaData: map['metaData'] as Map<String, dynamic>? ?? {},
+        metaData: (map['metaData'] as Map? ?? {}).cast(),
       );
 
   factory IsmCallExtraModel.fromJson(
