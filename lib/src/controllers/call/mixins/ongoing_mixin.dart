@@ -46,8 +46,10 @@ mixin IsmCallOngoingMixin {
         IsmCallUtility.closeLoader();
       }
     }
-    unawaited(_controller.room!.localParticipant!
-        .setCameraEnabled(_controller.isVideoOn));
+    unawaited(
+      _controller.room!.localParticipant!
+          .setCameraEnabled(_controller.isVideoOn),
+    );
   }
 
   void flipCamera() {
@@ -122,7 +124,8 @@ mixin IsmCallOngoingMixin {
           name == null ? 'Recording' : '$name is recording';
     }
     unawaited(
-        IsmCallUtility.showToast(msg, color: color ?? IsmCallColors.green));
+      IsmCallUtility.showToast(msg, color: color ?? IsmCallColors.green),
+    );
     _controller.isProcessingRecording = false;
   }
 
@@ -247,10 +250,13 @@ mixin IsmCallOngoingMixin {
         _controller.room!.disconnect(),
       ],
     ]);
-    IsmCallHelper.callTriggerStatusStream.add((
-      status: IsmCallStatus.callEnded,
-      meetingId: meetingId,
-    ));
+    IsmCallHelper.callTriggerStatusStream.add(
+      (
+        status: IsmCallStatus.callEnded,
+        meetingId: meetingId,
+        data: IsmCallHelper.incomingMetaData,
+      ),
+    );
     _controller.$callStreamTimer?.cancel();
     _controller._ringingTimer?.cancel();
   }
