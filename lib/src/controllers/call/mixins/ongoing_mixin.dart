@@ -235,11 +235,9 @@ mixin IsmCallOngoingMixin {
       return;
     }
     unawaited(IsmCallUtility.stopAudio());
-
     if (Get.currentRoute == IsmCallRoutes.call) {
       Get.back();
     }
-
     await Future.wait([
       if (!fromPushKit) ...[
         IsmCallHelper.endCall(),
@@ -249,7 +247,10 @@ mixin IsmCallOngoingMixin {
         _controller.room!.disconnect(),
       ],
     ]);
-
+    IsmCallHelper.callTriggerStatusStream.add((
+      status: IsmCallStatus.callEnded,
+      meetingId: meetingId,
+    ));
     _controller.$callStreamTimer?.cancel();
     _controller._ringingTimer?.cancel();
   }

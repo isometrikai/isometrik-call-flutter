@@ -30,7 +30,7 @@ class IsmCallHelper {
 
   static String? get ongoingMeetingId => ongoingCall?.extra.meetingId;
 
-  static final _callTriggerStatusStream =
+  static final callTriggerStatusStream =
       StreamController<IsmCallTriggerModel>.broadcast();
 
   static final _callTriggerListeners = <IsmCallTriggerFunction>[];
@@ -38,15 +38,15 @@ class IsmCallHelper {
   static IsmCallTriggerStreamSubscription addCallTriggerListener(
     IsmCallTriggerFunction listener,
   ) =>
-      _callTriggerStatusStream.stream.listen(listener);
+      callTriggerStatusStream.stream.listen(listener);
 
   static Future<void> removeCallTriggerListener(
     IsmCallTriggerFunction listener,
   ) async {
     _callTriggerListeners.remove(listener);
-    await _callTriggerStatusStream.stream.drain();
+    await callTriggerStatusStream.stream.drain();
     for (var listener in _callTriggerListeners) {
-      _callTriggerStatusStream.stream.listen(listener);
+      callTriggerStatusStream.stream.listen(listener);
     }
   }
 
@@ -162,7 +162,7 @@ class IsmCallHelper {
           break;
         case Event.actionCallTimeout:
           unawaited(IsmCallChannelHandler.handleTimeout(call.extra.uid));
-          _callTriggerStatusStream.add((
+          callTriggerStatusStream.add((
             status: IsmCallStatus.callMissed,
             meetingId: call.id,
           ));
@@ -246,7 +246,7 @@ class IsmCallHelper {
     if (GetPlatform.isIOS) {
       unawaited(IsmCallChannelHandler.handleCallEnd(meetingId));
     }
-    _callTriggerStatusStream.add((
+    callTriggerStatusStream.add((
       status: IsmCallStatus.callMissed,
       meetingId: meetingId,
     ));
@@ -313,12 +313,10 @@ class IsmCallHelper {
       return;
     }
     hasCall = false;
-
     final id = call.extra.meetingId;
     if (!incomingCalls.containsKey(id)) {
       return;
     }
-
     unawaited(IsmCallChannelHandler.handleCallEnd(id));
     incomingCalls.remove(id);
     IsmCallHelper.ongoingCall = null;
@@ -326,7 +324,7 @@ class IsmCallHelper {
       meetingId: id,
       fromPushKit: true,
     );
-    _callTriggerStatusStream.add((
+    callTriggerStatusStream.add((
       status: IsmCallStatus.callEnded,
       meetingId: id,
     ));
@@ -380,13 +378,13 @@ class IsmCallHelper {
           IsmCall.i.config?.projectConfig.deviceId ?? '',
         );
         if (callModel == null) {
-          _callTriggerStatusStream.add((
+          callTriggerStatusStream.add((
             status: IsmCallStatus.acceptError,
             meetingId: meetingId,
           ));
           unawaited(IsmCallHelper.endCall());
         } else {
-          _callTriggerStatusStream.add((
+          callTriggerStatusStream.add((
             status: IsmCallStatus.acceptSuccess,
             meetingId: meetingId,
           ));
@@ -406,12 +404,12 @@ class IsmCallHelper {
           meetingId,
         );
         if (isDeclined) {
-          _callTriggerStatusStream.add((
+          callTriggerStatusStream.add((
             status: IsmCallStatus.rejectSuccess,
             meetingId: meetingId,
           ));
         } else {
-          _callTriggerStatusStream.add((
+          callTriggerStatusStream.add((
             status: IsmCallStatus.rejectError,
             meetingId: meetingId,
           ));
