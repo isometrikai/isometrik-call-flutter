@@ -414,10 +414,12 @@ class IsmCall {
     _initialized = false;
   }
 
+  // Show pip
   void startPip() {
     _delegate.startPip();
   }
 
+  // close pip
   void closePip(BuildContext? context) {
     _delegate.closePip(context);
   }
