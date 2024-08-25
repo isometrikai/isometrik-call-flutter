@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' show Client;
-import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
-import 'package:isometrik_call_flutter/isometrik_call_flutter_platform_interface.dart';
+
+import 'isometrik_call_flutter.dart';
+import 'isometrik_call_flutter_platform_interface.dart';
 
 export 'package:mqtt_helper/mqtt_helper.dart';
 
@@ -25,15 +26,15 @@ part 'isometrik_call_flutter_delegate.dart';
 /// This class provides methods for initializing, starting, and ending calls,
 /// as well as adding and removing listeners for call triggers and events.
 class IsmCall {
+  /// Returns the platform version.
+  Future<String?> getPlatformVersion() =>
+      IsometrikCallFlutterPlatform.instance.getPlatformVersion();
+
   /// Factory constructor for creating an instance of IsmCall.
   factory IsmCall() => instance;
 
   /// Private constructor for creating an instance of IsmCall.
   const IsmCall._(this._delegate);
-
-  /// Returns the platform version.
-  Future<String?> getPlatformVersion() =>
-      IsometrikCallFlutterPlatform.instance.getPlatformVersion();
 
   /// The delegate for this instance of IsmCall.
   final IsmCallDelegate _delegate;
@@ -328,7 +329,6 @@ class IsmCall {
     List<Widget>? callActions,
     String? imageUrl,
     bool hdBroadcast = false,
-    isOutgoingCall = true,
   }) {
     assert(_initialized, _initializedError);
     _delegate.startCall(
@@ -339,7 +339,6 @@ class IsmCall {
       callActions: callActions,
       imageUrl: imageUrl,
       hdBroadcast: hdBroadcast,
-      isOutgoingCall: isOutgoingCall,
     );
   }
 
@@ -414,6 +413,7 @@ class IsmCall {
     _initialized = false;
   }
 
+
   // Show pip
   void startPip() {
     _delegate.startPip();
@@ -423,4 +423,5 @@ class IsmCall {
   void closePip(BuildContext? context) {
     _delegate.closePip(context);
   }
+
 }

@@ -4,18 +4,15 @@ import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 class IsmCallPropertiesData {
   const IsmCallPropertiesData({
     this.enablePip = false,
-    this.pipBuilder,
+    this.pipView,
     this.enableVideoFitChange = false,
     this.videoFit,
     this.showOpponentLeft = true,
     this.showMissCall = true,
     this.showOpponentCallEnded = true,
-    this.callControlsBuilder,
-    this.controlsPosition = IsmControlPosition.bottom,
-    this.allowedCallActions = IsmCallControl.values,
-    this.controlProperties,
+    this.showAddNotesOnCallEnd = true,
   })  : assert(
-          !enablePip || (enablePip && pipBuilder != null),
+          !enablePip || (enablePip && pipView != null),
           '`pipView` must be non-null, if `enablePip` is set to true',
         ),
         assert(
@@ -24,16 +21,13 @@ class IsmCallPropertiesData {
         );
 
   final bool enablePip;
-  final Widget Function(BuildContext)? pipBuilder;
+  final Widget? pipView;
   final bool enableVideoFitChange;
   final IsmCallVideoFit? videoFit;
   final bool showOpponentLeft;
   final bool showMissCall;
   final bool showOpponentCallEnded;
-  final List<IsmCallUserControlWidget> Function(BuildContext)? callControlsBuilder;
-  final IsmControlPosition controlsPosition;
-  final List<IsmCallControl> allowedCallActions;
-  final IsmCallControlProperty? controlProperties;
+  final bool showAddNotesOnCallEnd;
 
   IsmCallPropertiesData lerp(covariant IsmCallPropertiesData? other, double t) {
     if (other is! IsmCallPropertiesData) {
@@ -41,7 +35,7 @@ class IsmCallPropertiesData {
     }
     return IsmCallPropertiesData(
       enablePip: t < 0.5 ? enablePip : other.enablePip,
-      pipBuilder: t < 0.5 ? pipBuilder : other.pipBuilder,
+      pipView: t < 0.5 ? pipView : other.pipView,
       enableVideoFitChange:
           t < 0.5 ? enableVideoFitChange : other.enableVideoFitChange,
       videoFit: t < 0.5 ? videoFit : other.videoFit,
@@ -49,39 +43,31 @@ class IsmCallPropertiesData {
       showOpponentCallEnded:
           t < 0.5 ? showOpponentCallEnded : other.showOpponentCallEnded,
       showMissCall: t < 0.5 ? showMissCall : other.showMissCall,
-      callControlsBuilder: t < 0.5 ? callControlsBuilder : other.callControlsBuilder,
-      controlsPosition: t < 0.5 ? controlsPosition : other.controlsPosition,
-      allowedCallActions:
-          t < 0.5 ? allowedCallActions : other.allowedCallActions,
-      controlProperties: t < 0.5 ? controlProperties : other.controlProperties,
+      showAddNotesOnCallEnd:
+          t < 0.5 ? showAddNotesOnCallEnd : other.showAddNotesOnCallEnd,
     );
   }
 
   IsmCallPropertiesData copyWith({
     bool? enablePip,
-    Widget Function(BuildContext)? pipBuilder,
+    Widget? pipView,
     bool? enableVideoFitChange,
     IsmCallVideoFit? videoFit,
     bool? showOpponentLeft,
     bool? showMissCallSnack,
     bool? showOpponentCallEnded,
-    List<IsmCallUserControlWidget>  Function(BuildContext)? callControlsBuilder,
-    IsmControlPosition? controlsPosition,
-    final List<IsmCallControl>? allowedCallActions,
-    IsmCallControlProperty? controlProperties,
+    bool? showAddNotesOnCallEnd,
   }) =>
       IsmCallPropertiesData(
         enablePip: enablePip ?? this.enablePip,
-        pipBuilder: pipBuilder ?? this.pipBuilder,
+        pipView: pipView ?? this.pipView,
         enableVideoFitChange: enableVideoFitChange ?? this.enableVideoFitChange,
         videoFit: videoFit ?? this.videoFit,
         showOpponentLeft: showOpponentLeft ?? this.showOpponentLeft,
         showMissCall: showMissCallSnack ?? showMissCall,
         showOpponentCallEnded:
             showOpponentCallEnded ?? this.showOpponentCallEnded,
-        callControlsBuilder: callControlsBuilder ?? this.callControlsBuilder,
-        controlsPosition: controlsPosition ?? this.controlsPosition,
-        allowedCallActions: allowedCallActions ?? this.allowedCallActions,
-        controlProperties: controlProperties ?? this.controlProperties,
+        showAddNotesOnCallEnd:
+            showAddNotesOnCallEnd ?? this.showAddNotesOnCallEnd,
       );
 }
