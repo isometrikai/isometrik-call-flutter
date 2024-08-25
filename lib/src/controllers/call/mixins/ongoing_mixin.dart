@@ -46,10 +46,8 @@ mixin IsmCallOngoingMixin {
         IsmCallUtility.closeLoader();
       }
     }
-    unawaited(
-      _controller.room!.localParticipant!
-          .setCameraEnabled(_controller.isVideoOn),
-    );
+    unawaited(_controller.room!.localParticipant!
+        .setCameraEnabled(_controller.isVideoOn));
   }
 
   void flipCamera() {
@@ -100,11 +98,9 @@ mixin IsmCallOngoingMixin {
     Color? color;
     if (triggerAPI) {
       _controller.recordingText = "You're recording";
-      final meetingId = IsmCallHelper.ongoingMeetingId ?? '';
       if (value) {
-        var isStarted = await _controller._startRecording(
-          meetingId.isNotEmpty ? meetingId : _controller.meetingId,
-        );
+        var isStarted = await _controller
+            ._startRecording(IsmCallHelper.ongoingMeetingId ?? '');
         msg = 'Recording started';
         if (!isStarted) {
           msg = 'Error starting recording';
@@ -112,9 +108,8 @@ mixin IsmCallOngoingMixin {
           _controller.isRecording = false;
         }
       } else {
-        var isStopped = await _controller._stopRecording(
-          meetingId.isNotEmpty ? meetingId : _controller.meetingId,
-        );
+        var isStopped = await _controller
+            ._stopRecording(IsmCallHelper.ongoingMeetingId ?? '');
         msg = 'Recording stopped';
         if (!isStopped) {
           color = IsmCallColors.red;
@@ -127,8 +122,7 @@ mixin IsmCallOngoingMixin {
           name == null ? 'Recording' : '$name is recording';
     }
     unawaited(
-      IsmCallUtility.showToast(msg, color: color ?? IsmCallColors.green),
-    );
+        IsmCallUtility.showToast(msg, color: color ?? IsmCallColors.green));
     _controller.isProcessingRecording = false;
   }
 
@@ -241,9 +235,20 @@ mixin IsmCallOngoingMixin {
       return;
     }
     unawaited(IsmCallUtility.stopAudio());
+
     if (Get.currentRoute == IsmCallRoutes.call) {
       Get.back();
     }
+    final showNotes = (Get.context?.properties?.showAddNotesOnCallEnd ?? true);
+    if (!fromPushKit && showNotes) {
+      // unawaited(
+      //   IsmCallUtility.openBottomSheet(
+      //     IsmCallAddNoteSheet(meetingId: meetingId),
+      //     isScrollControlled: true,
+      //   ),
+      // );
+    }
+
     await Future.wait([
       if (!fromPushKit) ...[
         IsmCallHelper.endCall(),
@@ -253,13 +258,10 @@ mixin IsmCallOngoingMixin {
         _controller.room!.disconnect(),
       ],
     ]);
-    IsmCallHelper.callTriggerStatusStream.add(
-      (
-        status: IsmCallStatus.callEnded,
-        meetingId: meetingId,
-        data: IsmCallHelper.incomingMetaData,
-      ),
-    );
+    // if (Get.isRegistered<IsmLogsController>()) {
+    //   unawaited(Get.find<IsmLogsController>().refreshLogs());
+    // }
+
     _controller.$callStreamTimer?.cancel();
     _controller._ringingTimer?.cancel();
   }

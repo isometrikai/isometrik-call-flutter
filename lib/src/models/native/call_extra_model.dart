@@ -14,7 +14,6 @@ class IsmCallExtraModel {
     this.userIdentifier = '',
     this.name = '',
     this.ip = '',
-    this.metaData = const {},
   });
 
   factory IsmCallExtraModel.fromMap(Map<String, dynamic> map) =>
@@ -29,7 +28,6 @@ class IsmCallExtraModel {
         userIdentifier: map['userIdentifier'] as String? ?? '',
         name: map['name'] as String? ?? '',
         ip: map['ip'] as String? ?? '',
-        metaData: (map['metaData'] as Map? ?? {}).cast(),
       );
 
   factory IsmCallExtraModel.fromJson(
@@ -47,7 +45,6 @@ class IsmCallExtraModel {
   final String userIdentifier;
   final String name;
   final String ip;
-  final Map<String, dynamic> metaData;
 
   IsmCallExtraModel copyWith({
     String? userId,
@@ -60,7 +57,6 @@ class IsmCallExtraModel {
     String? userIdentifier,
     String? name,
     String? ip,
-    Map<String, dynamic>? metaData,
   }) =>
       IsmCallExtraModel(
         userId: userId ?? this.userId,
@@ -73,7 +69,6 @@ class IsmCallExtraModel {
         userIdentifier: userIdentifier ?? this.userIdentifier,
         name: name ?? this.name,
         ip: ip ?? this.ip,
-        metaData: metaData ?? this.metaData,
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -87,14 +82,13 @@ class IsmCallExtraModel {
         'userIdentifier': userIdentifier,
         'name': name,
         'ip': ip,
-        'metaData': metaData,
       };
 
   String toJson() => json.encode(toMap());
 
   @override
   String toString() =>
-      'IsmCallExtraModel(userId: $userId, uid: $uid, callType: $callType, id: $id, platform: $platform, meetingId: $meetingId, imageUrl: $imageUrl, userIdentifier: $userIdentifier, name: $name, ip: $ip, metaData $metaData)';
+      'IsmCallExtraModel(userId: $userId, uid: $uid, callType: $callType, id: $id, platform: $platform, meetingId: $meetingId, imageUrl: $imageUrl, userIdentifier: $userIdentifier, name: $name, ip: $ip)';
 
   @override
   bool operator ==(covariant IsmCallExtraModel other) {
@@ -109,8 +103,7 @@ class IsmCallExtraModel {
         other.imageUrl == imageUrl &&
         other.userIdentifier == userIdentifier &&
         other.name == name &&
-        other.ip == ip &&
-        other.metaData == metaData;
+        other.ip == ip;
   }
 
   @override
@@ -124,6 +117,5 @@ class IsmCallExtraModel {
       imageUrl.hashCode ^
       userIdentifier.hashCode ^
       name.hashCode ^
-      ip.hashCode ^
-      metaData.hashCode;
+      ip.hashCode;
 }

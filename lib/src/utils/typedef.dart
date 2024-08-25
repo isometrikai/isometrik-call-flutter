@@ -7,11 +7,7 @@ typedef IsmCallMapFunction = void Function(DynamicMap);
 
 typedef IsmCallEventFunction = void Function(EventModel);
 
-typedef IsmCallTriggerModel = ({
-  IsmCallStatus status,
-  String meetingId,
-  Map<String, dynamic> data
-});
+typedef IsmCallTriggerModel = ({IsmCallStatus status, String meetingId});
 
 typedef IsmCallTriggerFunction = void Function(IsmCallTriggerModel);
 
