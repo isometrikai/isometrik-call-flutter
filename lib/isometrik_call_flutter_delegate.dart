@@ -232,6 +232,12 @@ class IsmCallDelegate {
   }
 
   void startPip() {
-    callKey.currentState?.startPip();
+    callKey.currentState?.startPip(pipIsOutSide: true);
   }
+
+   void closePip(BuildContext context) {
+    callKey.currentState?.closePip(context);
+  }
+
+  
 }

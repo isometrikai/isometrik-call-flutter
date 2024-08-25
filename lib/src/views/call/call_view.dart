@@ -35,6 +35,8 @@ class IsmCallViewState extends State<IsmCallView> {
 
   late BuildContext _buildContext;
 
+  bool pipIsOutSide = false;
+
   @override
   void initState() {
     super.initState();
@@ -124,7 +126,8 @@ class IsmCallViewState extends State<IsmCallView> {
     }
   }
 
-  void startPip() {
+  void startPip({bool pipIsOutSide = false}) {
+    pipIsOutSide = pipIsOutSide;
     if (!(_buildContext.properties?.enablePip ?? false)) {
       return;
     }
@@ -133,6 +136,14 @@ class IsmCallViewState extends State<IsmCallView> {
       _buildContext.properties?.pipBuilder?.call(_buildContext) ??
           const SizedBox(),
     );
+  }
+
+  void closePip(BuildContext context) {
+    _buildContext = context;
+    if (!(_buildContext.properties?.enablePip ?? false)) {
+      return;
+    }
+    PIPView.of(_buildContext)?.stopFloating();
   }
 
   bool get isControlsBottom {
@@ -163,7 +174,9 @@ class IsmCallViewState extends State<IsmCallView> {
             _buildContext = context;
             return CustomWillPopScope(
               onWillPop: () async {
-                // startPip(context);
+                if (pipIsOutSide == false) {
+                  startPip();
+                }
                 return false;
               },
               canReturn: false,
@@ -187,13 +200,14 @@ class IsmCallViewState extends State<IsmCallView> {
                               'End-to-end Encrypted',
                               style: context.textTheme.bodyMedium,
                             ),
-                            // leading: IconButton(
-                            //   onPressed: () {
-                            //     _startPip(context);
-                            //   },
-                            //   icon:
-                            //       const Icon(Icons.arrow_back_ios_rounded),
-                            // ),
+                            leading: pipIsOutSide == false
+                                ? IconButton(
+                                    onPressed: startPip,
+                                    icon: const Icon(
+                                      Icons.arrow_back_ios_rounded,
+                                    ),
+                                  )
+                                : null,
                             bottom: PreferredSize(
                               preferredSize: Size(
                                 double.maxFinite,
