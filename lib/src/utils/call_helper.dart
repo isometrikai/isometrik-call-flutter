@@ -11,8 +11,6 @@ class IsmCallHelper {
 
   static Map<String, IsmNativeCallModel> incomingCalls = {};
 
-  static Map<String, dynamic> incomingMetaData = {};
-
   static IsmNativeCallModel? ongoingCall;
 
   static bool actionTriggered = false;
@@ -32,7 +30,7 @@ class IsmCallHelper {
 
   static String? get ongoingMeetingId => ongoingCall?.extra.meetingId;
 
-  static final callTriggerStatusStream =
+  static final _callTriggerStatusStream =
       StreamController<IsmCallTriggerModel>.broadcast();
 
   static final _callTriggerListeners = <IsmCallTriggerFunction>[];
@@ -40,15 +38,15 @@ class IsmCallHelper {
   static IsmCallTriggerStreamSubscription addCallTriggerListener(
     IsmCallTriggerFunction listener,
   ) =>
-      callTriggerStatusStream.stream.listen(listener);
+      _callTriggerStatusStream.stream.listen(listener);
 
   static Future<void> removeCallTriggerListener(
     IsmCallTriggerFunction listener,
   ) async {
     _callTriggerListeners.remove(listener);
-    await callTriggerStatusStream.stream.drain();
+    await _callTriggerStatusStream.stream.drain();
     for (var listener in _callTriggerListeners) {
-      callTriggerStatusStream.stream.listen(listener);
+      _callTriggerStatusStream.stream.listen(listener);
     }
   }
 
@@ -130,7 +128,7 @@ class IsmCallHelper {
       'rationaleMessagePermission':
           'Notification permission is required, to show notification.',
       'postNotificationMessageRequired':
-          'Notification permission is required, Please allow notification permission from setting.',
+          'Notification permission is required, Please allow notification permission from setting.'
     });
   }
 
@@ -140,11 +138,9 @@ class IsmCallHelper {
         return;
       }
       var call = IsmNativeCallModel.fromMap(event.body as Map<String, dynamic>);
-      incomingMetaData = call.extra.metaData;
       try {
         IsmCallLog.highlight(
-          'NativeCallEvent - ${event.event}\n${call.toJson()}',
-        );
+            'NativeCallEvent - ${event.event}\n${call.toJson()}');
       } catch (e, st) {
         IsmCallLog.error(e, st);
       }
@@ -166,13 +162,10 @@ class IsmCallHelper {
           break;
         case Event.actionCallTimeout:
           unawaited(IsmCallChannelHandler.handleTimeout(call.extra.uid));
-          callTriggerStatusStream.add(
-            (
-              status: IsmCallStatus.callMissed,
-              meetingId: call.id,
-              data: {},
-            ),
-          );
+          _callTriggerStatusStream.add((
+            status: IsmCallStatus.callMissed,
+            meetingId: call.id,
+          ));
           break;
         case Event.actionCallCallback:
           // only Android - click action `Call back` from missed call notification
@@ -243,21 +236,20 @@ class IsmCallHelper {
     if (showMissCall) {
       final misscalled =
           Get.context?.translations?.misscalled ?? IsmCallStrings.youMissedCall;
-      unawaited(
-        IsmCallUtility.showToast(
-          misscalled,
-          color: Colors.orange,
-        ),
-      );
+      unawaited(IsmCallUtility.showToast(
+        misscalled,
+        color: Colors.orange,
+      ));
     }
     incomingCalls.remove(meetingId);
     unawaited(FlutterCallkitIncoming.endCall(meetingId));
     if (GetPlatform.isIOS) {
       unawaited(IsmCallChannelHandler.handleCallEnd(meetingId));
     }
-    callTriggerStatusStream.add(
-      (status: IsmCallStatus.callMissed, meetingId: meetingId, data: {}),
-    );
+    _callTriggerStatusStream.add((
+      status: IsmCallStatus.callMissed,
+      meetingId: meetingId,
+    ));
   }
 
   static void callEndByHost(String meetingId) {
@@ -278,12 +270,10 @@ class IsmCallHelper {
     String? meetingId,
     bool isMissed = false,
   }) async {
-    _debouncer.run(
-      () => _endCall(
-        meetingId: meetingId,
-        isMissed: isMissed,
-      ),
-    );
+    _debouncer.run(() => _endCall(
+          meetingId: meetingId,
+          isMissed: isMissed,
+        ));
   }
 
   static Future<void> _endCall({
@@ -323,10 +313,12 @@ class IsmCallHelper {
       return;
     }
     hasCall = false;
+
     final id = call.extra.meetingId;
     if (!incomingCalls.containsKey(id)) {
       return;
     }
+
     unawaited(IsmCallChannelHandler.handleCallEnd(id));
     incomingCalls.remove(id);
     IsmCallHelper.ongoingCall = null;
@@ -334,6 +326,10 @@ class IsmCallHelper {
       meetingId: id,
       fromPushKit: true,
     );
+    _callTriggerStatusStream.add((
+      status: IsmCallStatus.callEnded,
+      meetingId: id,
+    ));
   }
 
   static void $answerCall(
@@ -369,12 +365,10 @@ class IsmCallHelper {
 
       var meetingId = call.extra.meetingId;
       if (meetingId.isEmpty) {
-        unawaited(
-          IsmCallUtility.showToast(
-            'Call not found',
-            color: IsmCallColors.red,
-          ),
-        );
+        unawaited(IsmCallUtility.showToast(
+          'Call not found',
+          color: IsmCallColors.red,
+        ));
         unawaited(_endAllCalls());
         return;
       }
@@ -386,33 +380,25 @@ class IsmCallHelper {
           IsmCall.i.config?.projectConfig.deviceId ?? '',
         );
         if (callModel == null) {
-          callTriggerStatusStream.add(
-            (
-              status: IsmCallStatus.acceptError,
-              meetingId: meetingId,
-              data: call.extra.metaData,
-            ),
-          );
+          _callTriggerStatusStream.add((
+            status: IsmCallStatus.acceptError,
+            meetingId: meetingId,
+          ));
           unawaited(IsmCallHelper.endCall());
         } else {
-          callTriggerStatusStream.add(
-            (
-              status: IsmCallStatus.acceptSuccess,
-              meetingId: meetingId,
-              data: call.extra.metaData,
-            ),
-          );
+          _callTriggerStatusStream.add((
+            status: IsmCallStatus.acceptSuccess,
+            meetingId: meetingId,
+          ));
 
           var userInfo = IsmCallUserInfoModel.fromMap(call.extra.toMap());
 
-          unawaited(
-            _controller.joinCall(
-              meetingId: meetingId,
-              call: callModel,
-              userInfo: userInfo,
-              callType: call.type,
-            ),
-          );
+          unawaited(_controller.joinCall(
+            meetingId: meetingId,
+            call: callModel,
+            userInfo: userInfo,
+            callType: call.type,
+          ));
         }
       } else {
         final isDeclined =
@@ -420,31 +406,23 @@ class IsmCallHelper {
           meetingId,
         );
         if (isDeclined) {
-          callTriggerStatusStream.add(
-            (
-              status: IsmCallStatus.rejectSuccess,
-              meetingId: meetingId,
-              data: call.extra.metaData,
-            ),
-          );
+          _callTriggerStatusStream.add((
+            status: IsmCallStatus.rejectSuccess,
+            meetingId: meetingId,
+          ));
         } else {
-          callTriggerStatusStream.add(
-            (
-              status: IsmCallStatus.rejectError,
-              meetingId: meetingId,
-              data: call.extra.metaData,
-            ),
-          );
+          _callTriggerStatusStream.add((
+            status: IsmCallStatus.rejectError,
+            meetingId: meetingId,
+          ));
         }
       }
     } catch (e) {
       unawaited(_endAllCalls());
-      unawaited(
-        IsmCallUtility.showToast(
-          'Error: Answering - $e',
-          color: IsmCallColors.red,
-        ),
-      );
+      unawaited(IsmCallUtility.showToast(
+        'Error: Answering - $e',
+        color: IsmCallColors.red,
+      ));
     }
   }
 

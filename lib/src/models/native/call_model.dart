@@ -55,9 +55,6 @@ class IsmNativeCallModel {
   final bool isMuted;
   final bool isActivate;
 
-
-  
-
   IsmNativeCallModel copyWith({
     int? normalHandle,
     int? duration,

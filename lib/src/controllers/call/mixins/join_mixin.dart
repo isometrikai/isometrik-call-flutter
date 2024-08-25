@@ -17,7 +17,7 @@ mixin IsmCallJoinMixin {
 
     var startTime = call.joinTime == null
         ? DateTime.now()
-        : DateTime.fromMillisecondsSinceEpoch(call.joinTime ?? 0);
+        : DateTime.fromMillisecondsSinceEpoch(call.joinTime!);
     var now = DateTime.now();
     _controller.callDuration = now.difference(startTime);
 

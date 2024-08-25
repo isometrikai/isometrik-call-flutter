@@ -39,7 +39,15 @@ class IsmCallRepository {
         showDialog: false,
       );
 
-
+  Future<IsmCallResponseModel> startCall(Map<String, dynamic> payload) async =>
+      _apiWrapper.makeRequest(
+        IsmCallEndpoints.call,
+        baseUrl: IsmCallEndpoints.baseUrl,
+        type: IsmCallRequestType.post,
+        showLoader: false,
+        payload: payload,
+        headers: _tokenHeader,
+      );
 
   Future<IsmCallResponseModel> endCall(Map<String, dynamic> payload) async =>
       _apiWrapper.makeRequest(
