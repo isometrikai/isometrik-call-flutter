@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
@@ -37,27 +38,29 @@ enum IsmCallControl {
     IsmCallAssets.mic,
     IsmCallAssets.micOff,
   ),
-  chat(
-    IsmCallAssets.message,
-    IsmCallAssets.message,
-  ),
-  speaker(
-    IsmCallAssets.speaker,
-    IsmCallAssets.speakerOff,
+  filpCamera(
+    IsmCallAssets.flipCamera,
+    IsmCallAssets.flipCamera,
   ),
   screenShare(
     IsmCallAssets.stopScreenShare,
     IsmCallAssets.screenShare,
   ),
-  filpCamera(
-    IsmCallAssets.flipCamera,
-    IsmCallAssets.flipCamera,
+  speaker(
+    IsmCallAssets.speaker,
+    IsmCallAssets.speakerOff,
+  ),
+
+  callEnd(
+    '',
+    '',
   );
 
   const IsmCallControl(
     this.icon,
     this.iconOff,
   );
+
   final String icon;
   final String iconOff;
 }
@@ -120,4 +123,16 @@ enum IsmCallStatus {
   acceptError,
   rejectSuccess,
   rejectError,
+}
+
+enum IsmControlPosition {
+  left,
+  right,
+  bottom;
+
+  AlignmentGeometry get alignment => switch (this) {
+        IsmControlPosition.left => Alignment.bottomLeft,
+        IsmControlPosition.right => Alignment.bottomRight,
+        IsmControlPosition.bottom => Alignment.bottomCenter,
+      };
 }

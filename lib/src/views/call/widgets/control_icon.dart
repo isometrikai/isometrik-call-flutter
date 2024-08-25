@@ -1,40 +1,59 @@
-import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class IsmCallControlIcon extends StatelessWidget {
   const IsmCallControlIcon(
-    this.control, {
+    this.iconPath, {
     super.key,
-    required this.isActive,
-    this.onToggle,
+    this.isActive = true,
   });
 
-  final IsmCallControl control;
+  final String iconPath;
   final bool isActive;
-  final void Function(bool)? onToggle;
 
   @override
-  Widget build(BuildContext context) => IsmCallTapHandler(
-        onTap: () => onToggle?.call(!isActive),
-        child: SizedBox.square(
-          dimension: IsmCallDimens.fifty,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: isActive
-                  ? (context.callTheme?.controlIconTheme?.activeColor ??
-                      context.theme.primaryColor)
-                  : (context.callTheme?.controlIconTheme?.inactiveColor ??
-                      context.theme.scaffoldBackgroundColor),
-              shape: BoxShape.circle,
+  Widget build(BuildContext context) => SizedBox.square(
+        dimension: IsmCallDimens.fifty,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: isActive
+                ? (context.callTheme?.controlIconTheme?.activeColor ??
+                    context.theme.primaryColor)
+                : (context.callTheme?.controlIconTheme?.inactiveColor ??
+                    context.theme.scaffoldBackgroundColor),
+            shape: BoxShape.circle,
+          ),
+          child: UnconstrainedBox(
+            child: IsmCallImage.svg(
+              iconPath,
+              dimensions: IsmCallDimens.thirtyTwo,
+              fromPackage: false,
             ),
-            child: UnconstrainedBox(
-              child: IsmCallImage.svg(
-                isActive ? control.icon : control.iconOff,
-                dimensions: IsmCallDimens.thirtyTwo,
-                fromPackage: false,
-              ),
-            ),
+          ),
+        ),
+      );
+}
+
+class IsmCallEndCall extends StatelessWidget {
+  const IsmCallEndCall({
+    super.key,
+    this.onTap,
+  });
+
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) => SizedBox.square(
+        dimension: IsmCallDimens.fifty,
+        child: const DecoratedBox(
+          decoration: BoxDecoration(
+            color: IsmCallColors.red,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            Icons.call_end_rounded,
+            color: IsmCallColors.white,
           ),
         ),
       );

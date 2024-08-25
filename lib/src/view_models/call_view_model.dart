@@ -48,41 +48,6 @@ class IsmCallViewModel {
     }
   }
 
-  Future<IsmAcceptCallModel?> startCall({
-    required String imageUrl,
-    required String userId,
-    required String conversationId,
-    required String deviceId,
-    required bool audioOnly,
-  }) async {
-    try {
-      final payload = {
-        'selfHosted': true,
-        'searchableTags': ['call', conversationId, userId],
-        'pushNotifications': true,
-        'metaData': {'open meeting': true},
-        'members': [userId],
-        'meetingImageUrl': imageUrl,
-        'meetingDescription': '1-1 call',
-        'hdMeeting': true,
-        'enableRecording': false,
-        'deviceId': deviceId,
-        'customType': 'oneToOneCall',
-        'conversationId': conversationId,
-        'autoTerminate': true,
-        'audioOnly': audioOnly,
-        'meetingType': audioOnly ? 0 : 1,
-      };
-      final res = await _repository.startCall(payload);
-      if (res.hasError) {
-        return null;
-      }
-      return IsmAcceptCallModel.fromJson(res.data);
-    } catch (e) {
-      return null;
-    }
-  }
-
   Future<bool> endCall(String meetingId) async {
     try {
       final res = await _repository.endCall({'meetingId': meetingId});

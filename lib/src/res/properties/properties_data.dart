@@ -4,15 +4,18 @@ import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 class IsmCallPropertiesData {
   const IsmCallPropertiesData({
     this.enablePip = false,
-    this.pipView,
+    this.pipBuilder,
     this.enableVideoFitChange = false,
     this.videoFit,
     this.showOpponentLeft = true,
     this.showMissCall = true,
     this.showOpponentCallEnded = true,
-    this.showAddNotesOnCallEnd = true,
+    this.callControlsBuilder,
+    this.controlsPosition = IsmControlPosition.bottom,
+    this.allowedCallActions = IsmCallControl.values,
+    this.controlProperties,
   })  : assert(
-          !enablePip || (enablePip && pipView != null),
+          !enablePip || (enablePip && pipBuilder != null),
           '`pipView` must be non-null, if `enablePip` is set to true',
         ),
         assert(
@@ -21,13 +24,16 @@ class IsmCallPropertiesData {
         );
 
   final bool enablePip;
-  final Widget? pipView;
+  final Widget Function(BuildContext)? pipBuilder;
   final bool enableVideoFitChange;
   final IsmCallVideoFit? videoFit;
   final bool showOpponentLeft;
   final bool showMissCall;
   final bool showOpponentCallEnded;
-  final bool showAddNotesOnCallEnd;
+  final List<IsmCallUserControlWidget> Function(BuildContext)? callControlsBuilder;
+  final IsmControlPosition controlsPosition;
+  final List<IsmCallControl> allowedCallActions;
+  final IsmCallControlProperty? controlProperties;
 
   IsmCallPropertiesData lerp(covariant IsmCallPropertiesData? other, double t) {
     if (other is! IsmCallPropertiesData) {
@@ -35,7 +41,7 @@ class IsmCallPropertiesData {
     }
     return IsmCallPropertiesData(
       enablePip: t < 0.5 ? enablePip : other.enablePip,
-      pipView: t < 0.5 ? pipView : other.pipView,
+      pipBuilder: t < 0.5 ? pipBuilder : other.pipBuilder,
       enableVideoFitChange:
           t < 0.5 ? enableVideoFitChange : other.enableVideoFitChange,
       videoFit: t < 0.5 ? videoFit : other.videoFit,
@@ -43,31 +49,39 @@ class IsmCallPropertiesData {
       showOpponentCallEnded:
           t < 0.5 ? showOpponentCallEnded : other.showOpponentCallEnded,
       showMissCall: t < 0.5 ? showMissCall : other.showMissCall,
-      showAddNotesOnCallEnd:
-          t < 0.5 ? showAddNotesOnCallEnd : other.showAddNotesOnCallEnd,
+      callControlsBuilder: t < 0.5 ? callControlsBuilder : other.callControlsBuilder,
+      controlsPosition: t < 0.5 ? controlsPosition : other.controlsPosition,
+      allowedCallActions:
+          t < 0.5 ? allowedCallActions : other.allowedCallActions,
+      controlProperties: t < 0.5 ? controlProperties : other.controlProperties,
     );
   }
 
   IsmCallPropertiesData copyWith({
     bool? enablePip,
-    Widget? pipView,
+    Widget Function(BuildContext)? pipBuilder,
     bool? enableVideoFitChange,
     IsmCallVideoFit? videoFit,
     bool? showOpponentLeft,
     bool? showMissCallSnack,
     bool? showOpponentCallEnded,
-    bool? showAddNotesOnCallEnd,
+    List<IsmCallUserControlWidget>  Function(BuildContext)? callControlsBuilder,
+    IsmControlPosition? controlsPosition,
+    final List<IsmCallControl>? allowedCallActions,
+    IsmCallControlProperty? controlProperties,
   }) =>
       IsmCallPropertiesData(
         enablePip: enablePip ?? this.enablePip,
-        pipView: pipView ?? this.pipView,
+        pipBuilder: pipBuilder ?? this.pipBuilder,
         enableVideoFitChange: enableVideoFitChange ?? this.enableVideoFitChange,
         videoFit: videoFit ?? this.videoFit,
         showOpponentLeft: showOpponentLeft ?? this.showOpponentLeft,
         showMissCall: showMissCallSnack ?? showMissCall,
         showOpponentCallEnded:
             showOpponentCallEnded ?? this.showOpponentCallEnded,
-        showAddNotesOnCallEnd:
-            showAddNotesOnCallEnd ?? this.showAddNotesOnCallEnd,
+        callControlsBuilder: callControlsBuilder ?? this.callControlsBuilder,
+        controlsPosition: controlsPosition ?? this.controlsPosition,
+        allowedCallActions: allowedCallActions ?? this.allowedCallActions,
+        controlProperties: controlProperties ?? this.controlProperties,
       );
 }

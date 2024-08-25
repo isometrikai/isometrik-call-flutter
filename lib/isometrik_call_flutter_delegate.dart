@@ -54,6 +54,8 @@ class IsmCallDelegate {
 
   IsmCallDBWrapper get _db => IsmCallDBWrapper.instance;
 
+  static final callKey = GlobalKey<IsmCallViewState>();
+
   void setup() async {
     IsmCallChannelHandler.initialize();
     if (!Get.isRegistered<IsmCallApiWrapper>()) {
@@ -162,7 +164,11 @@ class IsmCallDelegate {
     List<Widget>? callActions,
     String? imageUrl,
     bool hdBroadcast = false,
+    isOutgoingCall = true,
   }) {
+    if (!Get.isRegistered<IsmCallApiWrapper>()) {
+      Get.put(IsmCallApiWrapper(Client()));
+    }
     if (!Get.isRegistered<IsmCallController>()) {
       IsmCallBinding().dependencies();
     }
@@ -174,7 +180,7 @@ class IsmCallDelegate {
       callType: callType,
       imageUrl: imageUrl,
       hdBroadcast: hdBroadcast,
-      isOutgoingCall: true,
+      isOutgoingCall: isOutgoingCall,
     );
   }
 
@@ -224,4 +230,14 @@ class IsmCallDelegate {
       ],
     ]);
   }
+
+  void startPip() {
+    callKey.currentState?.startPip(pipIsOutSide: true);
+  }
+
+   void closePip(BuildContext? context) {
+    callKey.currentState?.closePip(context);
+  }
+
+  
 }
