@@ -418,7 +418,7 @@ class IsmCall {
     _delegate.startPip();
   }
 
-  void closePip(BuildContext context) {
+  void closePip(BuildContext? context) {
     _delegate.closePip(context);
   }
 }

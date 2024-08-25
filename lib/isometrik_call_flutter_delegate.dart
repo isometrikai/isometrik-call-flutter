@@ -235,7 +235,7 @@ class IsmCallDelegate {
     callKey.currentState?.startPip(pipIsOutSide: true);
   }
 
-   void closePip(BuildContext context) {
+   void closePip(BuildContext? context) {
     callKey.currentState?.closePip(context);
   }
 

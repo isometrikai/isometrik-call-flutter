@@ -138,8 +138,11 @@ class IsmCallViewState extends State<IsmCallView> {
     );
   }
 
-  void closePip(BuildContext context) {
-    _buildContext = context;
+  void closePip(BuildContext? context) {
+    if(context != null) {
+      _buildContext = context;
+    }
+   
     if (!(_buildContext.properties?.enablePip ?? false)) {
       return;
     }
