@@ -35,7 +35,7 @@ class IsmCallViewState extends State<IsmCallView> {
 
   late BuildContext _buildContext;
 
-  bool pipIsOutSide = false;
+  bool pipIsOutside = false;
 
   @override
   void initState() {
@@ -127,7 +127,7 @@ class IsmCallViewState extends State<IsmCallView> {
   }
 
   void startPip({bool pipIsOutSide = false}) {
-    pipIsOutSide = pipIsOutSide;
+    pipIsOutside = pipIsOutSide;
     if (!(_buildContext.properties?.enablePip ?? false)) {
       return;
     }
@@ -174,7 +174,7 @@ class IsmCallViewState extends State<IsmCallView> {
             _buildContext = context;
             return CustomWillPopScope(
               onWillPop: () async {
-                if (pipIsOutSide == false) {
+                if (pipIsOutside == false) {
                   startPip();
                 }
                 return false;
@@ -200,7 +200,7 @@ class IsmCallViewState extends State<IsmCallView> {
                               'End-to-end Encrypted',
                               style: context.textTheme.bodyMedium,
                             ),
-                            leading: pipIsOutSide == false
+                            leading: pipIsOutside == false
                                 ? IconButton(
                                     onPressed: startPip,
                                     icon: const Icon(
