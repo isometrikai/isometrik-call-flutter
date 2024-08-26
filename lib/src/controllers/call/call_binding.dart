@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class IsmCallBinding implements Bindings {
@@ -8,7 +9,9 @@ class IsmCallBinding implements Bindings {
       IsmCallController(
         IsmCallViewModel(
           IsmCallRepository(
-            Get.find(),
+            IsmCallApiWrapper(
+              Client(),
+            ),
           ),
         ),
       ),
