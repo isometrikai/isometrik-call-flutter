@@ -4,6 +4,7 @@ import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 class IsmCallPropertiesData {
   const IsmCallPropertiesData({
     this.enablePip = false,
+    this.startPipOuter = false,
     this.pipBuilder,
     this.enableVideoFitChange = false,
     this.videoFit,
@@ -24,13 +25,15 @@ class IsmCallPropertiesData {
         );
 
   final bool enablePip;
+  final bool startPipOuter;
   final Widget Function(BuildContext)? pipBuilder;
   final bool enableVideoFitChange;
   final IsmCallVideoFit? videoFit;
   final bool showOpponentLeft;
   final bool showMissCall;
   final bool showOpponentCallEnded;
-  final List<IsmCallUserControlWidget> Function(BuildContext)? callControlsBuilder;
+  final List<IsmCallUserControlWidget> Function(BuildContext)?
+      callControlsBuilder;
   final IsmControlPosition controlsPosition;
   final List<IsmCallControl> allowedCallActions;
   final IsmCallControlProperty? controlProperties;
@@ -41,6 +44,7 @@ class IsmCallPropertiesData {
     }
     return IsmCallPropertiesData(
       enablePip: t < 0.5 ? enablePip : other.enablePip,
+      startPipOuter: t < 0.5 ? startPipOuter : other.startPipOuter,
       pipBuilder: t < 0.5 ? pipBuilder : other.pipBuilder,
       enableVideoFitChange:
           t < 0.5 ? enableVideoFitChange : other.enableVideoFitChange,
@@ -49,7 +53,8 @@ class IsmCallPropertiesData {
       showOpponentCallEnded:
           t < 0.5 ? showOpponentCallEnded : other.showOpponentCallEnded,
       showMissCall: t < 0.5 ? showMissCall : other.showMissCall,
-      callControlsBuilder: t < 0.5 ? callControlsBuilder : other.callControlsBuilder,
+      callControlsBuilder:
+          t < 0.5 ? callControlsBuilder : other.callControlsBuilder,
       controlsPosition: t < 0.5 ? controlsPosition : other.controlsPosition,
       allowedCallActions:
           t < 0.5 ? allowedCallActions : other.allowedCallActions,
@@ -59,19 +64,21 @@ class IsmCallPropertiesData {
 
   IsmCallPropertiesData copyWith({
     bool? enablePip,
+    bool? startPipOuter,
     Widget Function(BuildContext)? pipBuilder,
     bool? enableVideoFitChange,
     IsmCallVideoFit? videoFit,
     bool? showOpponentLeft,
     bool? showMissCallSnack,
     bool? showOpponentCallEnded,
-    List<IsmCallUserControlWidget>  Function(BuildContext)? callControlsBuilder,
+    List<IsmCallUserControlWidget> Function(BuildContext)? callControlsBuilder,
     IsmControlPosition? controlsPosition,
     final List<IsmCallControl>? allowedCallActions,
     IsmCallControlProperty? controlProperties,
   }) =>
       IsmCallPropertiesData(
         enablePip: enablePip ?? this.enablePip,
+        startPipOuter: startPipOuter ?? this.startPipOuter,
         pipBuilder: pipBuilder ?? this.pipBuilder,
         enableVideoFitChange: enableVideoFitChange ?? this.enableVideoFitChange,
         videoFit: videoFit ?? this.videoFit,
