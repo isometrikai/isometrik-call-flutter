@@ -231,8 +231,10 @@ class IsmCall {
   /// // Later, to remove the listener
   /// await IsmCall.i.removeCallTriggerListener(listener);
   /// ```
-  Future<void> removeCallTriggerListener(IsmCallTriggerFunction listener) =>
-      _delegate.removeCallTriggerListener(listener);
+  Future<void> removeCallTriggerListener(IsmCallTriggerFunction listener) {
+    assert(_initialized, _initializedError);
+    return _delegate.removeCallTriggerListener(listener);
+  }
 
   /// Adds a listener for call events.
   ///
@@ -269,8 +271,10 @@ class IsmCall {
   /// // Later, to remove the listener
   /// await IsmCall.i.removeListener(listener);
   /// ```
-  Future<void> removeListener(IsmCallMapFunction listener) =>
-      _delegate.removeListener(listener);
+  Future<void> removeListener(IsmCallMapFunction listener) {
+    assert(_initialized, _initializedError);
+    return _delegate.removeListener(listener);
+  }
 
   /// Listens to an MQTT event.
   ///
@@ -345,16 +349,20 @@ class IsmCall {
     );
   }
 
-  /// Disconnects the current call.
+  /// Disconnects the current call with the specified meeting ID.
   ///
-  /// This function is used to disconnect the current call.
+  /// This function is used to disconnect the current call associated with the provided meeting ID.
+  ///
+  /// Parameters:
+  /// [meetingId] - The ID of the meeting to disconnect the call from.
   ///
   /// Example:
   /// ```dart
-  /// IsmCall.i.disconnectCall();
+  /// IsmCall.i.disconnectCall('meeting-id-123');
   /// ```
-  void disconnectCall() {
+  void disconnectCall(String meetingId) {
     assert(_initialized, _initializedError);
+    _delegate.disconnectCall(meetingId);
   }
 
   /// Updates the call configuration.
@@ -412,17 +420,62 @@ class IsmCall {
   /// await IsmCall.i.dispose();
   /// ```
   Future<void> dispose() async {
+    assert(_initialized, _initializedError);
     await _delegate.dispose();
     _initialized = false;
   }
 
-  // Show pip
+  /// Starts the Picture-in-Picture (PiP) mode during call.
+  ///
+  /// Example:
+  /// ```dart
+  /// await IsmCall.i.startPip();
+  /// ```
   void startPip() {
+    assert(_initialized, _initializedError);
     _delegate.startPip();
   }
 
-  // close pip
+  /// Closes the Picture-in-Picture (PiP) mode.
+  ///
+  /// The [context] parameter is optional and can be provided to handle any
+  /// context-specific cleanup or operations.
+  /// Example:
+  /// ```dart
+  /// await IsmCall.i.closePip();
+  /// ```
   void closePip(BuildContext? context) {
+    assert(_initialized, _initializedError);
     _delegate.closePip(context);
+  }
+
+  /// Reverses the time direction.
+  ///
+  /// If [reversedTime] is true, the time will move in reverse. Otherwise, it will move forward.
+  ///
+  /// Example:
+  /// ```dart
+  /// reversedTime(reversedTime: true); // Reverses the time direction
+  /// ```
+  ///
+  /// @param [reversedTime] Whether to reverse the time direction. Defaults to false.
+  void reversedTime({bool reversedTime = false}) {
+    assert(_initialized, _initializedError);
+    _delegate.reversedTime(reversedTime: reversedTime);
+  }
+
+  /// Adds a duration to the current time.
+  ///
+  /// The [timeStamp] parameter specifies the duration to add.
+  ///
+  /// Example:
+  /// ```dart
+  /// addDuration(1000); // Adds 1 second to the current time
+  /// ```
+  ///
+  /// @param [timeStamp] The duration to add in milliseconds.
+  void addDuration(int timeStamp) {
+    assert(_initialized, _initializedError);
+    _delegate.addDuration(timeStamp);
   }
 }

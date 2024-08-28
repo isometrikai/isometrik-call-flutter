@@ -15,6 +15,9 @@ class IsmCallDelegate {
   static bool _enableMqttLogs = true;
   bool get enableMqttLogs => _enableMqttLogs;
 
+  static bool _reverseTimer = false;
+  bool get reverseTimer => _reverseTimer;
+
   static void Function(bool)? _onConnectionChange;
   void Function(bool)? get onConnectionChange => _onConnectionChange;
 
@@ -219,6 +222,14 @@ class IsmCallDelegate {
   ) =>
       _onConnectionChange = onChange;
 
+  void disconnectCall(String meetingId) {
+    if (Get.isRegistered<IsmCallController>()) {
+      Get.find<IsmCallController>().disconnectCall(
+        meetingId: meetingId,
+      );
+    }
+  }
+
   Future<void> dispose() async {
     Get.find<IsmCallMqttController>().disconnect();
     await Future.wait([
@@ -231,6 +242,19 @@ class IsmCallDelegate {
         ],
       ],
     ]);
+  }
+
+  void reversedTime({bool reversedTime = false}) {
+    _reverseTimer = reversedTime;
+  }
+
+  void addDuration(int timeStamp) {
+    if (Get.isRegistered<IsmCallController>()) {
+      final controller = Get.find<IsmCallController>();
+      var newTime = DateTime.fromMillisecondsSinceEpoch(timeStamp);
+      var now = DateTime.now();
+      controller.callDuration = now.difference(newTime);
+    }
   }
 
   void startPip() {

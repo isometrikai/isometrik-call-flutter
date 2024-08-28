@@ -23,7 +23,6 @@ mixin IsmCallVariableMixin {
 
   Timer? _ringingTimer;
 
-
   final Rx<Duration> _callDuration = Duration.zero.obs;
   Duration get callDuration => _callDuration.value;
   set callDuration(Duration value) {
@@ -41,6 +40,7 @@ mixin IsmCallVariableMixin {
   final _disconnectDebouncer = IsmCallDebouncer(milliseconds: 500);
   final _micDebouncer = IsmCallDebouncer();
 
+  final ismDelegate = const IsmCallDelegate();
 
   late String meetingId;
 
