@@ -261,6 +261,7 @@ mixin IsmCallOngoingMixin {
       ),
     );
     _controller.$callStreamTimer?.cancel();
+    _controller._waitingTimer?.cancel();
     _controller._ringingTimer?.cancel();
   }
 }

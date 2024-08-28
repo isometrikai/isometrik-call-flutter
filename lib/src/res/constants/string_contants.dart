@@ -22,6 +22,8 @@ class IsmCallStrings {
 
   static const String joining = 'Joining call';
 
+  static const String ringing = 'Ringing call';
+
   static const String opponentLeft = 'User left the call';
 
   static const String youMissedCall = 'You Missed a Call';

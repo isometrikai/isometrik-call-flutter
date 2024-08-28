@@ -8,12 +8,14 @@ class IsmCallRouteManagement {
     required IsmCallUserInfoModel userInfo,
     required String meetingId,
     required bool audioOnly,
+    required bool isAccepted
   }) async {
     await Get.toNamed(
       IsmCallRoutes.call,
       arguments: {
         'audioOnly': audioOnly,
         'meetingId': meetingId,
+        'isAccepted' : isAccepted,
         ...userInfo.toMap(),
       },
     );

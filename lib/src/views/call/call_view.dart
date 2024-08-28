@@ -35,6 +35,8 @@ class IsmCallViewState extends State<IsmCallView> {
 
   late BuildContext _buildContext;
 
+  late bool isAccepted;
+
   @override
   void initState() {
     super.initState();
@@ -65,12 +67,14 @@ class IsmCallViewState extends State<IsmCallView> {
     if (!Get.isRegistered<IsmCallController>()) {
       IsmCallBinding().dependencies();
     }
+    final arguments = Get.arguments as Map<String, dynamic>? ?? {};
+    isAccepted = arguments['isAccepted'] as bool? ?? false;
     _controller.isAudioOnly =
-        widget.audioOnly ?? Get.arguments['audioOnly'] as bool? ?? true;
+        widget.audioOnly ?? arguments['audioOnly'] as bool? ?? true;
     _controller.userInfoModel =
-        widget.userInfo ?? IsmCallUserInfoModel.fromMap(Get.arguments);
+        widget.userInfo ?? IsmCallUserInfoModel.fromMap(arguments);
     _controller.meetingId =
-        widget.meetingId ?? Get.arguments['meetingId'] as String? ?? '';
+        widget.meetingId ?? arguments['meetingId'] as String? ?? '';
     _controller.isRecording = false;
     _controller.isMicOn = true;
     _controller.showFullVideo = true;
@@ -220,9 +224,17 @@ class IsmCallViewState extends State<IsmCallView> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    controller.callDuration.inSeconds < 1
-                                        ? Get.context?.translations?.joining ??
-                                            IsmCallStrings.joining
+                                    controller.participantTracks.isEmpty ||
+                                            controller
+                                                    .participantTracks.length ==
+                                                1
+                                        ? isAccepted
+                                            ? Get.context?.translations
+                                                    ?.joining ??
+                                                IsmCallStrings.joining
+                                            : Get.context?.translations
+                                                    ?.ringing ??
+                                                IsmCallStrings.ringing
                                         : controller.callDuration.formatTime,
                                   ),
                                   if (controller.isRecording) ...[

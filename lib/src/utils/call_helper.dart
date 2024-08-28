@@ -411,6 +411,7 @@ class IsmCallHelper {
               call: callModel,
               userInfo: userInfo,
               callType: call.type,
+              isAccepted: isAccepted,
             ),
           );
         }

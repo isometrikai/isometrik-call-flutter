@@ -19,6 +19,8 @@ mixin IsmCallVariableMixin {
 
   Timer? $callStreamTimer;
 
+  Timer? _waitingTimer;
+
   Timer? _ringingTimer;
 
 

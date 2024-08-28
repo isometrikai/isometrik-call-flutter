@@ -164,7 +164,8 @@ class IsmCallDelegate {
     List<Widget>? callActions,
     String? imageUrl,
     bool hdBroadcast = false,
-    isOutgoingCall = true,
+   bool shouldAudioPlay = true,
+   bool isAccepted = false,
   }) {
     if (!Get.isRegistered<IsmCallApiWrapper>()) {
       Get.put(IsmCallApiWrapper(Client()));
@@ -180,7 +181,8 @@ class IsmCallDelegate {
       callType: callType,
       imageUrl: imageUrl,
       hdBroadcast: hdBroadcast,
-      isOutgoingCall: isOutgoingCall,
+      shouldAudioPlay: shouldAudioPlay,
+      isAccepted: isAccepted,
     );
   }
 

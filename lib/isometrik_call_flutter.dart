@@ -328,7 +328,8 @@ class IsmCall {
     List<Widget>? callActions,
     String? imageUrl,
     bool hdBroadcast = false,
-    isOutgoingCall = true,
+    bool shouldAudioPlay = true,
+    bool isAccepted = false,
   }) {
     assert(_initialized, _initializedError);
     _delegate.startCall(
@@ -339,7 +340,8 @@ class IsmCall {
       callActions: callActions,
       imageUrl: imageUrl,
       hdBroadcast: hdBroadcast,
-      isOutgoingCall: isOutgoingCall,
+      shouldAudioPlay: shouldAudioPlay,
+      isAccepted: isAccepted,
     );
   }
 

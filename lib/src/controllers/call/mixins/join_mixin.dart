@@ -11,7 +11,8 @@ mixin IsmCallJoinMixin {
     required IsmCallType callType,
     String? imageUrl,
     bool hdBroadcast = false,
-    bool isOutgoingCall = false,
+    bool shouldAudioPlay = false,
+    bool isAccepted = false,
   }) async {
     // Get the token for the stream based on whether the user is a host or not
 
@@ -29,7 +30,8 @@ mixin IsmCallJoinMixin {
       hdBroadcast: hdBroadcast,
       userInfo: userInfo,
       callType: callType,
-      isOutgoingCall: isOutgoingCall,
+      shouldAudioPlay: shouldAudioPlay,
+      isAccepted: isAccepted,
     );
   }
 
@@ -37,7 +39,7 @@ mixin IsmCallJoinMixin {
     Room room, {
     required IsmCallType callType,
     required String meetingId,
-    bool isOutgoingCall = false,
+    bool shouldAudioPlay = false,
   }) async {
     room.localParticipant?.setTrackSubscriptionPermissions(
       allParticipantsAllowed: true,
@@ -50,13 +52,15 @@ mixin IsmCallJoinMixin {
       ],
     );
 
-    unawaited(publishTracks(callType.trackType).then(
-      (_) {
-        if (isOutgoingCall) startCallingTimer(meetingId);
-        _enableTracks(callType.trackType);
-        _controller.toggleSpeaker(callType == IsmCallType.video);
-      },
-    ));
+    unawaited(
+      publishTracks(callType.trackType).then(
+        (_) {
+          if (shouldAudioPlay) startCallingTimer(meetingId);
+          _enableTracks(callType.trackType);
+          _controller.toggleSpeaker(callType == IsmCallType.video);
+        },
+      ),
+    );
   }
 
   // Enable the user's video
@@ -110,7 +114,8 @@ mixin IsmCallJoinMixin {
     required IsmCallType callType,
     String? imageUrl,
     bool hdBroadcast = false,
-    bool isOutgoingCall = false,
+    bool shouldAudioPlay = false,
+    bool isAccepted = false,
   }) async {
     final message =
         Get.context?.translations?.joining ?? IsmCallStrings.joining;
@@ -157,19 +162,21 @@ mixin IsmCallJoinMixin {
 
       // Try to connect to the room
       try {
-        unawaited(room
-            .connect(
-              IsmCallEndpoints.wsUrl,
-              call.rtcToken,
-            )
-            .then(
-              (_) => _initializeTracks(
-                room,
-                callType: callType,
-                isOutgoingCall: isOutgoingCall,
-                meetingId: meetingId,
+        unawaited(
+          room
+              .connect(
+                IsmCallEndpoints.wsUrl,
+                call.rtcToken,
+              )
+              .then(
+                (_) => _initializeTracks(
+                  room,
+                  callType: callType,
+                  shouldAudioPlay: shouldAudioPlay,
+                  meetingId: meetingId,
+                ),
               ),
-            ));
+        );
       } catch (e, st) {
         IsmCallLog.error(e, st);
         IsmCallUtility.closeLoader();
@@ -180,10 +187,10 @@ mixin IsmCallJoinMixin {
 
       IsmCallUtility.closeLoader();
 
-      if (isOutgoingCall) {
+      if (shouldAudioPlay && !isAccepted) {
         unawaited(IsmCallUtility.playAudioFromAssets(IsmCallAssets.callingMp3));
       } else {
-        startStreamTimer();
+        startWaitingTimer();
       }
       _controller.isRemoteVideoLarge = true;
       unawaited(
@@ -191,6 +198,7 @@ mixin IsmCallJoinMixin {
           userInfo: userInfo,
           audioOnly: !callType.isVideo,
           meetingId: meetingId,
+          isAccepted: isAccepted,
         ),
       );
     } catch (e, st) {
@@ -209,6 +217,18 @@ mixin IsmCallJoinMixin {
     );
   }
 
+  void startWaitingTimer() {
+    _controller._waitingTimer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        if (_controller.participantTracks.length > 1) {
+          timer.cancel();
+          startStreamTimer();
+        }
+      },
+    );
+  }
+
   void startCallingTimer(String meetingId) {
     _controller._ringingTimer =
         Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -221,7 +241,6 @@ mixin IsmCallJoinMixin {
 
   void _checkParticipants(String meetingId) {
     final localParticipant = _controller.room?.localParticipant;
-
     if (_controller.participantTracks.length == 1) {
       final track = _controller.participantTracks.first;
 
@@ -279,7 +298,7 @@ mixin IsmCallJoinMixin {
     for (final participant in _controller.room!.remoteParticipants.values) {
       localTracks.addAll([
         ...participant.videoTrackPublications,
-        ...participant.audioTrackPublications
+        ...participant.audioTrackPublications,
       ]);
     }
 
