@@ -186,12 +186,11 @@ mixin IsmCallJoinMixin {
       _controller.isVideoOn = callType.isVideo;
 
       IsmCallUtility.closeLoader();
-      IsmCallLog.error('step1');
+
       if (shouldAudioPlay && !isAccepted) {
-        IsmCallLog.error('step2');
+        startWaitingTimer();
         unawaited(IsmCallUtility.playAudioFromAssets(IsmCallAssets.callingMp3));
       } else {
-        IsmCallLog.error('step3');
         startWaitingTimer();
       }
       _controller.isRemoteVideoLarge = true;

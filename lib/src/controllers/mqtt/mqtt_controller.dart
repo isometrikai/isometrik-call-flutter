@@ -235,11 +235,7 @@ class IsmCallMqttController extends GetxController {
 
         case 'joinRequestAccept':
           if (initiatorId != userId) {
-            if (Get.isRegistered<IsmCallController>()) {
-              final controller = Get.find<IsmCallController>();
-              controller.startStreamTimer();
-              unawaited(IsmCallUtility.stopAudio());
-            }
+            unawaited(IsmCallUtility.stopAudio());
           }
           break;
         case 'joinRequestReject':
