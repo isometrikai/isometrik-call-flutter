@@ -164,8 +164,8 @@ class IsmCallDelegate {
     List<Widget>? callActions,
     String? imageUrl,
     bool hdBroadcast = false,
-   bool shouldAudioPlay = true,
-   bool isAccepted = false,
+    bool shouldAudioPlay = true,
+    bool isAccepted = false,
   }) {
     if (!Get.isRegistered<IsmCallApiWrapper>()) {
       Get.put(IsmCallApiWrapper(Client()));
@@ -237,9 +237,7 @@ class IsmCallDelegate {
     callKey.currentState?.startPip();
   }
 
-   void closePip(BuildContext? context) {
+  void closePip(BuildContext? context) {
     callKey.currentState?.closePip(context);
   }
-
-  
 }
