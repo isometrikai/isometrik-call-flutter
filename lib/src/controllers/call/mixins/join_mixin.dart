@@ -220,6 +220,7 @@ mixin IsmCallJoinMixin {
             seconds: 1,
           );
         }
+        _controller.timerStreamController.add(_controller.callDuration);
       },
     );
   }

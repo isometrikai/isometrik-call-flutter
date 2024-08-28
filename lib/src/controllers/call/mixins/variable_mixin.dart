@@ -42,6 +42,10 @@ mixin IsmCallVariableMixin {
 
   final ismDelegate = const IsmCallDelegate();
 
+  final timerStreamController = StreamController<Duration>.broadcast();
+
+  var timerListeners = <IsmCallDuration>[];
+
   late String meetingId;
 
   final RxBool _isMicOn = true.obs;

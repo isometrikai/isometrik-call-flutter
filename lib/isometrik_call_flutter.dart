@@ -267,7 +267,7 @@ class IsmCall {
   /// final listener = (callMap) {
   ///   // call map logic
   /// };
-  /// IsmCall.i.addListener(listener);
+  /// IsmCall.i.addEventListener(listener);
   /// // Later, to remove the listener
   /// await IsmCall.i.removeListener(listener);
   /// ```
@@ -477,5 +477,45 @@ class IsmCall {
   void addDuration(int timeStamp) {
     assert(_initialized, _initializedError);
     _delegate.addDuration(timeStamp);
+  }
+
+  /// Adds a listener for call timer.
+  ///
+  /// This function adds a listener for call timer and returns a subscription
+  /// that can be used to cancel the listener.
+  ///
+  /// * `listener` is the function that will be called when a call timer is received.
+  ///
+  /// Example:
+  /// ```dart
+  /// final subscription = IsmCall.i.addTimerListener((event) {
+  ///   // call event logic
+  /// });
+  /// ```
+  /// To cancel the listener, call `subscription.cancel()`.
+  TimerStreamSubscription addTimerListener(IsmCallDuration listener) {
+    assert(_initialized, _initializedError);
+    return _delegate.addTimerListener(listener);
+  }
+
+  /// Removes a listener for call timer.
+  ///
+  /// This function removes a listener for call timer that was previously added
+  /// using a function that adds a listener.
+  ///
+  /// * `listener` is the function that was previously added as a listener.
+  ///
+  /// Example:
+  /// ```dart
+  /// final listener = (callMap) {
+  ///   // call map logic
+  /// };
+  /// IsmCall.i.addTimerListener(listener);
+  /// // Later, to remove the listener
+  /// await IsmCall.i.removeTimerListener(listener);
+  /// ```
+  Future<void> removeTimerListener(IsmCallDuration listener) {
+    assert(_initialized, _initializedError);
+    return _delegate.removeTimerListener(listener);
   }
 }

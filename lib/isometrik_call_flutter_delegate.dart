@@ -144,6 +144,9 @@ class IsmCallDelegate {
   }
 
   Future<void> removeListener(IsmCallMapFunction listener) async {
+    if (!Get.isRegistered<IsmCallMqttController>()) {
+      IsmCallMqttBinding().dependencies();
+    }
     var mqttController = Get.find<IsmCallMqttController>();
     mqttController.eventListeners.remove(listener);
     await mqttController.eventStreamController.stream.drain();
@@ -263,5 +266,25 @@ class IsmCallDelegate {
 
   void closePip(BuildContext? context) {
     callKey.currentState?.closePip(context);
+  }
+
+  TimerStreamSubscription addTimerListener(IsmCallDuration listener) {
+    if (!Get.isRegistered<IsmCallController>()) {
+      IsmCallBinding().dependencies();
+    }
+    var callController = Get.find<IsmCallController>();
+    return callController.timerStreamController.stream.listen(listener);
+  }
+
+  Future<void> removeTimerListener(IsmCallDuration listener) async {
+    if (!Get.isRegistered<IsmCallController>()) {
+      IsmCallBinding().dependencies();
+    }
+    var callController = Get.find<IsmCallController>();
+    callController.timerListeners.remove(listener);
+    await callController.timerStreamController.stream.drain();
+    for (var listener in callController.timerListeners) {
+      callController.timerStreamController.stream.listen(listener);
+    }
   }
 }

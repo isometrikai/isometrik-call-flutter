@@ -7,6 +7,8 @@ typedef IsmCallMapFunction = void Function(DynamicMap);
 
 typedef IsmCallEventFunction = void Function(EventModel);
 
+typedef IsmCallDuration = Function(Duration);
+
 typedef IsmCallTriggerModel = ({
   IsmCallStatus status,
   String meetingId,
@@ -33,6 +35,9 @@ typedef IsmCallRefreshCallback = Future<void> Function();
 typedef MapStreamSubscription = StreamSubscription<DynamicMap>;
 
 typedef EventStreamSubscription = StreamSubscription<EventModel>;
+
+typedef TimerStreamSubscription = StreamSubscription<Duration>;
+
 
 typedef IsmCallTriggerStreamSubscription
     = StreamSubscription<IsmCallTriggerModel>;
