@@ -211,19 +211,15 @@ mixin IsmCallJoinMixin {
     _controller.$callStreamTimer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        IsmCallLog.error('step1');
         if (_controller.ismDelegate.reverseTimer) {
-          IsmCallLog.error('step2');
           _controller.callDuration -= const Duration(
             seconds: 1,
           );
         } else {
-          IsmCallLog.error('step3');
           _controller.callDuration += const Duration(
             seconds: 1,
           );
         }
-        IsmCallLog.error('step4');
         _controller.timerStreamController.add(_controller.callDuration);
       },
     );

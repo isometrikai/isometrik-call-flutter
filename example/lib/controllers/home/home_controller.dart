@@ -114,11 +114,13 @@ class HomeController extends GetxController
   }
 
   void _listenCallTrigger() {
-    IsmCall.i.addCallTriggerListener((trigger) {
-      if (Get.isRegistered<LogsController>()) {
-        unawaited(Get.find<LogsController>().refreshLogs());
-      }
-    });
+    IsmCall.i.addCallTriggerListener(
+      (trigger) {
+        if (Get.isRegistered<LogsController>()) {
+          unawaited(Get.find<LogsController>().refreshLogs());
+        }
+      },
+    );
   }
 
   Future<void> logout() async {

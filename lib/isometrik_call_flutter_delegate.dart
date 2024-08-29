@@ -256,7 +256,7 @@ class IsmCallDelegate {
       final controller = Get.find<IsmCallController>();
       var newTime = DateTime.fromMillisecondsSinceEpoch(timeStamp);
       var now = DateTime.now();
-      controller.callDuration = now.difference(newTime);
+      controller.callDuration = newTime.difference(now);
     }
   }
 
