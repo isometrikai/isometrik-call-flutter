@@ -297,9 +297,17 @@ class IsmCallViewState extends State<IsmCallView> {
                                               : null,
                                           child: IsmCallParticipantView(
                                             _largeVideoTrack,
+                                            name: controller.isRemoteVideoLarge
+                                                ? controller.userInfoModel
+                                                        ?.userName ??
+                                                    ''
+                                                : IsmCall.i.config?.userConfig
+                                                    .fullName,
                                             imageUrl:
                                                 controller.isRemoteVideoLarge
-                                                    ? null
+                                                    ? controller.userInfoModel
+                                                            ?.imageUrl ??
+                                                        ''
                                                     : IsmCall
                                                         .i
                                                         .config
@@ -388,7 +396,16 @@ class IsmCallViewState extends State<IsmCallView> {
                                                     is LocalParticipant
                                                 ? IsmCall.i.config?.userConfig
                                                     .userProfile
-                                                : null,
+                                                : controller.userInfoModel
+                                                        ?.imageUrl ??
+                                                    '',
+                                            name: participant.participant
+                                                    is LocalParticipant
+                                                ? IsmCall.i.config?.userConfig
+                                                    .fullName
+                                                : controller.userInfoModel
+                                                        ?.userName ??
+                                                    '',
                                             videoOffBackgroundColor: context
                                                     .callTheme
                                                     ?.videoOffCardColor ??

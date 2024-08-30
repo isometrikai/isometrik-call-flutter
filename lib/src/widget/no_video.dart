@@ -34,7 +34,7 @@ class IsmCallNoVideoWidget extends StatelessWidget {
                   ? context.textTheme.titleMedium
                   : context.textTheme.bodySmall,
               textAlign: TextAlign.center,
-            )
+            ),
           ],
         ),
       );

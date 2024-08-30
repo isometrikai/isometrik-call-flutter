@@ -9,6 +9,7 @@ class IsmCallParticipantView extends StatefulWidget {
     this.participant, {
     super.key,
     this.imageUrl,
+    this.name,
     this.videoFit,
     this.showFullVideo = false,
     this.backgroundColor,
@@ -19,6 +20,8 @@ class IsmCallParticipantView extends StatefulWidget {
   final IsmCallParticipantTrack participant;
   final RTCVideoViewObjectFit? videoFit;
   final String? imageUrl;
+  final String? name;
+
   final bool showFullVideo;
   final Color? backgroundColor;
   final Color? videoOffBackgroundColor;
@@ -73,7 +76,7 @@ class _IsmCallParticipantViewState extends State<IsmCallParticipantView> {
                         : RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
               )
             : IsmCallNoVideoWidget(
-                name: widget.participant.participant.name,
+                name: widget.name ?? '', // widget.participant.participant.name,
                 imageUrl: widget.imageUrl ?? '',
                 isLargeVideo: widget.isLargeVideo,
               ),
