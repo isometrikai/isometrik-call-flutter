@@ -63,12 +63,13 @@ class IsmCallMqttController extends GetxController {
     await _mqttHelper.initialize(
       MqttConfig(
         serverConfig: ServerConfig.fromMap(_config?.mqttConfig.toMap() ?? {}),
-        projectConfig:
-            ProjectConfig.fromMap(_config?.projectConfig.toMap() ?? {}),
-        userId: userId,
+        projectConfig: ProjectConfig(
+          deviceId: _config?.projectConfig.deviceId ?? '',
+          userIdentifier: userId,
+          username: _config?.username ?? '',
+          password: _config?.password ?? '',
+        ),
         enableLogging: IsmCall.i.mqttLogsEnabled,
-        username: _config?.username ?? '',
-        password: _config?.password ?? '',
         webSocketConfig: _config?.socketConfig != null
             ? WebSocketConfig.fromMap(
                 _config?.socketConfig?.toMap() ?? {},
