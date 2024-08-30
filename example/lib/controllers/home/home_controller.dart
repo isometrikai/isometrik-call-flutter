@@ -97,12 +97,13 @@ class HomeController extends GetxController
         appLogo: const AppLogo(),
         onLogout: logout,
         onRefreshToken: refreshToken,
-        onAcceptCall: (meetingId, deviceId) => answerCall(meetingId, true),
-        onDeclineCall: (meetingId) async {
+        onAcceptCall: (meetingId, deviceId, metaData) =>
+            answerCall(meetingId, true),
+        onDeclineCall: (meetingId, metaData) async {
           final model = await answerCall(meetingId, false);
           return model != null;
         },
-        onEndCall: endCall,
+        onEndCall: (meetingId, metaData) => endCall(meetingId),
       );
       _listenCallTrigger();
     } catch (e, st) {

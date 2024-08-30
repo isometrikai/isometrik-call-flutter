@@ -48,15 +48,16 @@ mixin IsmCallApiMixin {
         meetingId,
       );
 
-  Future<bool> endCall(String meetingId) =>
+  Future<bool> endCall(String meetingId, Map<String, dynamic> metaData) =>
       _controller._viewModel.endCall(meetingId);
 
   Future<IsmAcceptCallModel?> acceptCall(
     String meetingId,
     String deviceId,
+    Map<String, dynamic> metaData,
   ) =>
       _controller._viewModel.acceptCall(meetingId, deviceId);
 
-  Future<bool> declineCall(String meetingId) =>
+  Future<bool> declineCall(String meetingId, Map<String, dynamic> metaData) =>
       _controller._viewModel.declineCall(meetingId);
 }

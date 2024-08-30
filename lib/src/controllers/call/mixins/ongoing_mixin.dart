@@ -248,7 +248,10 @@ mixin IsmCallOngoingMixin {
       if (!fromPushKit) ...[
         IsmCallHelper.endCall(),
       ],
-      (IsmCall.i.endCall ?? _controller.endCall).call(meetingId),
+      (IsmCall.i.endCall ?? _controller.endCall).call(
+        meetingId,
+        IsmCallHelper.incomingMetaData,
+      ),
       if (_controller.room != null) ...[
         _controller.room!.disconnect(),
       ],

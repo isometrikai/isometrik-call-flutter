@@ -22,11 +22,18 @@ typedef IsmCallRoomListener = EventsListener<RoomEvent>;
 typedef IsmCallAcceptTrigger = Future<IsmAcceptCallModel?> Function(
   String meetingId,
   String deviceId,
+  Map<String, dynamic>,
 );
 
-typedef IsmCallDeclineTrigger = Future<bool> Function(String);
+typedef IsmCallDeclineTrigger = Future<bool> Function(
+  String,
+  Map<String, dynamic>,
+);
 
-typedef IsmCallEndTrigger = Future<bool> Function(String);
+typedef IsmCallEndTrigger = Future<bool> Function(
+  String,
+  Map<String, dynamic>,
+);
 
 typedef IsmCallOnRecording = void Function(bool, Map<String, dynamic>);
 
@@ -37,7 +44,6 @@ typedef MapStreamSubscription = StreamSubscription<DynamicMap>;
 typedef EventStreamSubscription = StreamSubscription<EventModel>;
 
 typedef TimerStreamSubscription = StreamSubscription<Duration>;
-
 
 typedef IsmCallTriggerStreamSubscription
     = StreamSubscription<IsmCallTriggerModel>;

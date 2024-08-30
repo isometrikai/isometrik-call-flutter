@@ -384,6 +384,7 @@ class IsmCallHelper {
             await (IsmCall.i.acceptCall ?? _controller.acceptCall).call(
           meetingId,
           IsmCall.i.config?.projectConfig.deviceId ?? '',
+          call.extra.metaData,
         );
         if (callModel == null) {
           callTriggerStatusStream.add(
@@ -419,6 +420,7 @@ class IsmCallHelper {
         final isDeclined =
             await (IsmCall.i.declineCall ?? _controller.declineCall).call(
           meetingId,
+          call.extra.metaData,
         );
         if (isDeclined) {
           callTriggerStatusStream.add(
