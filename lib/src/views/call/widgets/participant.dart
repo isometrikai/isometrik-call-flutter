@@ -76,8 +76,11 @@ class _IsmCallParticipantViewState extends State<IsmCallParticipantView> {
                         : RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
               )
             : IsmCallNoVideoWidget(
-                name: widget.name, // widget.participant.participant.name,
-                imageUrl: widget.imageUrl,
+                name: context.properties?.nameBuilder?.call(widget.name) ??
+                    widget.name, // widget.participant.participant.name,
+                imageUrl:
+                    context.properties?.nameBuilder?.call(widget.imageUrl) ??
+                        widget.imageUrl,
                 isLargeVideo: widget.isLargeVideo,
               ),
       );

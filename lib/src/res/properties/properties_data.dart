@@ -15,6 +15,8 @@ class IsmCallPropertiesData {
     this.controlsPosition = IsmControlPosition.bottom,
     this.allowedCallActions = IsmCallControl.values,
     this.controlProperties,
+    this.imageUrlBuilder,
+    this.nameBuilder,
   })  : assert(
           !enablePip || (enablePip && pipBuilder != null),
           '`pipView` must be non-null, if `enablePip` is set to true',
@@ -37,6 +39,8 @@ class IsmCallPropertiesData {
   final IsmControlPosition controlsPosition;
   final List<IsmCallControl> allowedCallActions;
   final IsmCallControlProperty? controlProperties;
+  final StringBuilder? imageUrlBuilder;
+  final StringBuilder? nameBuilder;
 
   IsmCallPropertiesData lerp(covariant IsmCallPropertiesData? other, double t) {
     if (other is! IsmCallPropertiesData) {
@@ -44,6 +48,8 @@ class IsmCallPropertiesData {
     }
     return IsmCallPropertiesData(
       enablePip: t < 0.5 ? enablePip : other.enablePip,
+      imageUrlBuilder: t < 0.5 ? imageUrlBuilder : other.imageUrlBuilder,
+      nameBuilder: t < 0.5 ? nameBuilder : other.nameBuilder,
       startPipOuter: t < 0.5 ? startPipOuter : other.startPipOuter,
       pipBuilder: t < 0.5 ? pipBuilder : other.pipBuilder,
       enableVideoFitChange:
@@ -75,9 +81,13 @@ class IsmCallPropertiesData {
     IsmControlPosition? controlsPosition,
     final List<IsmCallControl>? allowedCallActions,
     IsmCallControlProperty? controlProperties,
+    StringBuilder? imageUrlBuilder,
+    StringBuilder? nameBuilder,
   }) =>
       IsmCallPropertiesData(
         enablePip: enablePip ?? this.enablePip,
+        imageUrlBuilder: imageUrlBuilder ?? this.imageUrlBuilder,
+        nameBuilder: nameBuilder ?? this.nameBuilder,
         startPipOuter: startPipOuter ?? this.startPipOuter,
         pipBuilder: pipBuilder ?? this.pipBuilder,
         enableVideoFitChange: enableVideoFitChange ?? this.enableVideoFitChange,

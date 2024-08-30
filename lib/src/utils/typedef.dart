@@ -47,3 +47,5 @@ typedef TimerStreamSubscription = StreamSubscription<Duration>;
 
 typedef IsmCallTriggerStreamSubscription
     = StreamSubscription<IsmCallTriggerModel>;
+
+typedef StringBuilder = String Function(String);   
