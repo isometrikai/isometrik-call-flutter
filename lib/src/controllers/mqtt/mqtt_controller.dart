@@ -28,7 +28,6 @@ class IsmCallMqttController extends GetxController {
   // ----------------- Functions -----------------------
 
   Future<void> setup({
-    bool shouldInitialize = true,
     IsmCallConfig? config,
     List<String>? topics,
     List<String>? topicChannels,
@@ -55,10 +54,6 @@ class IsmCallMqttController extends GetxController {
       statusTopic,
       messageTopic,
     });
-
-    if (!shouldInitialize) {
-      return;
-    }
 
     await _mqttHelper.initialize(
       MqttConfig(

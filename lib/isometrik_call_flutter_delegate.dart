@@ -59,6 +59,8 @@ class IsmCallDelegate {
 
   static final callKey = GlobalKey<IsmCallViewState>();
 
+  static bool _mqttInitialized = false;
+
   void setup() async {
     IsmCallChannelHandler.initialize();
     if (!Get.isRegistered<IsmCallApiWrapper>()) {
@@ -117,12 +119,14 @@ class IsmCallDelegate {
     if (!Get.isRegistered<IsmCallMqttController>()) {
       IsmCallMqttBinding().dependencies();
     }
-    await Get.find<IsmCallMqttController>().setup(
-      shouldInitialize: shouldInitialize,
-      config: config,
-      topics: topics,
-      topicChannels: topicChannels,
-    );
+    if (shouldInitialize) {
+      await Get.find<IsmCallMqttController>().setup(
+        config: config,
+        topics: topics,
+        topicChannels: topicChannels,
+      );
+      _mqttInitialized = true;
+    }
   }
 
   IsmCallTriggerStreamSubscription addCallTriggerListener(
@@ -136,17 +140,19 @@ class IsmCallDelegate {
       IsmCallHelper.removeCallTriggerListener(listener);
 
   EventStreamSubscription addEventListener(IsmCallEventFunction listener) {
-    if (!Get.isRegistered<IsmCallMqttController>()) {
-      IsmCallMqttBinding().dependencies();
-    }
+    assert(
+      _mqttInitialized,
+      'Mqtt is not initialized',
+    );
     var mqttController = Get.find<IsmCallMqttController>();
     return mqttController.eventStreamController.stream.listen(listener);
   }
 
   Future<void> removeListener(IsmCallMapFunction listener) async {
-    if (!Get.isRegistered<IsmCallMqttController>()) {
-      IsmCallMqttBinding().dependencies();
-    }
+    assert(
+      _mqttInitialized,
+      'Mqtt is not initialized',
+    );
     var mqttController = Get.find<IsmCallMqttController>();
     mqttController.eventListeners.remove(listener);
     await mqttController.eventStreamController.stream.drain();
@@ -156,10 +162,9 @@ class IsmCallDelegate {
   }
 
   void listenMqttEvent(EventModel event) {
-    if (!Get.isRegistered<IsmCallMqttController>()) {
-      IsmCallMqttBinding().dependencies();
+    if (Get.isRegistered<IsmCallMqttController>()) {
+      Get.find<IsmCallMqttController>().listenMqttEvent(event);
     }
-    Get.find<IsmCallMqttController>().listenMqttEvent(event);
   }
 
   void startCall({
