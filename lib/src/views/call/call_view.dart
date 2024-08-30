@@ -71,8 +71,8 @@ class IsmCallViewState extends State<IsmCallView> {
     isAccepted = arguments['isAccepted'] as bool? ?? false;
     _controller.isAudioOnly =
         widget.audioOnly ?? arguments['audioOnly'] as bool? ?? true;
-    // _controller.userInfoModel =
-    //     widget.userInfo ?? IsmCallUserInfoModel.fromMap(arguments);
+    _controller.userInfoModel =
+        widget.userInfo ?? IsmCallUserInfoModel.fromMap(arguments);
     _controller.meetingId =
         widget.meetingId ?? arguments['meetingId'] as String? ?? '';
     _controller.isRecording = false;
