@@ -78,9 +78,9 @@ class _IsmCallParticipantViewState extends State<IsmCallParticipantView> {
             : IsmCallNoVideoWidget(
                 name: context.properties?.nameBuilder?.call(widget.name) ??
                     widget.name, // widget.participant.participant.name,
-                imageUrl:
-                    context.properties?.nameBuilder?.call(widget.imageUrl) ??
-                        widget.imageUrl,
+                imageUrl: context.properties?.imageUrlBuilder
+                        ?.call(widget.imageUrl) ??
+                    widget.imageUrl,
                 isLargeVideo: widget.isLargeVideo,
               ),
       );
