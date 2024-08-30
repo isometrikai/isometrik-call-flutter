@@ -302,17 +302,19 @@ class IsmCallViewState extends State<IsmCallView> {
                                                         ?.userName ??
                                                     ''
                                                 : IsmCall.i.config?.userConfig
-                                                    .fullName,
+                                                        .fullName ??
+                                                    '',
                                             imageUrl:
                                                 controller.isRemoteVideoLarge
                                                     ? controller.userInfoModel
                                                             ?.imageUrl ??
                                                         ''
                                                     : IsmCall
-                                                        .i
-                                                        .config
-                                                        ?.userConfig
-                                                        .userProfile,
+                                                            .i
+                                                            .config
+                                                            ?.userConfig
+                                                            .userProfile ??
+                                                        '',
                                             videoFit: context
                                                 .properties?.videoFit?.rtcFit,
                                             showFullVideo:
@@ -395,14 +397,16 @@ class IsmCallViewState extends State<IsmCallView> {
                                             imageUrl: participant.participant
                                                     is LocalParticipant
                                                 ? IsmCall.i.config?.userConfig
-                                                    .userProfile
+                                                        .userProfile ??
+                                                    ''
                                                 : controller.userInfoModel
                                                         ?.imageUrl ??
                                                     '',
                                             name: participant.participant
                                                     is LocalParticipant
                                                 ? IsmCall.i.config?.userConfig
-                                                    .fullName
+                                                        .fullName ??
+                                                    ''
                                                 : controller.userInfoModel
                                                         ?.userName ??
                                                     '',
