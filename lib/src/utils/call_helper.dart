@@ -50,11 +50,7 @@ class IsmCallHelper {
     for (var listener in _callTriggerListeners) {
       callTriggerStatusStream.stream.listen(listener);
     }
-  }     
-          
-
-
-
+  }
 
   static IsmCallController get _controller {
     if (!Get.isRegistered<IsmCallController>()) {
@@ -72,7 +68,6 @@ class IsmCallHelper {
     String? imageUrl,
     String? ip,
     String? callType,
-    
   }) async {
     IsmCallLog('Here ');
     if (callId != null) {
@@ -364,7 +359,6 @@ class IsmCallHelper {
   ) async {
     try {
       hasCall = true;
-
       if (isAccepted) {
         ongoingCall = call;
         unawaited(IsmCallChannelHandler.handleCallStarted(call.id));
@@ -392,6 +386,7 @@ class IsmCallHelper {
           call.extra.metaData,
         );
         if (callModel == null) {
+          call.extra.metaData.addAll(call.extra.toMap());
           callTriggerStatusStream.add(
             (
               status: IsmCallStatus.acceptError,
@@ -408,9 +403,7 @@ class IsmCallHelper {
               data: call.extra.metaData,
             ),
           );
-
           var userInfo = IsmCallUserInfoModel.fromMap(call.extra.toMap());
-
           unawaited(
             _controller.joinCall(
               meetingId: meetingId,
