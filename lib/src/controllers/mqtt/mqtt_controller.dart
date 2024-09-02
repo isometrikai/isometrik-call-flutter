@@ -7,11 +7,7 @@ import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 class IsmCallMqttController extends GetxController {
   final _mqttHelper = MqttHelper();
 
-  late String userTopic;
-  late String statusTopic;
-  late String messageTopic;
-
-  late String userId;
+  String? userId;
 
   late String deviceId;
 
@@ -40,9 +36,9 @@ class IsmCallMqttController extends GetxController {
 
     userId = _config?.userConfig.userId ?? '';
 
-    userTopic = '$_topicPrefix/User/$userId';
-    statusTopic = '$_topicPrefix/Status/$userId';
-    messageTopic = '$_topicPrefix/Message/$userId';
+    final userTopic = '$_topicPrefix/User/$userId';
+    final statusTopic = '$_topicPrefix/Status/$userId';
+    final messageTopic = '$_topicPrefix/Message/$userId';
 
     var channelTopics =
         topicChannels?.map((e) => '$_topicPrefix/$e/$userId').toList();
@@ -60,7 +56,7 @@ class IsmCallMqttController extends GetxController {
         serverConfig: ServerConfig.fromMap(_config?.mqttConfig.toMap() ?? {}),
         projectConfig: ProjectConfig(
           deviceId: _config?.projectConfig.deviceId ?? '',
-          userIdentifier: userId,
+          userIdentifier: userId ?? '',
           username: _config?.username ?? '',
           password: _config?.password ?? '',
         ),

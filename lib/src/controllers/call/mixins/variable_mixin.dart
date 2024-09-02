@@ -7,6 +7,7 @@ mixin IsmCallVariableMixin {
 
   final RxBool _isFrontCamera = true.obs;
   bool get isFrontCamera => _isFrontCamera.value;
+
   set isFrontCamera(bool value) {
     if (isFrontCamera == value) {
       return;
@@ -132,6 +133,7 @@ mixin IsmCallVariableMixin {
 
   String recordingText = '';
 
+
   final RxBool _isProcessingRecording = false.obs;
   bool get isProcessingRecording => _isProcessingRecording.value;
   set isProcessingRecording(bool value) {
@@ -140,6 +142,7 @@ mixin IsmCallVariableMixin {
     }
     _isProcessingRecording.value = value;
   }
+  
 
   IsmCallUserInfoModel? userInfoModel;
 }
