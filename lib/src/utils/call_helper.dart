@@ -394,8 +394,7 @@ class IsmCallHelper {
               data: call.extra.metaData,
             ),
           );
-          // Todo will check this method
-          // unawaited(IsmCallHelper.endCall());
+          unawaited(IsmCallHelper.endCall());
         } else {
           callTriggerStatusStream.add(
             (
