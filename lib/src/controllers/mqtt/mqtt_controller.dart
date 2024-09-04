@@ -227,7 +227,16 @@ class IsmCallMqttController extends GetxController {
             IsmCallHelper.callEndByHost(meetingId);
           }
           break;
-
+        case 'meetingEndedDueToRejectionByAll':
+          var missedMembers = payload['missedByMembers'] as List? ?? [];
+          if (missedMembers.contains(userId)) {
+            IsmCallHelper.callMissed(meetingId);
+          }
+          if (initiatorId != userId) {
+            IsmCallHelper.callEndByHost(meetingId);
+            unawaited(IsmCallUtility.stopAudio());
+          }
+          break;
         case 'joinRequestAccept':
           if (initiatorId != userId) {
             unawaited(IsmCallUtility.stopAudio());
@@ -238,11 +247,7 @@ class IsmCallMqttController extends GetxController {
             unawaited(IsmCallUtility.stopAudio());
           }
           break;
-        case 'meetingEndedDueToRejectionByAll':
-          if (initiatorId != userId) {
-            unawaited(IsmCallUtility.stopAudio());
-          }
-          break;
+
         case 'recordingStarted':
           if (initiatorId != userId) {
             IsmCall.i.onRecording?.call(true, payload);
