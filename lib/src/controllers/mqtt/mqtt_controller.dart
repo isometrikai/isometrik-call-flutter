@@ -27,14 +27,18 @@ class IsmCallMqttController extends GetxController {
     IsmCallConfig? config,
     List<String>? topics,
     List<String>? topicChannels,
+    bool shouldInitialize = true,
   }) async {
     _config = config ?? IsmCall.i.config;
+
+    userId = _config?.userConfig.userId ?? '';
+
+    if (!shouldInitialize) return;
+
     _topicPrefix =
         '/${_config?.projectConfig.accountId ?? ''}/${_config?.projectConfig.projectId ?? ''}';
 
     deviceId = _config?.projectConfig.deviceId ?? '';
-
-    userId = _config?.userConfig.userId ?? '';
 
     final userTopic = '$_topicPrefix/User/$userId';
     final statusTopic = '$_topicPrefix/Status/$userId';
@@ -79,7 +83,6 @@ class IsmCallMqttController extends GetxController {
       autoSubscribe: true,
       topics: _topics,
     );
-
     _mqttHelper
         .onConnectionChange((value) => IsmCall.i.isMqttConnected = value);
     _mqttHelper.onEvent(_onEvent);
@@ -166,7 +169,7 @@ class IsmCallMqttController extends GetxController {
     if (event.topic.contains('User')) {
       final metaData = payload['metaData'] as Map<String, dynamic>?;
       final callType = metaData?['callType'] as String?;
-      final body = jsonDecode(payload['body']) as Map<String, dynamic>;
+      final body = jsonDecode(payload['body']) as Map<String, dynamic>? ?? {};
       final id = body['reqId'] as String?;
       final meetingId = body['meetingId'] as String?;
       final userIdentifier = payload['userIdentifier'] as String? ?? '';

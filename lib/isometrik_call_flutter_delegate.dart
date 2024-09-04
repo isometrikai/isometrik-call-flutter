@@ -119,12 +119,13 @@ class IsmCallDelegate {
     if (!Get.isRegistered<IsmCallMqttController>()) {
       IsmCallMqttBinding().dependencies();
     }
+    await Get.find<IsmCallMqttController>().setup(
+      config: config,
+      topics: topics,
+      topicChannels: topicChannels,
+      shouldInitialize: shouldInitialize,
+    );
     if (shouldInitialize) {
-      await Get.find<IsmCallMqttController>().setup(
-        config: config,
-        topics: topics,
-        topicChannels: topicChannels,
-      );
       _mqttInitialized = true;
     }
   }
