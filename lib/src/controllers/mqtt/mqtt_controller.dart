@@ -242,10 +242,7 @@ class IsmCallMqttController extends GetxController {
           }
           break;
         case 'meetingEndedDueToRejectionByAll':
-          IsmCallLog.error(
-              'step1 meetingEndedDueToRejectionByAll $initiatorId == $userId  ');
           if (initiatorId != userId) {
-            IsmCallLog.error('step2 meetingEndedDueToRejectionByAll');
             unawaited(IsmCallUtility.stopAudio());
           }
           break;

@@ -261,7 +261,10 @@ class IsmCallHelper {
   }
 
   static void callEndByHost(String meetingId) {
+    IsmCallLog.error('callEndByHost Step1');
     if (ongoingMeetingId != meetingId) {
+      IsmCallLog.error('callEndByHost Step1');
+
       return;
     }
     final showOpponentCallEnded =
