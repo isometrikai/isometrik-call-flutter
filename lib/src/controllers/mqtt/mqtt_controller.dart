@@ -234,13 +234,18 @@ class IsmCallMqttController extends GetxController {
           }
           break;
         case 'joinRequestReject':
+          IsmCallLog.error('step1 joinRequestAccept $initiatorId == $userId  ');
           if (initiatorId != userId) {
+            IsmCallLog.error('step2 joinRequestAccept');
             unawaited(IsmCallUtility.stopAudio());
             IsmCallHelper.callEndByHost(meetingId);
           }
           break;
         case 'meetingEndedDueToRejectionByAll':
+          IsmCallLog.error(
+              'step1 meetingEndedDueToRejectionByAll $initiatorId == $userId  ');
           if (initiatorId != userId) {
+            IsmCallLog.error('step2 meetingEndedDueToRejectionByAll');
             unawaited(IsmCallUtility.stopAudio());
           }
           break;
