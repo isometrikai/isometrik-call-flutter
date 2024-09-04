@@ -234,13 +234,9 @@ class IsmCallMqttController extends GetxController {
           }
           break;
         case 'joinRequestReject':
-          IsmCallLog.error('step1 joinRequestAccept $initiatorId == $userId  ');
           if (initiatorId != userId) {
-            IsmCallLog.error('step2 joinRequestAccept');
             unawaited(IsmCallUtility.stopAudio());
-
             Get.find<IsmCallController>().disconnectCall(meetingId: meetingId);
-
             // IsmCallHelper.callEndByHost(meetingId);
           }
           break;
