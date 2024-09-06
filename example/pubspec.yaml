@@ -28,7 +28,7 @@ dependencies:
   get: ^4.6.6
   google_fonts: ^6.2.1
   http: ^1.2.1
-  image_cropper: ^7.0.5
+  image_cropper: ^8.0.2
   image_picker: ^1.1.2
   intl: ^0.19.0
   isometrik_call_flutter:
