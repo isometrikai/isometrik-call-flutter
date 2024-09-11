@@ -117,10 +117,10 @@ class AppPages {
       page: AddNoteView.new,
       binding: HomeBinding(),
     ),
-    GetPage<VideoView>(
-      name: VideoView.route,
-      page: VideoView.new,
-    ),
+    // GetPage<VideoView>(
+    //   name: VideoView.route,
+    //   page: VideoView.new,
+    // ),
     ...IsmCallPages.pages,
   ];
 }

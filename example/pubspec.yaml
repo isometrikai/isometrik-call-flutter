@@ -7,7 +7,6 @@ environment:
   sdk: ">=3.3.3 <4.0.0"
 
 dependencies:
-  better_player_plus: ^1.0.7
   cached_network_image: ^3.3.1
   collection: ^1.18.0
   connectivity_plus: ^6.0.3
@@ -30,7 +29,7 @@ dependencies:
   http: ^1.2.1
   image_cropper: ^8.0.2
   image_picker: ^1.1.2
-  intl: ^0.19.0
+  intl: ^0.18.1
   isometrik_call_flutter:
     path: ../
   just_audio: ^0.9.39
