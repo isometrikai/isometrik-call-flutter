@@ -4,9 +4,9 @@
 // ignore: avoid_web_libraries_in_flutter
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:web/web.dart' as web;
+// import 'package:web/web.dart' as web;
 
-import 'isometrik_call_flutter_platform_interface.dart';
+import 'package:isometrik_call_flutter/isometrik_call_flutter_platform_interface.dart';
 
 /// A web implementation of the IsometrikCallFlutterPlatform of the IsometrikCallFlutter plugin.
 class IsometrikCallFlutterWeb extends IsometrikCallFlutterPlatform {
@@ -19,8 +19,5 @@ class IsometrikCallFlutterWeb extends IsometrikCallFlutterPlatform {
 
   /// Returns a [String] containing the version of the platform.
   @override
-  Future<String?> getPlatformVersion() async {
-    final version = web.window.navigator.userAgent;
-    return version;
-  }
+  Future<String?> getPlatformVersion() async => '0';
 }
