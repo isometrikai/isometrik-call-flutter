@@ -141,6 +141,7 @@ class IsmCallHelper {
       }
       var call = IsmNativeCallModel.fromMap(event.body as Map<String, dynamic>);
       incomingMetaData = call.extra.metaData;
+      IsmCallLog.info('from  listenCallEvents $incomingMetaData');
       try {
         IsmCallLog.highlight(
           'NativeCallEvent - ${event.event}\n${call.toJson()}',
