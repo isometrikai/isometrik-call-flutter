@@ -244,7 +244,7 @@ mixin IsmCallOngoingMixin {
     if (Get.currentRoute == IsmCallRoutes.call) {
       Get.back();
     }
-    IsmCallLog.info('from  _disconnectCall ${IsmCallHelper.incomingMetaData}');
+
     await Future.wait([
       if (!fromPushKit) ...[
         IsmCallHelper.endCall(),
@@ -257,9 +257,7 @@ mixin IsmCallOngoingMixin {
         _controller.room!.disconnect(),
       ],
     ]);
-    IsmCallLog.info(
-      'from  callTriggerStatusStream ${IsmCallHelper.incomingMetaData}',
-    );
+
     IsmCallHelper.callTriggerStatusStream.add(
       (
         status: IsmCallStatus.callEnded,

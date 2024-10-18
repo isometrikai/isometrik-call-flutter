@@ -140,8 +140,7 @@ class IsmCallHelper {
         return;
       }
       var call = IsmNativeCallModel.fromMap(event.body as Map<String, dynamic>);
-      incomingMetaData = call.extra.metaData;
-      IsmCallLog.info('from  listenCallEvents $incomingMetaData');
+
       try {
         IsmCallLog.highlight(
           'NativeCallEvent - ${event.event}\n${call.toJson()}',
@@ -151,18 +150,23 @@ class IsmCallHelper {
       }
       switch (event.event) {
         case Event.actionCallIncoming:
+          incomingMetaData = call.extra.metaData;
           startRinging(call);
           break;
         case Event.actionCallStart:
+          incomingMetaData = call.extra.metaData;
           _handleCallStarted();
           break;
         case Event.actionCallAccept:
+          incomingMetaData = call.extra.metaData;
           $answerCall(call, true);
           break;
         case Event.actionCallDecline:
+          incomingMetaData = call.extra.metaData;
           $answerCall(call, false);
           break;
         case Event.actionCallEnded:
+          incomingMetaData = call.extra.metaData;
           onEndCall(call);
           break;
         case Event.actionCallTimeout:
