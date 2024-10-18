@@ -141,19 +141,19 @@ class IsmCallDelegate {
       IsmCallHelper.removeCallTriggerListener(listener);
 
   EventStreamSubscription addEventListener(IsmCallEventFunction listener) {
-    assert(
-      _mqttInitialized,
-      'Mqtt is not initialized',
-    );
+    // assert(
+    //   _mqttInitialized,
+    //   'Mqtt is not initialized',
+    // );
     var mqttController = Get.find<IsmCallMqttController>();
     return mqttController.eventStreamController.stream.listen(listener);
   }
 
   Future<void> removeListener(IsmCallMapFunction listener) async {
-    assert(
-      _mqttInitialized,
-      'Mqtt is not initialized',
-    );
+    // assert(
+    //   _mqttInitialized,
+    //   'Mqtt is not initialized',
+    // );
     var mqttController = Get.find<IsmCallMqttController>();
     mqttController.eventListeners.remove(listener);
     await mqttController.eventStreamController.stream.drain();
