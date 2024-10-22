@@ -35,7 +35,7 @@ typedef IsmCallEndTrigger = Future<bool> Function(
   Map<String, dynamic>,
 );
 
-typedef IsmCallOnRecording = void Function(bool, Map<String, dynamic>);
+typedef IsmCallOnRecording = String Function(bool, Map<String, dynamic>);
 
 typedef IsmCallRefreshCallback = Future<void> Function();
 
@@ -48,4 +48,6 @@ typedef TimerStreamSubscription = StreamSubscription<Duration>;
 typedef IsmCallTriggerStreamSubscription
     = StreamSubscription<IsmCallTriggerModel>;
 
-typedef StringBuilder = String Function(String);   
+typedef StringBuilder = String Function(String);
+
+typedef IsmCallMapBuilder = String Function(Map<String, dynamic>);

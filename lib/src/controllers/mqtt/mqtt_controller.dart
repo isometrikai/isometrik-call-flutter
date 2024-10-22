@@ -202,7 +202,6 @@ class IsmCallMqttController extends GetxController {
       var initiatorId = payload['userId'] as String? ??
           payload['initiatorId'] as String? ??
           '';
-      var userName = payload['userName'] as String?;
       switch (action) {
         case 'memberLeave':
           break;
@@ -247,7 +246,7 @@ class IsmCallMqttController extends GetxController {
           break;
         case 'recordingStarted':
           if (initiatorId != userId) {
-            IsmCall.i.onRecording?.call(true, payload);
+            final userName = IsmCall.i.onRecording?.call(true, payload);
             if (Get.isRegistered<IsmCallController>()) {
               Get.find<IsmCallController>().toggleRecording(
                 true,
@@ -259,7 +258,7 @@ class IsmCallMqttController extends GetxController {
           break;
         case 'recordingStopped':
           if (initiatorId != userId) {
-            IsmCall.i.onRecording?.call(false, payload);
+            final userName = IsmCall.i.onRecording?.call(false, payload);
             if (Get.isRegistered<IsmCallController>()) {
               Get.find<IsmCallController>().toggleRecording(
                 false,

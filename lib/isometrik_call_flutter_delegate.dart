@@ -89,6 +89,7 @@ class IsmCallDelegate {
     _enableLogs = enableLogs;
     _enableMqttLogs = enableMqttLogs;
     _logout = onLogout;
+
     _acceptCall = onAcceptCall;
     _declineCall = onDeclineCall;
     _endCall = onEndCall;
