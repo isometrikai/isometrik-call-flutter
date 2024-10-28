@@ -16,6 +16,7 @@ class IsmCallRepository {
         type: IsmCallRequestType.post,
         payload: {'meetingId': meetingId},
         headers: _tokenHeader,
+        showDialog: false,
       );
 
   Future<IsmCallResponseModel> stopRecording(
@@ -26,6 +27,7 @@ class IsmCallRepository {
         type: IsmCallRequestType.post,
         payload: {'meetingId': meetingId},
         headers: _tokenHeader,
+        showDialog: false,
       );
 
   Future<IsmCallResponseModel> updatePushToken(
@@ -38,8 +40,6 @@ class IsmCallRepository {
         headers: _authHeader,
         showDialog: false,
       );
-
-
 
   Future<IsmCallResponseModel> endCall(Map<String, dynamic> payload) async =>
       _apiWrapper.makeRequest(
@@ -62,7 +62,8 @@ class IsmCallRepository {
       );
 
   Future<IsmCallResponseModel> declineCall(
-          Map<String, dynamic> payload) async =>
+    Map<String, dynamic> payload,
+  ) async =>
       _apiWrapper.makeRequest(
         IsmCallEndpoints.rejectCall,
         baseUrl: IsmCallEndpoints.baseUrl,

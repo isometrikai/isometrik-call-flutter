@@ -37,8 +37,13 @@ mixin IsmCallOngoingMixin {
     _controller.isVideoOn = value ?? !_controller.isVideoOn;
     if (_controller.isVideoOn) {
       var participant = _controller.participantTracks
-          .firstWhere((e) => e.id == _controller.room!.localParticipant!.sid);
-      if (!participant.hasVideo) {
+          .cast<IsmCallParticipantTrack?>()
+          .firstWhere(
+            (e) => e?.id == _controller.room?.localParticipant?.sid,
+            orElse: () => null,
+          );
+
+      if (participant != null && !participant.hasVideo) {
         final enablingVideo = Get.context?.translations?.enablingVideo ??
             IsmCallStrings.enablingVideo;
         IsmCallUtility.showLoader(enablingVideo);
@@ -54,10 +59,13 @@ mixin IsmCallOngoingMixin {
 
   void flipCamera() {
     final participant = _controller.room?.localParticipant;
+
     if (participant == null) {
       return;
     }
+
     final track = participant.videoTrackPublications.firstOrNull?.track;
+
     if (track == null) return;
 
     try {
@@ -125,6 +133,7 @@ mixin IsmCallOngoingMixin {
     } else {
       _controller.recordingText =
           name == null ? 'Recording' : '$name is recording';
+      msg = value ? 'Recording started' : 'Recording stopped';
     }
     unawaited(
       IsmCallUtility.showToast(msg, color: color ?? IsmCallColors.green),

@@ -30,21 +30,19 @@ class _IsmCallUserControlState extends State<IsmCallUserControl> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onToggle != null
-          ? () {
-              setState(() {
-                isActive = !isActive;
-                widget.onToggle?.call(isActive);
-              });
-            }
-          : null,
-      child: isActive
-          ? widget.activeIcon
-          : (widget.inactiveIcon ?? widget.activeIcon),
-    );
-  }
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: widget.onToggle != null
+            ? () {
+                setState(() {
+                  isActive = !isActive;
+                  widget.onToggle?.call(isActive);
+                });
+              }
+            : null,
+        child: isActive
+            ? widget.activeIcon
+            : (widget.inactiveIcon ?? widget.activeIcon),
+      );
 }
 
 class RecordControl extends IsmCallUserControl {
@@ -135,27 +133,28 @@ class MicControl extends IsmCallUserControl {
 }
 
 class ScreenShareControl extends IsmCallUserControl {
-  ScreenShareControl(
-      {super.key,
-      this.activeChild,
-      this.inactiveChild,
-      this.onChange,
-      this.isActive = false})
-      : super(
-            activeIcon: activeChild ??
-                const IsmCallControlIcon(
-                  IsmCallAssets.stopScreenShare,
-                ),
-            inactiveIcon: inactiveChild ??
-                const IsmCallControlIcon(
-                  IsmCallAssets.screenShare,
-                  isActive: false,
-                ),
-            onToggle: (value) {
-              onChange?.call(value);
-              Get.find<IsmCallController>().toggleScreenShare(value);
-            },
-            initiallyActive: isActive);
+  ScreenShareControl({
+    super.key,
+    this.activeChild,
+    this.inactiveChild,
+    this.onChange,
+    this.isActive = false,
+  }) : super(
+          activeIcon: activeChild ??
+              const IsmCallControlIcon(
+                IsmCallAssets.stopScreenShare,
+              ),
+          inactiveIcon: inactiveChild ??
+              const IsmCallControlIcon(
+                IsmCallAssets.screenShare,
+                isActive: false,
+              ),
+          onToggle: (value) {
+            onChange?.call(value);
+            Get.find<IsmCallController>().toggleScreenShare(value);
+          },
+          initiallyActive: isActive,
+        );
   final Widget? activeChild;
   final Widget? inactiveChild;
   final void Function(bool)? onChange;
@@ -204,20 +203,21 @@ class SpeakerControl extends IsmCallUserControl {
     this.onChange,
     this.isActive = false,
   }) : super(
-            activeIcon: activeChild ??
-                const IsmCallControlIcon(
-                  IsmCallAssets.speaker,
-                ),
-            inactiveIcon: inactiveChild ??
-                const IsmCallControlIcon(
-                  IsmCallAssets.speakerOff,
-                  isActive: false,
-                ),
-            onToggle: (value) {
-              onChange?.call(value);
-              Get.find<IsmCallController>().toggleSpeaker(value);
-            },
-            initiallyActive: isActive);
+          activeIcon: activeChild ??
+              const IsmCallControlIcon(
+                IsmCallAssets.speaker,
+              ),
+          inactiveIcon: inactiveChild ??
+              const IsmCallControlIcon(
+                IsmCallAssets.speakerOff,
+                isActive: false,
+              ),
+          onToggle: (value) {
+            onChange?.call(value);
+            Get.find<IsmCallController>().toggleSpeaker(value);
+          },
+          initiallyActive: isActive,
+        );
   final Widget? activeChild;
   final Widget? inactiveChild;
   final void Function(bool)? onChange;

@@ -443,7 +443,7 @@ class IsmCallViewState extends State<IsmCallView> {
         features.add(
           controlProperties?.recordingControl ??
               RecordControl(
-                onChange: controller.toggleRecording,
+                onChange: (_) {}, //controller.toggleRecording,
                 isActive: controller.isRecording,
               ),
         );
@@ -452,7 +452,7 @@ class IsmCallViewState extends State<IsmCallView> {
         features.add(
           controlProperties?.videoControl ??
               VideoControl(
-                onChange: controller.toggleVideo,
+                onChange: (_) {}, //controller.toggleVideo
                 isActive: controller.isVideoOn,
               ),
         );
@@ -462,7 +462,7 @@ class IsmCallViewState extends State<IsmCallView> {
           controlProperties?.micControl ??
               MicControl(
                 onChange: (value) {
-                  controller.toggleMic(value: value);
+                  // controller.toggleMic(value: value);
                 },
                 isActive: controller.isMicOn,
               ),
@@ -472,7 +472,7 @@ class IsmCallViewState extends State<IsmCallView> {
         features.add(
           controlProperties?.speakerControl ??
               SpeakerControl(
-                onChange: controller.toggleSpeaker,
+                onChange: (_) {}, // controller.toggleSpeaker,
                 isActive: controller.isSpeakerOn,
               ),
         );
@@ -481,7 +481,7 @@ class IsmCallViewState extends State<IsmCallView> {
         features.add(
           controlProperties?.screenShareControl ??
               ScreenShareControl(
-                onChange: controller.toggleScreenShare,
+                onChange: (_) {}, // controller.toggleScreenShare,
                 isActive: controller.isScreenSharing,
               ),
         );
@@ -491,7 +491,7 @@ class IsmCallViewState extends State<IsmCallView> {
           controlProperties?.cameraControl ??
               FilpCameraControl(
                 onChange: controller.isVideoOn
-                    ? (_) => _controller.flipCamera()
+                    ? (_) {} //_controller.flipCamera()
                     : null,
                 isActive: controller.isVideoOn,
               ),
