@@ -233,11 +233,13 @@ mixin IsmCallOngoingMixin {
   void disconnectCall({
     required String meetingId,
     bool fromPushKit = false,
+    bool fromMqtt = false,
   }) {
     _controller._disconnectDebouncer.run(
       () => _disconnectCall(
         meetingId: meetingId,
         fromPushKit: fromPushKit,
+        fromMqtt: fromMqtt,
       ),
     );
   }
@@ -245,6 +247,7 @@ mixin IsmCallOngoingMixin {
   void _disconnectCall({
     required String meetingId,
     bool fromPushKit = false,
+    bool fromMqtt = false,
   }) async {
     if (meetingId.isEmpty) {
       return;
@@ -269,7 +272,8 @@ mixin IsmCallOngoingMixin {
 
     IsmCallHelper.callTriggerStatusStream.add(
       (
-        status: IsmCallStatus.callEnded,
+        status:
+            fromMqtt ? IsmCallStatus.rejectSuccess : IsmCallStatus.callEnded,
         meetingId: meetingId,
         data: IsmCallHelper.incomingMetaData,
       ),
