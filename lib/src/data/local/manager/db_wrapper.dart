@@ -35,7 +35,6 @@ class IsmCallDBWrapper {
   Future<bool> updatePushToken(String token) async =>
       await saveValueSecurely(IsmCallLocalKeys.apnsToken, token);
 
-  Future<bool> addConfig(IsmCallConfig config) async {
-    return await saveValueSecurely(IsmCallLocalKeys.config, config.toJson());
-  }
+  Future<bool> addConfig(IsmCallConfig config) async =>
+      await saveValueSecurely(IsmCallLocalKeys.config, config.toJson());
 }
