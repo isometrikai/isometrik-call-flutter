@@ -26,7 +26,17 @@ class _IsmCallUserControlState extends State<IsmCallUserControl> {
   @override
   void initState() {
     super.initState();
+    IsmCallLog.error('initState ${widget.initiallyActive}');
     isActive = widget.initiallyActive;
+  }
+
+  @override
+  void didUpdateWidget(covariant IsmCallUserControl oldWidget) {
+    IsmCallLog.error('didUpdateWidget ${widget.initiallyActive}');
+    isActive = widget.initiallyActive;
+
+    // setState(() {});
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
