@@ -7,11 +7,14 @@ import flutter_callkit_incoming
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, PKPushRegistryDelegate {
-    let channel = "com.isometrik.call"
-    
+    let channelName = "com.isometrik.call"
+
+    var methodChannel: FlutterMethodChannel?
+
     var flutterEngine: FlutterEngine?
     
     var ongoingCall: IncomingCall?
+
     var incomingCalls = [String: IncomingCall]()
     
     var pushRegistry: PKPushRegistry?
@@ -23,10 +26,16 @@ import flutter_callkit_incoming
         flutterEngine = FlutterEngine(name: "io.flutter", project: nil)
         
         let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-        let methodChannel = FlutterMethodChannel(name: channel, binaryMessenger: controller.binaryMessenger)
+        methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: controller.binaryMessenger)
                
-        methodChannel.setMethodCallHandler({
+        methodChannel?.setMethodCallHandler({
            (call: FlutterMethodCall, result: FlutterResult) -> Void in
+
+            // if call.method == "invalidateAndReRegister" {
+            //     self.invalidateAndReRegister()
+            //     result("PushKit token re-registration triggered")
+            //     return
+            // }
             guard let arguments = call.arguments as? [String: Any],
                 let callId = arguments["callId"] as? String else {
                 result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing or invalid arguments", details: nil))
@@ -53,7 +62,7 @@ import flutter_callkit_incoming
            case "handleCallEnd":
                self.handleCallEnd(callId)
                result(nil)
-               
+       
            default:
                result(FlutterMethodNotImplemented)
                return
@@ -78,7 +87,7 @@ import flutter_callkit_incoming
         }
         
         if let flutterEngine = flutterEngine, let controller = flutterEngine.viewController {
-            let channel = FlutterMethodChannel(name: channel, binaryMessenger: controller.binaryMessenger)
+            let channel = FlutterMethodChannel(name: channelName, binaryMessenger: controller.binaryMessenger)
             
             DispatchQueue.global().asyncAfter(deadline: .now()) {
                 channel.invokeMethod("handleIncomingPush", arguments: payload.dictionaryPayload)
@@ -113,7 +122,10 @@ import flutter_callkit_incoming
     
     func handleIncomingPush(with payload: PKPushPayload) {
         print("didReceiveIncomingPushWith \(payload.dictionaryPayload)")
-        
+
+        // let isLoggedIn =  methodChannel?.invokeMethod("checkIsUserLoggedIn", arguments:{}) 
+        // print("isLoggedIn \(isLoggedIn)")
+
         guard let metaData = payload.dictionaryPayload["metaData"] as? [String: Any] ?? payload.dictionaryPayload["payload"] as? [String: Any] else { return }
         
         let id = UUID().uuidString
@@ -236,5 +248,16 @@ import flutter_callkit_incoming
         print("LOG: Handling call end event for: \(callId)")
         ongoingCall = nil
         checkCallQueue()
+    }
+
+
+
+    // Method to invalidate token and re-register
+    func invalidateAndReRegister() {
+    // Re-register by reinitializing PushKit
+        pushRegistry = nil
+        pushRegistry = PKPushRegistry(queue: DispatchQueue.main)
+        pushRegistry?.delegate = self
+        pushRegistry?.desiredPushTypes = [.voIP]
     }
 }

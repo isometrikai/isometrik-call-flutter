@@ -76,6 +76,9 @@ class IsmCall {
   /// The logout function for this instance of IsmCall.
   Future Function()? get logout => _delegate.logout;
 
+  /// The isUserLogedIn function for this instance of IsmCall.
+  IsmCallLoggedIn? get isUserLogedIn => _delegate.isUserLogedIn;
+
   /// The accept call trigger for this instance of IsmCall.
   IsmCallAcceptTrigger? get acceptCall => _delegate.acceptCall;
 
@@ -160,6 +163,7 @@ class IsmCall {
   /// ```
   Future<void> initialize(
     IsmCallConfig config, {
+    required IsmCallLoggedIn isUserLogedIn,
     Widget? appLogo,
     bool enableLogs = true,
     bool enableMqttLogs = true,
@@ -176,6 +180,7 @@ class IsmCall {
     await Future.wait([
       _delegate.initialize(
         config,
+        isUserLogedIn: isUserLogedIn,
         logo: appLogo,
         enableLogs: enableLogs,
         enableMqttLogs: enableMqttLogs,
@@ -523,4 +528,6 @@ class IsmCall {
       await _delegate.getDevicePushTokenVoIP();
 
   Future<String> getLocalToken() async => await _delegate.getToken();
+
+  // Future<bool> Function()? isUserLogedIn() => _delegate.isUserLogedIn;
 }

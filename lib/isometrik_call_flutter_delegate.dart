@@ -30,6 +30,9 @@ class IsmCallDelegate {
   static Future Function()? _logout;
   Future Function()? get logout => _logout;
 
+  static IsmCallLoggedIn? _isUserLogedIn;
+  IsmCallLoggedIn? get isUserLogedIn => _isUserLogedIn;
+
   static IsmCallAcceptTrigger? _acceptCall;
   IsmCallAcceptTrigger? get acceptCall => _acceptCall;
 
@@ -70,6 +73,7 @@ class IsmCallDelegate {
 
   Future<void> initialize(
     IsmCallConfig config, {
+    required IsmCallLoggedIn isUserLogedIn,
     bool enableLogs = true,
     bool enableMqttLogs = true,
     bool shouldInitializeMqtt = true,
@@ -85,6 +89,7 @@ class IsmCallDelegate {
   }) async {
     _config = config;
     setup();
+    _isUserLogedIn = _isUserLogedIn;
     _logo = logo;
     _enableLogs = enableLogs;
     _enableMqttLogs = enableMqttLogs;

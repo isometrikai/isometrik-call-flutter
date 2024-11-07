@@ -5,14 +5,31 @@ class IsmCallChannelHandler {
   static const MethodChannel _channel = MethodChannel('com.isometrik.call');
 
   static void initialize() {
-    _channel.setMethodCallHandler((call) async {
-      if (call.method == 'handleIncomingPush') {
-        final Map<dynamic, dynamic> payload = call.arguments;
-        final nativeCall =
-            IsmNativeCallModel.fromMap(payload.cast<String, dynamic>());
-        IsmCallHelper.startRinging(nativeCall);
-      }
-    });
+    _channel.setMethodCallHandler(
+      (call) async {
+        if (call.method == 'handleIncomingPush') {
+          final Map<dynamic, dynamic> payload = call.arguments;
+          final nativeCall =
+              IsmNativeCallModel.fromMap(payload.cast<String, dynamic>());
+          IsmCallHelper.startRinging(nativeCall);
+          if (IsmCall.i.isUserLogedIn == null) {
+            return false;
+          }
+          final data = await IsmCall.i.isUserLogedIn!();
+          if (data) {
+            await invalidateAndReRegisterToken();
+          }
+        } else if (call.method == 'checkIsUserLoggedIn') {
+          if (IsmCall.i.isUserLogedIn == null) {
+            return false;
+          }
+          final data = await IsmCall.i.isUserLogedIn!();
+          return data;
+        } else {
+          IsmCallLog.error('Unhandle event from ${call.method}');
+        }
+      },
+    );
   }
 
   static Future<void> handleRinging(String callId) async {
@@ -52,6 +69,14 @@ class IsmCallChannelHandler {
       await _channel.invokeMethod('handleCallEnd', {'callId': callId});
     } on PlatformException catch (e) {
       IsmCallLog.error("Failed to handle call end: '${e.message}'.");
+    }
+  }
+
+  static Future<void> invalidateAndReRegisterToken() async {
+    try {
+      await _channel.invokeMethod('invalidateAndReRegister');
+    } on PlatformException catch (e) {
+      IsmCallLog.error('Failed to re-register PushKit token: ${e.message}');
     }
   }
 }

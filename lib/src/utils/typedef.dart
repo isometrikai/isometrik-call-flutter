@@ -51,3 +51,5 @@ typedef IsmCallTriggerStreamSubscription
 typedef StringBuilder = String Function(String);
 
 typedef IsmCallMapBuilder = String Function(Map<String, dynamic>);
+
+typedef IsmCallLoggedIn = Future<bool> Function();

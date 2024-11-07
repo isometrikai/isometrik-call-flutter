@@ -104,6 +104,7 @@ class HomeController extends GetxController
           return model != null;
         },
         onEndCall: (meetingId, metaData) => endCall(meetingId),
+        isUserLogedIn: () async => true,
       );
       _listenCallTrigger();
     } catch (e, st) {
