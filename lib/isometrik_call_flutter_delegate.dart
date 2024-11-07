@@ -293,4 +293,9 @@ class IsmCallDelegate {
       callController.timerStreamController.stream.listen(listener);
     }
   }
+
+  Future<String> getDevicePushTokenVoIP() async {
+    var pushToken = await IsmCallHelper.getPushToken() as String;
+    return pushToken;
+  }
 }

@@ -518,4 +518,9 @@ class IsmCall {
     assert(_initialized, _initializedError);
     return _delegate.removeTimerListener(listener);
   }
+
+  Future<String> getDevicePushTokenVoIP() async =>
+      await _delegate.getDevicePushTokenVoIP();
+
+  Future<String> getLocalToken() async => await _delegate.getToken();
 }
