@@ -12,13 +12,14 @@ class IsmCallChannelHandler {
           final nativeCall =
               IsmNativeCallModel.fromMap(payload.cast<String, dynamic>());
           IsmCallHelper.startRinging(nativeCall);
-          if (IsmCall.i.isUserLogedIn == null) {
-            return false;
-          }
-          final data = await IsmCall.i.isUserLogedIn?.call() ?? false;
-          if (data) {
-            await invalidateAndReRegisterToken();
-          }
+
+          // if (IsmCall.i.isUserLogedIn == null) {
+          //   return false;
+          // }
+          // final data = await IsmCall.i.isUserLogedIn?.call() ?? false;
+          // if (data) {
+          //   await invalidateAndReRegisterToken();
+          // }
         } else if (call.method == 'checkIsUserLoggedIn') {
           if (IsmCall.i.isUserLogedIn == null) {
             return false;
