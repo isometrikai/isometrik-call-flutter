@@ -4,6 +4,7 @@ import 'package:call_qwik_example/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class AuthController extends GetxController {
   AuthController(this._viewModel);
@@ -84,6 +85,14 @@ class AuthController extends GetxController {
 
   void togglePasswordVisibility() {
     hidePassword = !hidePassword;
+  }
+
+  @override
+  void onInit() {
+    IsmCall.i.getIsUserLogedIn(
+      () async => true,
+    );
+    super.onInit();
   }
 
   void toggleNewPasswordVisibility() {

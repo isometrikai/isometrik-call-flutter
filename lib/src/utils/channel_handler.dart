@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:flutter/services.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
@@ -15,7 +17,7 @@ class IsmCallChannelHandler {
           if (IsmCall.i.isUserLogedIn == null) {
             return false;
           }
-          final data = await IsmCall.i.isUserLogedIn!();
+          final data = await IsmCall.i.isUserLogedIn?.call() ?? false;
           if (data) {
             await invalidateAndReRegisterToken();
           }
