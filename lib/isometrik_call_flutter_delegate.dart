@@ -85,10 +85,11 @@ class IsmCallDelegate {
     IsmCallDeclineTrigger? onDeclineCall,
     IsmCallEndTrigger? onEndCall,
     IsmCallOnRecording? onRecording,
+    IsmCallLoggedIn? isUserLogedIn,
   }) async {
     _config = config;
     setup();
-
+    _isUserLogedIn = isUserLogedIn;
     _logo = logo;
     _enableLogs = enableLogs;
     _enableMqttLogs = enableMqttLogs;

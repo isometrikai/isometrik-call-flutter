@@ -175,11 +175,13 @@ class IsmCall {
     IsmCallDeclineTrigger? onDeclineCall,
     IsmCallEndTrigger? onEndCall,
     IsmCallOnRecording? onRecording,
+    IsmCallLoggedIn? isUserLogedIn,
   }) async {
     await Future.wait([
       _delegate.initialize(
         config,
         logo: appLogo,
+        isUserLogedIn: isUserLogedIn,
         enableLogs: enableLogs,
         enableMqttLogs: enableMqttLogs,
         shouldInitializeMqtt: shouldInitializeMqtt,
