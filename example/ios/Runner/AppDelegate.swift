@@ -31,12 +31,6 @@ import flutter_callkit_incoming
         methodChannel?.setMethodCallHandler({
            (call: FlutterMethodCall, result: FlutterResult) -> Void in
 
-            // if call.method == "invalidateAndReRegister" {
-            //     self.invalidateAndReRegister()
-            //     result("PushKit token re-registration triggered")
-            //     return
-            // }
-
             guard let arguments = call.arguments as? [String: Any],
                 let callId = arguments["callId"] as? String else {
                 result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing or invalid arguments", details: nil))
@@ -124,9 +118,6 @@ import flutter_callkit_incoming
     func handleIncomingPush(with payload: PKPushPayload) {
         print("didReceiveIncomingPushWith \(payload.dictionaryPayload)")
 
-        // let isLoggedIn =  methodChannel?.invokeMethod("checkIsUserLoggedIn", arguments:{}) 
-        // print("isLoggedIn \(isLoggedIn)")
-
         guard let metaData = payload.dictionaryPayload["metaData"] as? [String: Any] ?? payload.dictionaryPayload["payload"] as? [String: Any] else { return }
         
         let id = UUID().uuidString
@@ -185,20 +176,54 @@ import flutter_callkit_incoming
     
     func handleIncomingCalls(call: IncomingCall, payload: PKPushPayload) {
         print("LOG: handleIncomingCalls \(call.id)")
+
 //        if ongoingCall == nil && incomingCalls.isEmpty {
 //            startRinging(call: call, payload: payload)
 //        }
         
         incomingCalls[call.id] = call
         
-        startRinging(call: call, payload: payload)
+       checkIsLoggedIn { result in
+            self.startRinging(call: call, payload: payload, isLoggedIn: result)
+        }
+    }
+
+     func checkIsLoggedIn(completion: @escaping (Bool)->Void){
+        if(methodChannel == nil){
+            completion(false)
+        }
+        methodChannel!.invokeMethod("checkIsUserLoggedIn", arguments: nil) { result in
+            if let isLoggedIn = result as? Bool {
+                print("User is logged in: \(isLoggedIn)")
+                completion(isLoggedIn)
+                // Use `isLoggedIn` variable as needed in your app
+            } else if let error = result as? FlutterError {
+                print("Error checking login status: \(error.message ?? "Unknown error")")
+                completion(false)
+            } else {
+                print("Unexpected result type")
+                completion(false)
+            }
+        }
+        
     }
     
-    func startRinging(call: IncomingCall, payload: PKPushPayload) {
+    func startRinging(call: IncomingCall, payload: PKPushPayload, isLoggedIn: Bool = false) {
         print("LOG: startRinging \(call.id)")
         SwiftFlutterCallkitIncomingPlugin.sharedInstance?.showCallkitIncoming(call.data, fromPushKit: true)
         startFlutterEngineIfNeeded(payload)
         removeCall(call.id)
+        if(!isLoggedIn) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.endCall(call: call)
+                self.invalidateAndReRegister()
+            }
+        }
+    }
+
+     func endCall(call: IncomingCall) {
+        SwiftFlutterCallkitIncomingPlugin.sharedInstance?.endCall(call.data)
+        
     }
     
     func checkCallQueue() {
@@ -210,7 +235,9 @@ import flutter_callkit_incoming
             if call.expirationTime <= now {
                 removeCall(id)
             } else {
-                startRinging(call: call, payload: PKPushPayload())
+                checkIsLoggedIn { result in
+                    self.startRinging(call: call, payload: PKPushPayload(), isLoggedIn: result)
+                }
                 break
             }
         }

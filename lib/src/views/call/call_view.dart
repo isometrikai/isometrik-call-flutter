@@ -42,6 +42,7 @@ class IsmCallViewState extends State<IsmCallView> {
     super.initState();
     _listener = AppLifecycleListener(
       onDetach: () {
+        IsmCallLog.success('onDetach');
         _controller.disconnectCall(meetingId: _controller.meetingId);
       },
       onHide: () {

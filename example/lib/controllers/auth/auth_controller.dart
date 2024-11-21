@@ -90,7 +90,7 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     IsmCall.i.getIsUserLogedIn(
-      () async => true,
+      () async => false,
     );
     super.onInit();
   }
