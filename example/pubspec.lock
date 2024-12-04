@@ -274,10 +274,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_callkit_incoming
-      sha256: "911978c1db30d2cf886daf80c874ac0beac8482682769b397c0dc3190f3f6cef"
+      sha256: "516f188bffb849a552701d08c7a5af99f60c1747f7cd0992840974bc6eea922c"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.4+1"
+    version: "2.0.4+2"
   flutter_driver:
     dependency: transitive
     description: flutter
