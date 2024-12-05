@@ -105,7 +105,7 @@ import flutter_callkit_incoming
     
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
         guard type == .voIP else { return }
-        
+
         self.handleIncomingPush(with: payload);
         
         DispatchQueue.main.asyncAfter(deadline: .now()) {
@@ -177,19 +177,16 @@ import flutter_callkit_incoming
     func handleIncomingCalls(call: IncomingCall, payload: PKPushPayload) {
         print("LOG: handleIncomingCalls \(call.id)")
 
-//        if ongoingCall == nil && incomingCalls.isEmpty {
-//            startRinging(call: call, payload: payload)
-//        }
-        
         incomingCalls[call.id] = call
+
+        self.startRinging(call: call, payload: payload)
         
-       checkIsLoggedIn { result in
-            self.startRinging(call: call, payload: payload, isLoggedIn: result)
-        }
+       
     }
 
      func checkIsLoggedIn(completion: @escaping (Bool)->Void){
         if(methodChannel == nil){
+            print("Method channel is nil")
             completion(false)
         }
         methodChannel!.invokeMethod("checkIsUserLoggedIn", arguments: nil) { result in
@@ -208,17 +205,20 @@ import flutter_callkit_incoming
         
     }
     
-    func startRinging(call: IncomingCall, payload: PKPushPayload, isLoggedIn: Bool = false) {
+    func startRinging(call: IncomingCall, payload: PKPushPayload) {
         print("LOG: startRinging \(call.id)")
         SwiftFlutterCallkitIncomingPlugin.sharedInstance?.showCallkitIncoming(call.data, fromPushKit: true)
         startFlutterEngineIfNeeded(payload)
         removeCall(call.id)
-        if(!isLoggedIn) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                self.endCall(call: call)
-                self.invalidateAndReRegister()
+        checkIsLoggedIn { result in
+            if(!result) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.endCall(call: call)
+                    self.invalidateAndReRegister()
+                }
             }
         }
+        
     }
 
      func endCall(call: IncomingCall) {
@@ -235,9 +235,7 @@ import flutter_callkit_incoming
             if call.expirationTime <= now {
                 removeCall(id)
             } else {
-                checkIsLoggedIn { result in
-                    self.startRinging(call: call, payload: PKPushPayload(), isLoggedIn: result)
-                }
+                self.startRinging(call: call, payload: PKPushPayload())
                 break
             }
         }

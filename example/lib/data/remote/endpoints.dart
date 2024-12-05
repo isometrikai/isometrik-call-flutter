@@ -4,7 +4,8 @@ class Endpoints {
 
   static const String baseUrl = 'https://apis.isometrik.io';
 
-  static const String adminBaseUrl = 'https://service-apis.isometrik.io/v1';
+  static const String adminBaseUrl =
+      'https://apinew.isometrik.ai/v1'; // 'https://service-apis.isometrik.io/v1';
 
   static const String wsUrl = 'wss://streaming.isometrik.io';
 
