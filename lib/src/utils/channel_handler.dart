@@ -14,9 +14,9 @@ class IsmCallChannelHandler {
           IsmCallHelper.startRinging(nativeCall);
         } else if (call.method == 'checkIsUserLoggedIn') {
           if (IsmCall.i.isUserLogedIn == null) {
-            return false;
+            return true;
           }
-          final data = await IsmCall.i.isUserLogedIn?.call() ?? false;
+          final data = await IsmCall.i.isUserLogedIn?.call() ?? true;
           return data;
         } else {
           IsmCallLog.error('Unhandle event from ${call.method}');
