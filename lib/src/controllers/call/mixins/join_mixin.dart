@@ -65,6 +65,9 @@ mixin IsmCallJoinMixin {
 
   // Enable the user's video
   Future<void> publishTracks(IsmCallTrackType trackType) async {
+    // Add small delay before camera initialization
+    await Future.delayed(const Duration(milliseconds: 500));
+
     final tracks = await Future.wait([
       if (trackType.hasAudio) ...[
         LocalAudioTrack.create(),
@@ -123,13 +126,24 @@ mixin IsmCallJoinMixin {
 
     try {
       final videoQuality = hdBroadcast
-          ? VideoParametersPresets.h720_169
+          ? const VideoParameters(
+              dimensions: VideoDimensions(
+                720,
+                1280,
+              ),
+              encoding: VideoEncoding(
+                maxBitrate: 2000 * 1000,
+                maxFramerate: 30,
+              ),
+            ) // VideoParametersPresets.h720_169
+
           : VideoParametersPresets.h540_169;
       var room = Room(
         roomOptions: RoomOptions(
           defaultCameraCaptureOptions: CameraCaptureOptions(
             cameraPosition: CameraPosition.front,
             params: videoQuality,
+            deviceId: IsmCall.i.config?.projectConfig.deviceId ?? '',
           ),
           defaultAudioCaptureOptions: const AudioCaptureOptions(
             noiseSuppression: true,
@@ -140,19 +154,20 @@ mixin IsmCallJoinMixin {
           ),
           defaultVideoPublishOptions: VideoPublishOptions(
             videoEncoding: videoQuality.encoding,
+            simulcast: false,
           ),
           defaultAudioPublishOptions: const AudioPublishOptions(
             dtx: true,
           ),
         ),
-        connectOptions: ConnectOptions(
-          timeouts: Timeouts.defaultTimeouts.ismCallCopyWith(
-            connection: const Duration(seconds: 30),
-            peerConnection: const Duration(seconds: 30),
-            publish: const Duration(seconds: 30),
-            iceRestart: const Duration(seconds: 30),
-          ),
-        ),
+        // connectOptions: ConnectOptions(
+        //   timeouts: Timeouts.defaultTimeouts.ismCallCopyWith(
+        //     connection: const Duration(seconds: 30),
+        //     peerConnection: const Duration(seconds: 30),
+        //     publish: const Duration(seconds: 30),
+        //     iceRestart: const Duration(seconds: 30),
+        //   ),
+        // ),
       );
 
       _controller.room = room;
