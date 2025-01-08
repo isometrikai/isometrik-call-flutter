@@ -22,14 +22,14 @@ dependencies:
   flutter_svg: ^2.0.10+1
   flutter_web_plugins:
     sdk: flutter
-  flutter_webrtc: ^0.11.5
+  flutter_webrtc: ^0.12.5+hotfix.2
   fluttertoast: ^8.2.6
   get: ^4.6.6
   google_fonts: ^6.2.1
   http: ^1.2.1
   image_cropper: ^8.0.2
   image_picker: ^1.1.2
-  intl: ^0.18.1
+  intl: ^0.20.1
   isometrik_call_flutter:
     path: ../
   just_audio: ^0.9.39

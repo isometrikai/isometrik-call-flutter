@@ -4,7 +4,7 @@ PODS:
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
-  - CryptoSwift (1.8.3)
+  - CryptoSwift (1.8.4)
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -13,9 +13,9 @@ PODS:
     - Flutter
   - flutter_secure_storage (6.0.0):
     - Flutter
-  - flutter_webrtc (0.11.3):
+  - flutter_webrtc (0.12.2):
     - Flutter
-    - WebRTC-SDK (= 125.6422.04)
+    - WebRTC-SDK (= 125.6422.06)
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -30,23 +30,23 @@ PODS:
     - Flutter
   - just_audio (0.0.1):
     - Flutter
-  - livekit_client (2.2.5):
+  - livekit_client (2.3.1):
     - Flutter
-    - WebRTC-SDK (= 125.6422.04)
+    - WebRTC-SDK (= 125.6422.06)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - sqflite (0.0.3):
+  - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
   - Toast (4.1.1)
   - TOCropViewController (2.7.4)
   - url_launcher_ios (0.0.1):
     - Flutter
-  - WebRTC-SDK (125.6422.04)
+  - WebRTC-SDK (125.6422.06)
 
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
@@ -65,7 +65,7 @@ DEPENDENCIES:
   - livekit_client (from `.symlinks/plugins/livekit_client/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
-  - sqflite (from `.symlinks/plugins/sqflite/darwin`)
+  - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
@@ -108,34 +108,34 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
-  sqflite:
-    :path: ".symlinks/plugins/sqflite/darwin"
+  sqflite_darwin:
+    :path: ".symlinks/plugins/sqflite_darwin/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
   audio_session: 088d2483ebd1dc43f51d253d4a1c517d9a2e7207
-  connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
-  CryptoSwift: 967f37cea5a3294d9cce358f78861652155be483
+  connectivity_plus: 18382e7311ba19efcaee94442b23b32507b20695
+  CryptoSwift: e64e11850ede528a02a0f3e768cec8e9d92ecb90
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_callkit_incoming: 417dd1b46541cdd5d855ad795ccbe97d1c18155e
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
-  flutter_webrtc: 75b868e4f9e817c7a9a42ca4b6169063de4eec9f
+  flutter_webrtc: 1a53bd24f97bcfeff512f13699e721897f261563
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   image_cropper: 37d40f62177c101ff4c164906d259ea2c3aa70cf
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
   isometrik_call_flutter: 0d005a23b4a1924f6af9c73ef0cd6b90d6dd5809
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
-  livekit_client: 9c8080879256a0fb16da13c9be4845248209d896
+  livekit_client: dbb906ef427fe96dde5854471c3dda0a50cc15f9
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
+  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
-  WebRTC-SDK: c3d69a87e7185fad3568f6f3cff7c9ac5890acf3
+  WebRTC-SDK: 79942c006ea64f6fb48d7da8a4786dfc820bc1db
 
 PODFILE CHECKSUM: 741f620b8f9446b149917ac544932bf9c9b2cafa
 
