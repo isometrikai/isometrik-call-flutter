@@ -649,12 +649,11 @@ packages:
   mqtt_helper:
     dependency: transitive
     description:
-      path: "."
-      ref: "feat/check_for_topics"
-      resolved-ref: "7229b4bbd47a61f42b14e9685a2f5dfc75566011"
-      url: "https://github.com/rahulsaryam285/mqtt_helper.git"
-    source: git
-    version: "1.0.0"
+      name: mqtt_helper
+      sha256: "823555afa2c9b70837763865589b46959812e4200b72795980c6f59276129767"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   nm:
     dependency: transitive
     description:
