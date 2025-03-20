@@ -5,6 +5,7 @@ import 'package:call_qwik_example/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class CustomImage extends StatelessWidget {
   const CustomImage.asset(
@@ -188,7 +189,7 @@ class _Network extends StatelessWidget {
         placeholder: (context, url) => Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: CallColors.primary.withOpacity(0.2),
+            color: CallColors.primary.applyOpacity(0.2),
             shape: isProfileImage ? BoxShape.circle : BoxShape.rectangle,
           ),
           child: isProfileImage && name.trim().isNotEmpty

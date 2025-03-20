@@ -89,7 +89,7 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
                       key: const ObjectKey('sheet_icon'),
                     ),
                   ),
-                )
+                ),
               ],
               SafeArea(
                 top: false,

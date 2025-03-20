@@ -320,7 +320,8 @@ class IsmCallApiWrapper {
   }) async {
     var diff = DateTime.now().difference(startTime).inMilliseconds / 1000;
     IsmCallLog(
-        '[Response] - ${diff}s ${response.statusCode} ${response.request?.url}\n${response.body}');
+      '[Response] - ${diff}s ${response.statusCode} ${response.request?.url}\n${response.body}',
+    );
 
     switch (response.statusCode) {
       case 200:

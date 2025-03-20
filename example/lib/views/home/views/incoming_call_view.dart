@@ -111,7 +111,7 @@ class _IncomingCallViewState extends State<IncomingCallView> {
               ),
               Positioned.fill(
                 child: ColoredBox(
-                  color: Colors.black.withOpacity(0.8),
+                  color: Colors.black.applyOpacity(0.8),
                 ),
               ),
             ],
@@ -179,7 +179,7 @@ class _IncomingCallViewState extends State<IncomingCallView> {
                             child: Icon(
                               Icons.keyboard_arrow_up_rounded,
                               color:
-                                  Colors.white.withOpacity(index * 0.2 + 0.2),
+                                  Colors.white.applyOpacity(index * 0.2 + 0.2),
                             ),
                           ),
                         ),

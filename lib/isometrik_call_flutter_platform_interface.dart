@@ -1,6 +1,5 @@
+import 'package:isometrik_call_flutter/isometrik_call_flutter_method_channel.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
-import 'isometrik_call_flutter_method_channel.dart';
 
 abstract class IsometrikCallFlutterPlatform extends PlatformInterface {
   /// Constructs a IsometrikCallFlutterPlatform.
@@ -8,7 +7,8 @@ abstract class IsometrikCallFlutterPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static IsometrikCallFlutterPlatform _instance = MethodChannelIsometrikCallFlutter();
+  static IsometrikCallFlutterPlatform _instance =
+      MethodChannelIsometrikCallFlutter();
 
   /// The default instance of [IsometrikCallFlutterPlatform] to use.
   ///

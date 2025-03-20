@@ -216,7 +216,7 @@ class _ContactDetailsViewState extends State<ContactDetailsView>
                     tabAlignment: TabAlignment.start,
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicator: BoxDecoration(
-                      color: context.theme.primaryColor.withOpacity(0.3),
+                      color: context.theme.primaryColor.applyOpacity(0.3),
                       border: Border(
                         bottom: BorderSide(
                           color: context.theme.primaryColor,

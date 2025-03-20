@@ -61,7 +61,9 @@ class IsmCallButton extends StatelessWidget {
   final Color? backgroundColor;
 
   static WidgetStateProperty<TextStyle?> _textStyle(
-          BuildContext context, bool small) =>
+    BuildContext context,
+    bool small,
+  ) =>
       WidgetStateProperty.all(
         (small ? context.textTheme.labelSmall : context.textTheme.bodyMedium)
             ?.copyWith(
@@ -70,13 +72,16 @@ class IsmCallButton extends StatelessWidget {
       );
 
   static WidgetStateProperty<EdgeInsetsGeometry?> _padding(
-          BuildContext context, bool small) =>
+    BuildContext context,
+    bool small,
+  ) =>
       WidgetStateProperty.all(
         small ? IsmCallDimens.edgeInsets8_4 : IsmCallDimens.edgeInsets16_8,
       );
 
   static WidgetStateProperty<OutlinedBorder?> _borderRadius(
-          BuildContext context) =>
+    BuildContext context,
+  ) =>
       WidgetStateProperty.all(
         RoundedRectangleBorder(
           borderRadius: context.callTheme?.buttonRadius ??

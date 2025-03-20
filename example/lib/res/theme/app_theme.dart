@@ -11,7 +11,7 @@ class AppTheme {
           scaffoldBackgroundColor: CallColors.background,
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
-            fillColor: CallColors.secondary.withOpacity(0.2),
+            fillColor: CallColors.secondary.applyOpacity(0.2),
             alignLabelWithHint: true,
             isDense: true,
             iconColor: CallColors.white,

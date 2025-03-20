@@ -2,6 +2,7 @@ import 'package:call_qwik_example/main.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class CustomInputField extends StatelessWidget {
   const CustomInputField({
@@ -307,7 +308,7 @@ class CustomInputField extends StatelessWidget {
           alignLabelWithHint: _decorationTheme(context).alignLabelWithHint,
           fillColor: fillColor ??
               _decorationTheme(context).fillColor ??
-              CallColors.secondary.withOpacity(0.2),
+              CallColors.secondary.applyOpacity(0.2),
           hintText: 'Search',
           hintStyle: hintStyle ?? _decorationTheme(context).hintStyle,
           isDense: _decorationTheme(context).isDense,
@@ -348,7 +349,7 @@ class CustomInputField extends StatelessWidget {
             alignLabelWithHint: _decorationTheme(context).alignLabelWithHint,
             fillColor: fillColor ??
                 _decorationTheme(context).fillColor ??
-                CallColors.secondary.withOpacity(0.2),
+                CallColors.secondary.applyOpacity(0.2),
             hintText: hintText ?? (label != null ? 'Enter $label' : null),
             hintStyle: hintStyle ?? _decorationTheme(context).hintStyle,
             isDense: _decorationTheme(context).isDense,

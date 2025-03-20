@@ -261,7 +261,7 @@ class IsmCallMqttController extends GetxController {
           break;
         case 'recordingStopped':
           if (initiatorId != userId) {
-            final userName = IsmCall.i.onRecording?.call(false, payload);
+            IsmCall.i.onRecording?.call(false, payload);
             if (Get.isRegistered<IsmCallController>()) {
               Get.find<IsmCallController>().toggleRecording(
                 false,

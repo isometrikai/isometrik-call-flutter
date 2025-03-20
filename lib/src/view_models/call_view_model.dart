@@ -58,7 +58,9 @@ class IsmCallViewModel {
   }
 
   Future<IsmAcceptCallModel?> acceptCall(
-      String meetingId, String deviceId) async {
+    String meetingId,
+    String deviceId,
+  ) async {
     try {
       final res = await _repository.acceptCall({
         'meetingId': meetingId,

@@ -21,7 +21,9 @@ class IsmCallButtonThemeData with Diagnosticable {
   }
 
   IsmCallButtonThemeData lerp(
-      covariant IsmCallButtonThemeData? other, double t) {
+    covariant IsmCallButtonThemeData? other,
+    double t,
+  ) {
     if (other is! IsmCallButtonThemeData) {
       return this;
     }
@@ -32,11 +34,12 @@ class IsmCallButtonThemeData with Diagnosticable {
     );
   }
 
-  IsmCallButtonThemeData copyWith(
-          {Color? foregroundColor,
-          Color? backgroundColor,
-          Color? disableColor,
-          BorderRadius? borderRadius}) =>
+  IsmCallButtonThemeData copyWith({
+    Color? foregroundColor,
+    Color? backgroundColor,
+    Color? disableColor,
+    BorderRadius? borderRadius,
+  }) =>
       IsmCallButtonThemeData(
         foregroundColor: foregroundColor ?? this.foregroundColor,
         backgroundColor: backgroundColor ?? this.backgroundColor,

@@ -5,20 +5,20 @@ import 'package:isometrik_call_flutter/isometrik_call_flutter_method_channel.dar
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MethodChannelIsometrikCallFlutter platform = MethodChannelIsometrikCallFlutter();
-  const MethodChannel channel = MethodChannel('isometrik_call_flutter');
+  var platform = MethodChannelIsometrikCallFlutter();
+  const channel = MethodChannel('isometrik_call_flutter');
 
   setUp(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
       channel,
-      (MethodCall methodCall) async {
-        return '42';
-      },
+      (MethodCall methodCall) async => '42',
     );
   });
 
   tearDown(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
   });
 
   test('getPlatformVersion', () async {

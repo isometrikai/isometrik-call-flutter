@@ -38,14 +38,16 @@ class AvailabilitySwitch extends StatelessWidget {
                   value: value,
                   onChanged: onChanged,
                   applyTheme: true,
-                  trackColor: context.theme.switchTheme.trackColor?.resolve(
-                        {...WidgetState.values},
-                      ) ??
-                      CallColors.red,
-                  activeColor: context.theme.switchTheme.overlayColor?.resolve(
-                        {...WidgetState.values},
-                      ) ??
-                      CallColors.green,
+                  inactiveTrackColor:
+                      context.theme.switchTheme.trackColor?.resolve(
+                            {...WidgetState.values},
+                          ) ??
+                          CallColors.red,
+                  activeTrackColor:
+                      context.theme.switchTheme.overlayColor?.resolve(
+                            {...WidgetState.values},
+                          ) ??
+                          CallColors.green,
                 ),
                 Dimens.boxWidth2,
                 Text(

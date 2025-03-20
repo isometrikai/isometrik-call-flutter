@@ -208,8 +208,6 @@ class IsmCallHelper {
           break;
         case Event.actionCallCustom:
           break;
-        default:
-          IsmCallLog.error(event);
       }
     });
   }

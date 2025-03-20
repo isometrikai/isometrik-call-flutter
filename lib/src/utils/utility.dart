@@ -29,11 +29,13 @@ class IsmCallUtility {
   /// Returns true if the internet connection is available.
   static Future<bool> get isNetworkAvailable async {
     final result = await Connectivity().checkConnectivity();
-    return result.any((e) => [
-          ConnectivityResult.mobile,
-          ConnectivityResult.wifi,
-          ConnectivityResult.ethernet,
-        ].contains(e));
+    return result.any(
+      (e) => [
+        ConnectivityResult.mobile,
+        ConnectivityResult.wifi,
+        ConnectivityResult.ethernet,
+      ].contains(e),
+    );
   }
 
   static Future<String?> getMimetype(String mediaExtension) async {

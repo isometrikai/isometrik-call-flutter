@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
-import 'isometrik_call_flutter_platform_interface.dart';
+import 'package:isometrik_call_flutter/isometrik_call_flutter_platform_interface.dart';
 
 /// An implementation of [IsometrikCallFlutterPlatform] that uses method channels.
 class MethodChannelIsometrikCallFlutter extends IsometrikCallFlutterPlatform {
@@ -11,7 +10,8 @@ class MethodChannelIsometrikCallFlutter extends IsometrikCallFlutterPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version =
+        await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
 }
