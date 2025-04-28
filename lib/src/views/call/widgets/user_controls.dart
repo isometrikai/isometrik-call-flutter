@@ -31,16 +31,21 @@ class _IsmCallUserControlState extends State<IsmCallUserControl> {
     super.initState();
   }
 
+  void update() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) => GestureDetector(
         onTap: widget.onToggle != null
             ? () {
                 if (widget.shouldUpdate) {
-                  setState(() {
-                    isActive = !isActive;
-                    widget.onToggle?.call(isActive);
-                  });
+                  isActive = !isActive;
+                  update();
                 }
+                widget.onToggle?.call(isActive);
               }
             : null,
         child: isActive
