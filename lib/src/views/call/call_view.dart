@@ -453,25 +453,7 @@ class IsmCallViewState extends State<IsmCallView> {
         features.add(
           controlProperties?.videoControl ??
               VideoControl(
-                onChange: (value) {
-                  IsmCallLog.error('isControlsBottom step1 $value');
-                  if (!value) {
-                    IsmCallLog.error(
-                      'isControlsBottom step2 $isControlsBottom',
-                    );
-                    if (!isControlsBottom) return;
-                    IsmCallLog.error(
-                      'isControlsBottom step3 ${collapsedKey.currentState?.isCollapsed}',
-                    );
-                    if (collapsedKey.currentState?.isCollapsed == true) {
-                      collapsedKey.currentState?.toggleCollapse(true);
-                      collapsedKey.currentState?.toggleCollapse(false);
-                    } else {
-                      collapsedKey.currentState?.toggleCollapse(false);
-                      collapsedKey.currentState?.toggleCollapse(true);
-                    }
-                  }
-                }, //controller.toggleVideo
+                onChange: (value) {}, //controller.toggleVideo
                 isActive: controller.isVideoOn,
               ),
         );
