@@ -184,6 +184,11 @@ class FilpCameraControl extends IsmCallUserControl {
                   final controller = Get.find<IsmCallController>();
                   if (controller.isVideoOn) {
                     controller.flipCamera();
+                  } else {
+                    IsmCallUtility.showToast(
+                      'Please turn on you camera',
+                      color: IsmCallColors.green,
+                    );
                   }
                 }
               : null,
