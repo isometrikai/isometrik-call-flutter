@@ -71,6 +71,7 @@ class IsmCallMqttController extends GetxController {
               )
             : null,
         secure: _config?.secure ?? false,
+        autoReconnect: _config?.autoReconnect ?? true,
       ),
       callbacks: MqttCallbacks(
         onConnected: _onConnected,

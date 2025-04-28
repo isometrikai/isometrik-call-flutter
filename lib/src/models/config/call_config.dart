@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class IsmCallConfig {
@@ -34,6 +35,7 @@ class IsmCallConfig {
     required this.mqttConfig,
     this.socketConfig,
     this.secure = false,
+    this.autoReconnect = true,
   });
 
   final IsmCallUserConfig userConfig;
@@ -41,6 +43,7 @@ class IsmCallConfig {
   final IsmCallMqttConfig mqttConfig;
   final IsmCallWebSocketConfig? socketConfig;
   final bool secure;
+  final bool autoReconnect;
 
   String? get username =>
       '2${projectConfig.accountId}${projectConfig.projectId}';
@@ -54,6 +57,7 @@ class IsmCallConfig {
     IsmCallMqttConfig? mqttConfig,
     IsmCallWebSocketConfig? socketConfig,
     bool? secure,
+    bool? autoReconnect,
   }) =>
       IsmCallConfig(
         userConfig: userConfig ?? this.userConfig,
@@ -61,6 +65,7 @@ class IsmCallConfig {
         mqttConfig: mqttConfig ?? this.mqttConfig,
         socketConfig: socketConfig ?? this.socketConfig,
         secure: secure ?? this.secure,
+        autoReconnect: autoReconnect ?? this.autoReconnect,
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -69,13 +74,14 @@ class IsmCallConfig {
         'mqttConfig': mqttConfig.toMap(),
         'webSocketConfig': socketConfig?.toMap(),
         'secure': secure,
+        'autoReconnect': autoReconnect,
       };
 
   String toJson() => json.encode(toMap());
 
   @override
   String toString() =>
-      'IsmCallConfig( userConfig: $userConfig, projectConfig: $projectConfig, mqttConfig: $mqttConfig, webSocketConfig: $socketConfig, secure: $secure)';
+      'IsmCallConfig( userConfig: $userConfig, projectConfig: $projectConfig, mqttConfig: $mqttConfig, webSocketConfig: $socketConfig, secure: $secure, autoReconnect: $autoReconnect)';
 
   @override
   bool operator ==(covariant IsmCallConfig other) {
@@ -85,6 +91,7 @@ class IsmCallConfig {
         other.projectConfig == projectConfig &&
         other.mqttConfig == mqttConfig &&
         other.socketConfig == socketConfig &&
+        other.autoReconnect == autoReconnect &&
         other.secure == secure;
   }
 
@@ -94,5 +101,6 @@ class IsmCallConfig {
       projectConfig.hashCode ^
       mqttConfig.hashCode ^
       socketConfig.hashCode ^
+      autoReconnect.hashCode ^
       secure.hashCode;
 }
