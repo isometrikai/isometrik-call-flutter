@@ -9,12 +9,14 @@ abstract class IsmCallUserControl extends StatefulWidget {
     this.inactiveIcon,
     this.onToggle,
     this.initiallyActive = false,
+    this.shouldUpdate = true,
   });
 
   final Widget activeIcon;
   final Widget? inactiveIcon;
   final void Function(bool)? onToggle;
   final bool initiallyActive;
+  final bool shouldUpdate;
 
   @override
   State<IsmCallUserControl> createState() => _IsmCallUserControlState();
@@ -33,10 +35,12 @@ class _IsmCallUserControlState extends State<IsmCallUserControl> {
   Widget build(BuildContext context) => GestureDetector(
         onTap: widget.onToggle != null
             ? () {
-                setState(() {
-                  isActive = !isActive;
-                  widget.onToggle?.call(isActive);
-                });
+                if (widget.shouldUpdate) {
+                  setState(() {
+                    isActive = !isActive;
+                    widget.onToggle?.call(isActive);
+                  });
+                }
               }
             : null,
         child: isActive
@@ -178,20 +182,19 @@ class FilpCameraControl extends IsmCallUserControl {
                 IsmCallAssets.flipCamera,
                 isActive: false,
               ),
-          onToggle: onChange != null
-              ? (value) {
-                  onChange.call(value);
-                  final controller = Get.find<IsmCallController>();
-                  if (controller.isVideoOn) {
-                    controller.flipCamera();
-                  } else {
-                    IsmCallUtility.showToast(
-                      'Please turn on you camera',
-                      color: IsmCallColors.green,
-                    );
-                  }
-                }
-              : null,
+          onToggle: (value) {
+            onChange?.call(value);
+            final controller = Get.find<IsmCallController>();
+            if (controller.isVideoOn) {
+              controller.flipCamera();
+            } else {
+              IsmCallUtility.showToast(
+                'Please turn on you camera',
+                color: IsmCallColors.green,
+              );
+            }
+          },
+          shouldUpdate: Get.find<IsmCallController>().isVideoOn,
           initiallyActive: isActive,
         );
   final Widget? activeChild;

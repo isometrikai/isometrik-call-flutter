@@ -491,9 +491,7 @@ class IsmCallViewState extends State<IsmCallView> {
         features.add(
           controlProperties?.cameraControl ??
               FilpCameraControl(
-                onChange: controller.isVideoOn
-                    ? (_) {} //_controller.flipCamera()
-                    : null,
+                onChange: (_) {}, //_controller.flipCamera()
                 isActive: controller.isVideoOn,
               ),
         );
