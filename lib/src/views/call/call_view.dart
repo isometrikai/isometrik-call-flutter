@@ -464,8 +464,10 @@ class IsmCallViewState extends State<IsmCallView> {
                       'isControlsBottom step3 ${collapsedKey.currentState?.isCollapsed}',
                     );
                     if (collapsedKey.currentState?.isCollapsed == true) {
+                      collapsedKey.currentState?.toggleCollapse(true);
                       collapsedKey.currentState?.toggleCollapse(false);
                     } else {
+                      collapsedKey.currentState?.toggleCollapse(false);
                       collapsedKey.currentState?.toggleCollapse(true);
                     }
                   }
