@@ -347,8 +347,7 @@ class IsmCallViewState extends State<IsmCallView> {
                                 alignment: alignment,
                                 child: IsmCallControlSheet(
                                   key: collapsedKey,
-                                  isControlsBottom:
-                                      isMobile && isControlsBottom,
+                                  isControlsBottom: isControlsBottom,
                                   controls: [
                                     if (context
                                             .properties?.callControlsBuilder !=

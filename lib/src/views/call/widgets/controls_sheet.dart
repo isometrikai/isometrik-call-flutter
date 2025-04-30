@@ -63,11 +63,7 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
         () {
           final isMobile = MediaQuery.of(context).size.width < 800;
           return Container(
-            width: widget.isControlsBottom
-                ? Get.width
-                : isMobile
-                    ? IsmCallDimens.sixty
-                    : Get.width / 2,
+            width: widget.isControlsBottom ? Get.width : IsmCallDimens.sixty,
             decoration: BoxDecoration(
               color: (isCollapsed || !widget.isControlsBottom)
                   ? Colors.transparent
@@ -83,7 +79,7 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (widget.isControlsBottom) ...[
+                if (widget.isControlsBottom && isMobile) ...[
                   IsmCallTapHandler(
                     onTap: toggleCollapse,
                     child: Padding(
