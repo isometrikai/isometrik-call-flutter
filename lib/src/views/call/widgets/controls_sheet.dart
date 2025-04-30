@@ -66,8 +66,8 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
             width: widget.isControlsBottom
                 ? Get.width
                 : isMobile
-                    ? Get.width / 2
-                    : IsmCallDimens.sixty,
+                    ? IsmCallDimens.sixty
+                    : Get.width / 2,
             decoration: BoxDecoration(
               color: (isCollapsed || !widget.isControlsBottom)
                   ? Colors.transparent
