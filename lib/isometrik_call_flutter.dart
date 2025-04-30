@@ -354,6 +354,14 @@ class IsmCall {
     );
   }
 
+  void callAnsDecined({
+    required IsmNativeCallModel call,
+    bool isAccepted = true,
+  }) {
+    assert(_initialized, _initializedError);
+    _delegate.callAnsDecined(call: call, isAccepted: isAccepted);
+  }
+
   /// Disconnects the current call with the specified meeting ID.
   ///
   /// This function is used to disconnect the current call associated with the provided meeting ID.

@@ -203,6 +203,19 @@ class IsmCallDelegate {
     );
   }
 
+  void callAnsDecined({
+    required IsmNativeCallModel call,
+    bool isAccepted = true,
+  }) {
+    if (!Get.isRegistered<IsmCallApiWrapper>()) {
+      Get.put(IsmCallApiWrapper(Client()));
+    }
+    if (!Get.isRegistered<IsmCallController>()) {
+      IsmCallBinding().dependencies();
+    }
+    IsmCallHelper.$answerCall(call, isAccepted);
+  }
+
   Future<void> _checkPushToken() async {
     if (!GetPlatform.isIOS) {
       return;
