@@ -341,11 +341,14 @@ class IsmCallViewState extends State<IsmCallView> {
                               final alignment = context
                                       .properties?.controlsPosition.alignment ??
                                   Alignment.bottomCenter;
+                              final isMobile =
+                                  MediaQuery.of(context).size.width < 800;
                               return Align(
                                 alignment: alignment,
                                 child: IsmCallControlSheet(
                                   key: collapsedKey,
-                                  isControlsBottom: isControlsBottom,
+                                  isControlsBottom:
+                                      isMobile && isControlsBottom,
                                   controls: [
                                     if (context
                                             .properties?.callControlsBuilder !=
@@ -356,7 +359,9 @@ class IsmCallViewState extends State<IsmCallView> {
                                     ],
                                     ...ismCallControlFeatures(),
                                   ],
-                                  collapseIndexOrder: const [6, 3, 1, 2, 5],
+                                  collapseIndexOrder: isMobile
+                                      ? const [6, 3, 1, 2, 5]
+                                      : const [6, 3, 1, 2, 5, 4, 0],
                                 ),
                               );
                             },

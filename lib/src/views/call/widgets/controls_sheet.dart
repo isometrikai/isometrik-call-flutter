@@ -60,65 +60,72 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
 
   @override
   Widget build(BuildContext context) => Obx(
-        () => Container(
-          width: widget.isControlsBottom ? Get.width : IsmCallDimens.sixty,
-          decoration: BoxDecoration(
-            color: (isCollapsed || !widget.isControlsBottom)
-                ? Colors.transparent
-                : context.theme.canvasColor,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(
-                IsmCallDimens.sixteen,
+        () {
+          final isMobile = MediaQuery.of(context).size.width < 800;
+          return Container(
+            width: widget.isControlsBottom
+                ? Get.width
+                : isMobile
+                    ? Get.width / 2
+                    : IsmCallDimens.sixty,
+            decoration: BoxDecoration(
+              color: (isCollapsed || !widget.isControlsBottom)
+                  ? Colors.transparent
+                  : context.theme.canvasColor,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(
+                  IsmCallDimens.sixteen,
+                ),
               ),
             ),
-          ),
-          key: const ObjectKey('sheet_card_wrapper'),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (widget.isControlsBottom) ...[
-                IsmCallTapHandler(
-                  onTap: toggleCollapse,
-                  child: Padding(
-                    padding: IsmCallDimens.edgeInsets8,
-                    child: Icon(
-                      isCollapsed
-                          ? Icons.keyboard_arrow_up_rounded
-                          : Icons.keyboard_arrow_down_rounded,
-                      key: const ObjectKey('sheet_icon'),
+            key: const ObjectKey('sheet_card_wrapper'),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.isControlsBottom) ...[
+                  IsmCallTapHandler(
+                    onTap: toggleCollapse,
+                    child: Padding(
+                      padding: IsmCallDimens.edgeInsets8,
+                      child: Icon(
+                        isCollapsed
+                            ? Icons.keyboard_arrow_up_rounded
+                            : Icons.keyboard_arrow_down_rounded,
+                        key: const ObjectKey('sheet_icon'),
+                      ),
+                    ),
+                  ),
+                ],
+                SafeArea(
+                  top: false,
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: widget.isControlsBottom
+                          ? isCollapsed
+                              ? 5
+                              : 3
+                          : 1,
+                      childAspectRatio: widget.isControlsBottom
+                          ? isCollapsed
+                              ? 1.2
+                              : 1.8
+                          : 1,
+                    ),
+                    padding: isCollapsed
+                        ? IsmCallDimens.edgeInsets16_0
+                        : IsmCallDimens.edgeInsets0,
+                    itemCount: controls.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (_, index) => UnconstrainedBox(
+                      child: controls[index],
                     ),
                   ),
                 ),
               ],
-              SafeArea(
-                top: false,
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: widget.isControlsBottom
-                        ? isCollapsed
-                            ? 5
-                            : 3
-                        : 1,
-                    childAspectRatio: widget.isControlsBottom
-                        ? isCollapsed
-                            ? 1.2
-                            : 1.8
-                        : 1,
-                  ),
-                  padding: isCollapsed
-                      ? IsmCallDimens.edgeInsets16_0
-                      : IsmCallDimens.edgeInsets0,
-                  itemCount: controls.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (_, index) => UnconstrainedBox(
-                    child: controls[index],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       );
 }

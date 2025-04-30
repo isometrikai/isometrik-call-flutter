@@ -29,8 +29,9 @@ PODS:
   - just_audio (0.0.1):
     - Flutter
     - FlutterMacOS
-  - livekit_client (2.3.1):
+  - livekit_client (2.4.5):
     - Flutter
+    - flutter_webrtc
     - WebRTC-SDK (= 125.6422.06)
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -114,18 +115,18 @@ SPEC CHECKSUMS:
   audio_session: 9bb7f6c970f21241b19f5a3658097ae459681ba0
   connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
   CryptoSwift: e64e11850ede528a02a0f3e768cec8e9d92ecb90
-  device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
+  device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_callkit_incoming: cb8138af67cda6dd981f7101a5d709003af21502
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   flutter_webrtc: 57f32415b8744e806f9c2a96ccdb60c6a627ba33
   fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
-  image_cropper: 5f162dcf988100dc1513f9c6b7eb42cd6fbf9156
+  image_cropper: c4326ea50132b1e1564499e5d32a84f01fb03537
   image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
   isometrik_call_flutter: e3e16485f88ac937de058001aea699ecc7afffe1
   just_audio: 4e391f57b79cad2b0674030a00453ca5ce817eed
-  livekit_client: f2828bf3f9dae951af44107765b032a53f26fe45
+  livekit_client: eafdba57b59f8f1815c0cd9f9d72a9437abd831d
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
