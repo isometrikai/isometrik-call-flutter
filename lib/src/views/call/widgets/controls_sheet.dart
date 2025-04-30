@@ -99,12 +99,16 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: widget.isControlsBottom
                           ? isCollapsed
-                              ? 5
+                              ? isMobile
+                                  ? 5
+                                  : 7
                               : 3
                           : 1,
                       childAspectRatio: widget.isControlsBottom
                           ? isCollapsed
-                              ? 1.2
+                              ? isMobile
+                                  ? 1.2
+                                  : 1
                               : 1.8
                           : 1,
                     ),
