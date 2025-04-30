@@ -177,6 +177,7 @@ class IsmCallViewState extends State<IsmCallView> {
           floatingWidth: pipSize?.width,
           builder: (context, isFloating) {
             _buildContext = context;
+            final isMobile = MediaQuery.of(context).size.width < 800;
             return CustomWillPopScope(
               onWillPop: () async {
                 if (_buildContext.properties?.startPipOuter == false) {
@@ -341,8 +342,6 @@ class IsmCallViewState extends State<IsmCallView> {
                               final alignment = context
                                       .properties?.controlsPosition.alignment ??
                                   Alignment.bottomCenter;
-                              final isMobile =
-                                  MediaQuery.of(context).size.width < 800;
                               return Align(
                                 alignment: alignment,
                                 child: IsmCallControlSheet(
@@ -383,8 +382,13 @@ class IsmCallViewState extends State<IsmCallView> {
                                   child: SizedBox(
                                     height: min(
                                       Get.height * 0.25,
-                                      IsmCallDimens.oneHundredSeventy,
+                                      isMobile
+                                          ? IsmCallDimens.oneHundredSeventy
+                                          : IsmCallDimens.threeHundred,
                                     ),
+                                    width: isMobile
+                                        ? null
+                                        : IsmCallDimens.threeHundred,
                                     child: ListView.builder(
                                       itemCount: _smallVideoTrack.length,
                                       shrinkWrap: true,
