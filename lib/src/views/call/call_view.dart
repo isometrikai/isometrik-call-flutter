@@ -386,9 +386,6 @@ class IsmCallViewState extends State<IsmCallView> {
                                           ? IsmCallDimens.oneHundredSeventy
                                           : IsmCallDimens.threeHundred,
                                     ),
-                                    width: isMobile
-                                        ? null
-                                        : IsmCallDimens.threeHundred,
                                     child: ListView.builder(
                                       itemCount: _smallVideoTrack.length,
                                       shrinkWrap: true,
@@ -399,7 +396,8 @@ class IsmCallViewState extends State<IsmCallView> {
                                         final participant =
                                             _smallVideoTrack[index];
                                         return AspectRatio(
-                                          aspectRatio: 9 / 16,
+                                          aspectRatio:
+                                              isMobile ? 9 / 16 : 16 / 9,
                                           child: IsmCallParticipantView(
                                             participant,
                                             isLargeVideo: false,
