@@ -213,7 +213,7 @@ class IsmCallDelegate {
     if (!Get.isRegistered<IsmCallController>()) {
       IsmCallBinding().dependencies();
     }
-    IsmCallHelper.startRinging(call);
+    IsmCallHelper.incomingCalls[call.extra.meetingId] = call;
     IsmCallHelper.$answerCall(call, isAccepted);
   }
 
