@@ -540,4 +540,7 @@ class IsmCall {
     IsmCallLoggedIn isUserLogedIn,
   ) =>
       _delegate.getIsUserLogedIn(isUserLogedIn);
+
+  void playAudioFromAssets({bool isPlay = true}) =>
+      _delegate.playAudioFromAssets(isPlay: isPlay);
 }

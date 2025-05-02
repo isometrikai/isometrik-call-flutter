@@ -210,8 +210,10 @@ class IsmCallDelegate {
     if (!Get.isRegistered<IsmCallApiWrapper>()) {
       Get.put(IsmCallApiWrapper(Client()));
     }
-    if (!Get.isRegistered<IsmCallController>()) {
-      IsmCallBinding().dependencies();
+    if (isAccepted) {
+      if (!Get.isRegistered<IsmCallController>()) {
+        IsmCallBinding().dependencies();
+      }
     }
     IsmCallHelper.incomingCalls[call.extra.meetingId] = call;
     IsmCallHelper.$answerCall(call, isAccepted);
@@ -322,5 +324,13 @@ class IsmCallDelegate {
     IsmCallLoggedIn isUserLogedIn,
   ) {
     _isUserLogedIn = isUserLogedIn;
+  }
+
+  void playAudioFromAssets({bool isPlay = true}) {
+    if (isPlay) {
+      IsmCallUtility.playAudioFromAssets(IsmCallAssets.callingMp3);
+    } else {
+      IsmCallUtility.stopAudio();
+    }
   }
 }
