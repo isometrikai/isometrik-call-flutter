@@ -170,7 +170,9 @@ class IsmCallMqttController extends GetxController {
     if (event.topic.contains('User')) {
       final metaData = payload['metaData'] as Map<String, dynamic>?;
       final callType = metaData?['callType'] as String?;
-      final body = jsonDecode(payload['body']) as Map<String, dynamic>? ?? {};
+      final body = payload['body'] != null
+          ? jsonDecode(payload['body']) as Map<String, dynamic>? ?? {}
+          : {};
       final id = body['reqId'] as String?;
       final meetingId = body['meetingId'] as String?;
       final userIdentifier = payload['userIdentifier'] as String? ?? '';
