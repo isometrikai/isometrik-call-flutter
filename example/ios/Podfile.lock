@@ -119,7 +119,7 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_callkit_incoming: cb8138af67cda6dd981f7101a5d709003af21502
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
-  flutter_webrtc: 99074935210e2c736885cfb6e34659c48f5bdbe8
+  flutter_webrtc: 57f32415b8744e806f9c2a96ccdb60c6a627ba33
   fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
   image_cropper: c4326ea50132b1e1564499e5d32a84f01fb03537
   image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a

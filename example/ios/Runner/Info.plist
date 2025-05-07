@@ -68,5 +68,7 @@
 		</array>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>RTCAppGroupIdentifier</key>
+		<string>group.com.appscrip.meet.BroadcastExtension</string>
 	</dict>
 </plist>
