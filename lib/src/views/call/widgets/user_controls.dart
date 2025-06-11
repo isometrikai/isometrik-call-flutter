@@ -199,7 +199,8 @@ class FilpCameraControl extends IsmCallUserControl {
               );
             }
           },
-          shouldUpdate: Get.find<IsmCallController>().isVideoOn,
+          shouldUpdate: Get.isRegistered<IsmCallController>() &&
+              Get.find<IsmCallController>().isVideoOn,
           initiallyActive: isActive,
         );
   final Widget? activeChild;
