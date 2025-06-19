@@ -62,8 +62,6 @@ class IsmCallDelegate {
 
   static final callKey = GlobalKey<IsmCallViewState>();
 
-  static bool _mqttInitialized = false;
-
   void setup() async {
     IsmCallChannelHandler.initialize();
     if (!Get.isRegistered<IsmCallApiWrapper>()) {
@@ -130,9 +128,6 @@ class IsmCallDelegate {
       topicChannels: topicChannels,
       shouldInitialize: shouldInitialize,
     );
-    if (shouldInitialize) {
-      _mqttInitialized = true;
-    }
   }
 
   IsmCallTriggerStreamSubscription addCallTriggerListener(
