@@ -258,10 +258,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_callkit_incoming
-      sha256: "21d645f0bc622c3ab9c113e289abbbd169a0f9143f3eb2a05ef1fb01b729c239"
+      sha256: "9f6076c132ab2a4e2df70d9ba2ff778ce7e1ce46aef95b880e932e80085ce959"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.2"
+    version: "2.5.4"
   flutter_driver:
     dependency: transitive
     description: flutter
@@ -361,10 +361,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_webrtc
-      sha256: dd47ca103b5b6217771e6277882674276d9621bbf9eb23da3c03898b507844e3
+      sha256: "792aa1e5838a719f29ae52c0773dbb5dd781fc33b1bf87c321b274e55ab51ad1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.1"
+    version: "0.14.2"
   fluttertoast:
     dependency: "direct main"
     description:
@@ -446,10 +446,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "317a5d961cec5b34e777b9252393f2afbd23084aa6e60fcf601dcf6341b9ebeb"
+      sha256: "6fae381e6af2bbe0365a5e4ce1db3959462fa0c4d234facf070746024bb80c8d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12+23"
+    version: "0.8.12+24"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -594,10 +594,10 @@ packages:
     dependency: "direct main"
     description:
       name: livekit_client
-      sha256: c270720a49b935591960c6f3296fd8f00c09b45a70cd64aef78cd0a8f8257913
+      sha256: "5d182f40cc9aafce60a9acf936bad8bc69010b5cbf0a949f6f27dc4390f2fcce"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.8"
+    version: "2.4.9"
   logging:
     dependency: transitive
     description:
@@ -650,16 +650,16 @@ packages:
     dependency: transitive
     description:
       name: mqtt_client
-      sha256: "854a789a1c0f1336bea4a9edd57341aec13a4df077d6cc2693099dde6a8679e2"
+      sha256: "8c79275452446d0c767b4ce3c25d02570944b2cf70179f0eb197fea7d98c6056"
       url: "https://pub.dev"
     source: hosted
-    version: "10.9.2"
+    version: "10.10.0"
   mqtt_helper:
     dependency: transitive
     description:
       path: "."
       ref: main
-      resolved-ref: "50d6e8b3c4dc17bef533b818ece7e21ae47d2438"
+      resolved-ref: fa696bd8b1530efe8e99b95f3926b44292b6a2a3
       url: "https://github.com/rahulsaryam/mqtt_helper.git"
     source: git
     version: "1.0.2"
@@ -795,10 +795,10 @@ packages:
     dependency: transitive
     description:
       name: protobuf
-      sha256: "579fe5557eae58e3adca2e999e38f02441d8aa908703854a9e0a0f47fa857731"
+      sha256: "6153efcc92a06910918f3db8231fd2cf828ac81e50ebd87adc8f8a8cb3caff0e"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.0"
+    version: "4.1.1"
   pull_to_refresh:
     dependency: "direct main"
     description:
@@ -976,10 +976,10 @@ packages:
     dependency: transitive
     description:
       name: synchronized
-      sha256: "0669c70faae6270521ee4f05bffd2919892d42d1276e6c495be80174b6bc0ef6"
+      sha256: c254ade258ec8282947a0acbbc90b9575b4f19673533ee46f2f6e9b3aeefd7c0
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.1"
+    version: "3.4.0"
   term_glyph:
     dependency: transitive
     description:
@@ -1016,10 +1016,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "9d06212b1362abc2f0f0d78e6f09f726608c74e3b9462e8368bb03314aa8d603"
+      sha256: f6a7e5c4835bb4e3026a04793a4199ca2d14c739ec378fdfe23fc8075d0439f8
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.1"
+    version: "6.3.2"
   url_launcher_android:
     dependency: transitive
     description:

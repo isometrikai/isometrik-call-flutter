@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:get/get.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 import 'package:livekit_client/livekit_client.dart';
@@ -18,7 +17,7 @@ class IsmCallParticipantView extends StatefulWidget {
   });
 
   final IsmCallParticipantTrack participant;
-  final RTCVideoViewObjectFit? videoFit;
+  final VideoViewFit? videoFit;
   final String imageUrl;
   final String name;
 
@@ -72,8 +71,8 @@ class _IsmCallParticipantViewState extends State<IsmCallParticipantView> {
                 activeVideoTrack!,
                 fit: widget.videoFit ??
                     (widget.showFullVideo
-                        ? RTCVideoViewObjectFit.RTCVideoViewObjectFitContain
-                        : RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
+                        ? VideoViewFit.contain
+                        : VideoViewFit.cover),
               )
             : IsmCallNoVideoWidget(
                 name: context.properties?.nameBuilder?.call(widget.name) ??

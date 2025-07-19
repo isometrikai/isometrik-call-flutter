@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
+import 'package:livekit_client/livekit_client.dart';
 
 enum IsmCallRequestType {
   get,
@@ -108,11 +108,9 @@ enum IsmCallVideoFit {
   contain,
   cover;
 
-  RTCVideoViewObjectFit get rtcFit => switch (this) {
-        IsmCallVideoFit.contain =>
-          RTCVideoViewObjectFit.RTCVideoViewObjectFitContain,
-        IsmCallVideoFit.cover =>
-          RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
+  VideoViewFit get rtcFit => switch (this) {
+        IsmCallVideoFit.contain => VideoViewFit.contain,
+        IsmCallVideoFit.cover => VideoViewFit.cover,
       };
 }
 
