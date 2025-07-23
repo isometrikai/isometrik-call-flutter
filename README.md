@@ -6,7 +6,7 @@
 
 For detailed setup instructions, please refer to the platform-specific guides and you need to add your project level platforms:
 
-- [Android](./README_android.md)
+- [Android](./README_andriod.md)
 
 - [iOS](./README_ios.md)
 
