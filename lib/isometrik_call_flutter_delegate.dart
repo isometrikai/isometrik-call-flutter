@@ -97,8 +97,10 @@ class IsmCallDelegate {
     _endCall = onEndCall;
     _onRecording = onRecording;
     _refreshToken = onRefreshToken;
-    IsmCallHelper.requestNotification();
-    IsmCallHelper.listenCallEvents();
+    if (!kIsWeb) {
+      IsmCallHelper.requestNotification();
+      IsmCallHelper.listenCallEvents();
+    }
     unawaited(
       Future.wait([
         _connectMqtt(
