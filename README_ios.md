@@ -256,11 +256,12 @@ import flutter_callkit_incoming
 
 ### First you need make one file with `IncomingCallModel.swift` file name
 
-Path: `ios` > `Runner` > `IncomingCallModel.swift` 
+Path: `ios` > `Runner` > `IncomingCallModel.swift`
 
 You can create this file with the help of `Xcode`
 
 1. Add code inside
+
 ```swift
 //
 //  IncomingCallModel.swift
@@ -275,13 +276,13 @@ class IncomingCall {
     let id: String
     let data: flutter_callkit_incoming.Data
     let expirationTime: Date
-    
+
     init(id: String, data: flutter_callkit_incoming.Data, expirationTime: Date) {
         self.id = id
         self.data = data
         self.expirationTime = expirationTime
     }
-    
+
     open func toJSON() -> [String: Any] {
         return [
             "id": id,
@@ -294,6 +295,6 @@ class IncomingCall {
 
 Setup other platforms
 
-- [Android](./README_android.md)
+- [Android](./README_andriod.md)
 
 [Go back to main](./README.md)
