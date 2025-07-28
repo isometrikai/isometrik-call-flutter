@@ -54,4 +54,9 @@ typedef IsmCallMapBuilder = String Function(Map<String, dynamic>);
 
 typedef IsmCallLoggedIn = Future<bool> Function();
 
-typedef IsmCallCanJoinCallback = Future<void> Function(bool);
+typedef IsmCallCanJoinCallback = void Function({
+  required IsmCallUserInfoModel userInfo,
+  required String meetingId,
+  required bool audioOnly,
+  required bool isAccepted,
+});

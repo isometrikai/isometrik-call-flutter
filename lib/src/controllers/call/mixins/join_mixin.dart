@@ -213,7 +213,12 @@ mixin IsmCallJoinMixin {
       }
       _controller.isRemoteVideoLarge = true;
       if (canJoinCallForWeb != null) {
-        await canJoinCallForWeb.call(true);
+        canJoinCallForWeb.call(
+          userInfo: userInfo,
+          meetingId: meetingId,
+          audioOnly: !callType.isVideo,
+          isAccepted: isAccepted,
+        );
       } else {
         unawaited(
           IsmCallRouteManagement.goToCall(
