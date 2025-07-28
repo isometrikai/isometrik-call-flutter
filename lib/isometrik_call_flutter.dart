@@ -340,6 +340,7 @@ class IsmCall {
     bool hdBroadcast = false,
     bool shouldAudioPlay = true,
     bool isAccepted = false,
+    IsmCallCanJoinCallback? canJoinCallForWeb,
   }) {
     assert(_initialized, _initializedError);
     _delegate.startCall(
@@ -352,15 +353,21 @@ class IsmCall {
       hdBroadcast: hdBroadcast,
       shouldAudioPlay: shouldAudioPlay,
       isAccepted: isAccepted,
+      canJoinCallForWeb: canJoinCallForWeb,
     );
   }
 
   void callAnsDecined({
     required IsmNativeCallModel call,
     bool isAccepted = true,
+    IsmCallCanJoinCallback? canJoinCallForWeb,
   }) {
     assert(_initialized, _initializedError);
-    _delegate.callAnsDecined(call: call, isAccepted: isAccepted);
+    _delegate.callAnsDecined(
+      call: call,
+      isAccepted: isAccepted,
+      canJoinCallForWeb: canJoinCallForWeb,
+    );
   }
 
   /// Disconnects the current call with the specified meeting ID.

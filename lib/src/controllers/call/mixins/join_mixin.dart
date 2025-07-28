@@ -13,6 +13,7 @@ mixin IsmCallJoinMixin {
     bool hdBroadcast = false,
     bool shouldAudioPlay = false,
     bool isAccepted = false,
+    IsmCallCanJoinCallback? canJoinCallForWeb,
   }) async {
     // Get the token for the stream based on whether the user is a host or not
 
@@ -32,6 +33,7 @@ mixin IsmCallJoinMixin {
       callType: callType,
       shouldAudioPlay: shouldAudioPlay,
       isAccepted: isAccepted,
+      canJoinCallForWeb: canJoinCallForWeb,
     );
   }
 
@@ -119,6 +121,7 @@ mixin IsmCallJoinMixin {
     bool hdBroadcast = false,
     bool shouldAudioPlay = false,
     bool isAccepted = false,
+    IsmCallCanJoinCallback? canJoinCallForWeb,
   }) async {
     final message =
         Get.context?.translations?.joining ?? IsmCallStrings.joining;
@@ -209,14 +212,18 @@ mixin IsmCallJoinMixin {
         startWaitingTimer();
       }
       _controller.isRemoteVideoLarge = true;
-      unawaited(
-        IsmCallRouteManagement.goToCall(
-          userInfo: userInfo,
-          audioOnly: !callType.isVideo,
-          meetingId: meetingId,
-          isAccepted: isAccepted,
-        ),
-      );
+      if (canJoinCallForWeb != null) {
+        await canJoinCallForWeb.call(true);
+      } else {
+        unawaited(
+          IsmCallRouteManagement.goToCall(
+            userInfo: userInfo,
+            audioOnly: !callType.isVideo,
+            meetingId: meetingId,
+            isAccepted: isAccepted,
+          ),
+        );
+      }
     } catch (e, st) {
       IsmCallLog.error(e, st);
     }

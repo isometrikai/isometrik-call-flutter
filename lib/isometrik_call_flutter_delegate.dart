@@ -180,6 +180,7 @@ class IsmCallDelegate {
     bool hdBroadcast = false,
     bool shouldAudioPlay = true,
     bool isAccepted = false,
+    IsmCallCanJoinCallback? canJoinCallForWeb,
   }) {
     if (!Get.isRegistered<IsmCallApiWrapper>()) {
       Get.put(IsmCallApiWrapper(Client()));
@@ -197,12 +198,14 @@ class IsmCallDelegate {
       hdBroadcast: hdBroadcast,
       shouldAudioPlay: shouldAudioPlay,
       isAccepted: isAccepted,
+      canJoinCallForWeb: canJoinCallForWeb,
     );
   }
 
   void callAnsDecined({
     required IsmNativeCallModel call,
     bool isAccepted = true,
+    IsmCallCanJoinCallback? canJoinCallForWeb,
   }) {
     if (!Get.isRegistered<IsmCallApiWrapper>()) {
       Get.put(IsmCallApiWrapper(Client()));
@@ -213,7 +216,7 @@ class IsmCallDelegate {
       }
     }
     IsmCallHelper.incomingCalls[call.extra.meetingId] = call;
-    IsmCallHelper.$answerCall(call, isAccepted);
+    IsmCallHelper.$answerCall(call, isAccepted, canJoinCallForWeb);
   }
 
   Future<void> _checkPushToken() async {

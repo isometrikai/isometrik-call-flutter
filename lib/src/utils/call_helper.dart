@@ -344,25 +344,27 @@ class IsmCallHelper {
 
   static void $answerCall(
     IsmNativeCallModel call,
-    bool isAccepted,
-  ) {
+    bool isAccepted, [
+    IsmCallCanJoinCallback? canJoinCallForWeb,
+  ]) {
     final id = call.extra.meetingId;
     if (!incomingCalls.containsKey(id)) {
       return;
     }
     if (Get.context == null) {
       IsmCallUtility.updateLater(() {
-        _answerCall(call, isAccepted);
+        _answerCall(call, isAccepted, canJoinCallForWeb);
       });
     } else {
-      _answerCall(call, isAccepted);
+      _answerCall(call, isAccepted, canJoinCallForWeb);
     }
   }
 
   static void _answerCall(
     IsmNativeCallModel call,
-    bool isAccepted,
-  ) async {
+    bool isAccepted, [
+    IsmCallCanJoinCallback? canJoinCallForWeb,
+  ]) async {
     try {
       hasCall = true;
       if (isAccepted) {
@@ -417,6 +419,7 @@ class IsmCallHelper {
               userInfo: userInfo,
               callType: call.type,
               isAccepted: isAccepted,
+              canJoinCallForWeb: canJoinCallForWeb,
             ),
           );
         }

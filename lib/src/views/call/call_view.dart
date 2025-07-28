@@ -12,6 +12,7 @@ class IsmCallView extends StatefulWidget {
     super.key,
     this.meetingId,
     this.audioOnly,
+    this.isAccepted,
     this.userInfo,
   });
 
@@ -21,6 +22,7 @@ class IsmCallView extends StatefulWidget {
 
   final String? meetingId;
   final bool? audioOnly;
+  final bool? isAccepted;
   final IsmCallUserInfoModel? userInfo;
 
   @override
@@ -69,7 +71,7 @@ class IsmCallViewState extends State<IsmCallView> {
       IsmCallBinding().dependencies();
     }
     final arguments = Get.arguments as Map<String, dynamic>? ?? {};
-    isAccepted = arguments['isAccepted'] as bool? ?? false;
+    isAccepted = widget.isAccepted ?? arguments['isAccepted'] as bool? ?? false;
     _controller.isAudioOnly =
         widget.audioOnly ?? arguments['audioOnly'] as bool? ?? true;
     _controller.userInfoModel =
