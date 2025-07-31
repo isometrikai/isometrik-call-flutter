@@ -319,8 +319,9 @@ class IsmCallViewState extends State<IsmCallView> {
                                                             ?.userConfig
                                                             .userProfile ??
                                                         '',
-                                            videoFit: context
-                                                .properties?.videoFit?.rtcFit,
+                                            videoFit: context.properties
+                                                    ?.videoFit?.rtcFit ??
+                                                IsmCallVideoFit.contain.rtcFit,
                                             showFullVideo:
                                                 _controller.showFullVideo ||
                                                     _isScreenShared,
