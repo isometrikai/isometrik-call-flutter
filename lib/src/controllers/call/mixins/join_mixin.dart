@@ -127,6 +127,13 @@ mixin IsmCallJoinMixin {
         Get.context?.translations?.joining ?? IsmCallStrings.joining;
     IsmCallUtility.showLoader(message);
 
+    if (shouldAudioPlay && !isAccepted) {
+      startWaitingTimer();
+      unawaited(IsmCallUtility.playAudioFromAssets(IsmCallAssets.callingMp3));
+    } else {
+      startWaitingTimer();
+    }
+
     try {
       final videoQuality = hdBroadcast
           ? const VideoParameters(
@@ -205,12 +212,6 @@ mixin IsmCallJoinMixin {
 
       IsmCallUtility.closeLoader();
 
-      if (shouldAudioPlay && !isAccepted) {
-        startWaitingTimer();
-        unawaited(IsmCallUtility.playAudioFromAssets(IsmCallAssets.callingMp3));
-      } else {
-        startWaitingTimer();
-      }
       _controller.isRemoteVideoLarge = true;
       if (canJoinCallForWeb != null) {
         canJoinCallForWeb.call(
