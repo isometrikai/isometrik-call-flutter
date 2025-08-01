@@ -231,13 +231,9 @@ class IsmCallMqttController extends GetxController {
           break;
 
         case 'joinRequestAccept':
-          if (initiatorId != userId) {
-            unawaited(IsmCallUtility.stopAudio());
-          }
           break;
         case 'joinRequestReject':
           if (initiatorId != userId) {
-            unawaited(IsmCallUtility.stopAudio());
             Get.find<IsmCallController>().disconnectCall(
               meetingId: meetingId,
               fromMqtt: true,
@@ -246,9 +242,6 @@ class IsmCallMqttController extends GetxController {
           }
           break;
         case 'meetingEndedDueToRejectionByAll':
-          if (initiatorId != userId) {
-            unawaited(IsmCallUtility.stopAudio());
-          }
           break;
         case 'recordingStarted':
           if (initiatorId != userId) {

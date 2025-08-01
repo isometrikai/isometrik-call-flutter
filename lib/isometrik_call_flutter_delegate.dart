@@ -178,7 +178,6 @@ class IsmCallDelegate {
     List<Widget>? callActions,
     String? imageUrl,
     bool hdBroadcast = false,
-    bool shouldAudioPlay = true,
     bool isAccepted = false,
     IsmCallCanJoinCallback? canJoinCallForWeb,
   }) {
@@ -196,7 +195,6 @@ class IsmCallDelegate {
       callType: callType,
       imageUrl: imageUrl,
       hdBroadcast: hdBroadcast,
-      shouldAudioPlay: shouldAudioPlay,
       isAccepted: isAccepted,
       canJoinCallForWeb: canJoinCallForWeb,
     );
@@ -324,13 +322,5 @@ class IsmCallDelegate {
     IsmCallLoggedIn isUserLogedIn,
   ) {
     _isUserLogedIn = isUserLogedIn;
-  }
-
-  void playAudioFromAssets({bool isPlay = true}) {
-    if (isPlay) {
-      IsmCallUtility.playAudioFromAssets(IsmCallAssets.callingMp3);
-    } else {
-      IsmCallUtility.stopAudio();
-    }
   }
 }

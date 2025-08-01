@@ -252,7 +252,7 @@ mixin IsmCallOngoingMixin {
     if (meetingId.isEmpty) {
       return;
     }
-    unawaited(IsmCallUtility.stopAudio());
+
     if (Get.currentRoute == IsmCallRoutes.call) {
       Get.back();
     }

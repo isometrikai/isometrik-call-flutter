@@ -11,7 +11,6 @@ mixin IsmCallJoinMixin {
     required IsmCallType callType,
     String? imageUrl,
     bool hdBroadcast = false,
-    bool shouldAudioPlay = false,
     bool isAccepted = false,
     IsmCallCanJoinCallback? canJoinCallForWeb,
   }) async {
@@ -31,7 +30,6 @@ mixin IsmCallJoinMixin {
       hdBroadcast: hdBroadcast,
       userInfo: userInfo,
       callType: callType,
-      shouldAudioPlay: shouldAudioPlay,
       isAccepted: isAccepted,
       canJoinCallForWeb: canJoinCallForWeb,
     );
@@ -41,7 +39,6 @@ mixin IsmCallJoinMixin {
     Room room, {
     required IsmCallType callType,
     required String meetingId,
-    bool shouldAudioPlay = false,
   }) async {
     room.localParticipant?.setTrackSubscriptionPermissions(
       allParticipantsAllowed: true,
@@ -57,7 +54,7 @@ mixin IsmCallJoinMixin {
     unawaited(
       publishTracks(callType.trackType).then(
         (_) {
-          if (shouldAudioPlay) startCallingTimer(meetingId);
+          startCallingTimer(meetingId);
           _enableTracks(callType.trackType);
           _controller.toggleSpeaker(callType == IsmCallType.video);
         },
@@ -119,20 +116,12 @@ mixin IsmCallJoinMixin {
     required IsmCallType callType,
     String? imageUrl,
     bool hdBroadcast = false,
-    bool shouldAudioPlay = false,
     bool isAccepted = false,
     IsmCallCanJoinCallback? canJoinCallForWeb,
   }) async {
     final message =
         Get.context?.translations?.joining ?? IsmCallStrings.joining;
     IsmCallUtility.showLoader(message);
-
-    if (shouldAudioPlay && !isAccepted) {
-      startWaitingTimer();
-      unawaited(IsmCallUtility.playAudioFromAssets(IsmCallAssets.callingMp3));
-    } else {
-      startWaitingTimer();
-    }
 
     try {
       final videoQuality = hdBroadcast
@@ -197,7 +186,6 @@ mixin IsmCallJoinMixin {
                 (_) => _initializeTracks(
                   room,
                   callType: callType,
-                  shouldAudioPlay: shouldAudioPlay,
                   meetingId: meetingId,
                 ),
               ),
@@ -211,6 +199,8 @@ mixin IsmCallJoinMixin {
       _controller.isVideoOn = callType.isVideo;
 
       IsmCallUtility.closeLoader();
+
+      startWaitingTimer();
 
       _controller.isRemoteVideoLarge = true;
       if (canJoinCallForWeb != null) {

@@ -258,10 +258,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_callkit_incoming
-      sha256: "9f6076c132ab2a4e2df70d9ba2ff778ce7e1ce46aef95b880e932e80085ce959"
+      sha256: f56301e138c539253a9d0ae3c620450a4bc8cc4bc7e83b001906cfa639183ea2
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.4"
+    version: "2.5.7"
   flutter_driver:
     dependency: transitive
     description: flutter
@@ -920,10 +920,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "84731e8bfd8303a3389903e01fb2141b6e59b5973cacbb0929021df08dddbe8b"
+      sha256: "6ef422a4525ecc601db6c0a2233ff448c731307906e92cabc9ba292afaae16a6"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.5"
+    version: "2.5.6"
   sqflite_darwin:
     dependency: transitive
     description:

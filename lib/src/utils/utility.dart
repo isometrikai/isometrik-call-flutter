@@ -7,12 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
-import 'package:just_audio/just_audio.dart';
 
 class IsmCallUtility {
   const IsmCallUtility._();
-
-  static final audioPlayer = AudioPlayer();
 
   static void updateLater(VoidCallback callback, [bool addDelay = true]) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -160,18 +157,5 @@ class IsmCallUtility {
   /// Close any open snackbar
   static void closeSnackbar() {
     if (Get.isSnackbarOpen) Get.back<void>();
-  }
-
-  //plays audio from assets
-  static Future<void> playAudioFromAssets(String assetName) async {
-    await audioPlayer.setAsset(assetName);
-    await audioPlayer.setVolume(1);
-    await audioPlayer.setLoopMode(LoopMode.all);
-    await audioPlayer.play();
-  }
-
-  //plays audio from assets
-  static Future<void> stopAudio() async {
-    await audioPlayer.stop();
   }
 }
