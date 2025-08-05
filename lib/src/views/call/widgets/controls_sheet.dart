@@ -57,82 +57,94 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
   @override
   void initState() {
     super.initState();
-
     toggleCollapse(widget.isMobile ? !widget.isControlsBottom : true);
   }
 
   @override
   Widget build(BuildContext context) => Obx(
-        () {
-          final isMobile = MediaQuery.of(context).size.width < 800;
-          return Container(
-            width: widget.isControlsBottom
-                ? isMobile
-                    ? Get.width
-                    : Get.width / 2
-                : IsmCallDimens.sixty,
-            decoration: BoxDecoration(
-              color: (isCollapsed || !widget.isControlsBottom)
-                  ? Colors.transparent
-                  : context.theme.canvasColor,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(
-                  IsmCallDimens.sixteen,
-                ),
+        () => Container(
+          width: widget.isControlsBottom
+              ? widget.isMobile
+                  ? Get.width
+                  : Get.width / 2
+              : IsmCallDimens.sixty,
+          decoration: BoxDecoration(
+            color: (isCollapsed || !widget.isControlsBottom)
+                ? Colors.transparent
+                : widget.isMobile
+                    ? context.theme.canvasColor
+                    : Colors.transparent,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(
+                IsmCallDimens.sixteen,
               ),
             ),
-            key: const ObjectKey('sheet_card_wrapper'),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (widget.isControlsBottom && isMobile) ...[
-                  IsmCallTapHandler(
-                    onTap: toggleCollapse,
-                    child: Padding(
-                      padding: IsmCallDimens.edgeInsets8,
-                      child: Icon(
-                        isCollapsed
-                            ? Icons.keyboard_arrow_up_rounded
-                            : Icons.keyboard_arrow_down_rounded,
-                        key: const ObjectKey('sheet_icon'),
-                      ),
-                    ),
-                  ),
-                ],
-                SafeArea(
-                  top: false,
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: widget.isControlsBottom
-                          ? isCollapsed
-                              ? isMobile
-                                  ? 5
-                                  : 7
-                              : 3
-                          : 1,
-                      childAspectRatio: widget.isControlsBottom
-                          ? isCollapsed
-                              ? isMobile
-                                  ? 1.2
-                                  : 1
-                              : 1.8
-                          : 1,
-                    ),
-                    padding: isCollapsed
-                        ? IsmCallDimens.edgeInsets16_0
-                        : IsmCallDimens.edgeInsets0,
-                    itemCount: controls.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (_, index) => UnconstrainedBox(
-                      child: controls[index],
+          ),
+          key: const ObjectKey('sheet_card_wrapper'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (widget.isControlsBottom && widget.isMobile) ...[
+                IsmCallTapHandler(
+                  onTap: toggleCollapse,
+                  child: Padding(
+                    padding: IsmCallDimens.edgeInsets8,
+                    child: Icon(
+                      isCollapsed
+                          ? Icons.keyboard_arrow_up_rounded
+                          : Icons.keyboard_arrow_down_rounded,
+                      key: const ObjectKey('sheet_icon'),
                     ),
                   ),
                 ),
               ],
-            ),
-          );
-        },
+              SafeArea(
+                top: false,
+                child: widget.isMobile
+                    ? GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: widget.isControlsBottom
+                              ? isCollapsed
+                                  ? widget.isMobile
+                                      ? 5
+                                      : 7
+                                  : 3
+                              : 1,
+                          childAspectRatio: widget.isControlsBottom
+                              ? isCollapsed
+                                  ? widget.isMobile
+                                      ? 1.2
+                                      : 1
+                                  : 1.8
+                              : 1,
+                        ),
+                        padding: isCollapsed
+                            ? IsmCallDimens.edgeInsets16_0
+                            : IsmCallDimens.edgeInsets0,
+                        itemCount: controls.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (_, index) => UnconstrainedBox(
+                          child: controls[index],
+                        ),
+                      )
+                    : Padding(
+                        padding: IsmCallDimens.edgeInsetsB25,
+                        child: Row(
+                          spacing: IsmCallDimens.twenty,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(
+                            controls.length,
+                            (index) => UnconstrainedBox(
+                              child: controls[index],
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+            ],
+          ),
+        ),
       );
 }
