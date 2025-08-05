@@ -8,6 +8,7 @@ class IsmCallControlSheet extends StatefulWidget {
     required this.controls,
     required this.collapseIndexOrder,
     required this.isControlsBottom,
+    required this.isMobile,
   });
 
   // assert(
@@ -24,6 +25,7 @@ class IsmCallControlSheet extends StatefulWidget {
   final List<Widget> controls;
   final List<int> collapseIndexOrder;
   final bool isControlsBottom;
+  final bool isMobile;
 
   @override
   State<IsmCallControlSheet> createState() => IsmCallControlSheetState();
@@ -55,7 +57,8 @@ class IsmCallControlSheetState extends State<IsmCallControlSheet> {
   @override
   void initState() {
     super.initState();
-    toggleCollapse(!widget.isControlsBottom);
+
+    toggleCollapse(widget.isMobile ? !widget.isControlsBottom : true);
   }
 
   @override

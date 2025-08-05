@@ -347,6 +347,7 @@ class IsmCallViewState extends State<IsmCallView> {
                               return Align(
                                 alignment: alignment,
                                 child: IsmCallControlSheet(
+                                  isMobile: isMobile,
                                   key: collapsedKey,
                                   isControlsBottom: isControlsBottom,
                                   controls: [
@@ -386,7 +387,7 @@ class IsmCallViewState extends State<IsmCallView> {
                                       Get.height * 0.25,
                                       isMobile
                                           ? IsmCallDimens.oneHundredSeventy
-                                          : IsmCallDimens.threeHundred,
+                                          : IsmCallDimens.oneHundredFifty,
                                     ),
                                     child: ListView.builder(
                                       itemCount: _smallVideoTrack.length,
@@ -399,7 +400,7 @@ class IsmCallViewState extends State<IsmCallView> {
                                             _smallVideoTrack[index];
                                         return AspectRatio(
                                           aspectRatio:
-                                              isMobile ? 9 / 16 : 16 / 9,
+                                              isMobile ? 9 / 16 : 3 / 4,
                                           child: IsmCallParticipantView(
                                             participant,
                                             isLargeVideo: false,
