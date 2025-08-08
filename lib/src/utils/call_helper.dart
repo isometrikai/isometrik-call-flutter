@@ -170,7 +170,9 @@ class IsmCallHelper {
           onEndCall(call);
           break;
         case Event.actionCallTimeout:
-          unawaited(IsmCallChannelHandler.handleTimeout(call.extra.uid));
+          if (GetPlatform.isIOS) {
+            unawaited(IsmCallChannelHandler.handleTimeout(call.extra.uid));
+          }
           callTriggerStatusStream.add(
             (
               status: IsmCallStatus.callMissed,
