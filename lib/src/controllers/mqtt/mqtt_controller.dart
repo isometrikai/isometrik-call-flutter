@@ -173,15 +173,18 @@ class IsmCallMqttController extends GetxController {
       final body = payload['body'] != null
           ? jsonDecode(payload['body']) as Map<String, dynamic>? ?? {}
           : {};
-      final id = body['reqId'] as String?;
-      final meetingId = body['meetingId'] as String?;
-      final userIdentifier = payload['userIdentifier'] as String? ?? '';
-      final userId = payload['userId'] as String? ?? '';
-      final userName = body['userName'] as String?;
-      final userImage = body['userProfileImageUrl'] as String?;
-      final ip = body['ip'] as String? ?? '';
       final countryFlag = body['countryFlag'] as String? ?? '';
       final countryName = body['countryName'] as String? ?? 'U';
+      final id = body['reqId'] as String?;
+      final ip = body['ip'] as String? ?? '';
+      final meetingId =
+          payload['messageId'] as String? ?? body['meetingId'] as String?;
+      final userIdentifier = payload['userIdentifier'] as String? ?? '';
+      final userId = payload['userId'] as String? ?? '';
+      final userName = payload['userName'] as String? ?? countryName;
+      final userImage =
+          payload['userProfileImageUrl'] as String? ?? countryFlag;
+
       if (id != null && meetingId != null) {
         if (Get.currentRoute == IsmCallRoutes.call) {
           return;
@@ -190,12 +193,13 @@ class IsmCallMqttController extends GetxController {
           IsmCallHelper.triggerCall(
             id: id,
             meetingId: meetingId,
-            name: userName ?? countryName,
-            imageUrl: userImage ?? countryFlag,
+            name: userName,
+            imageUrl: userImage,
             ip: ip,
             userIdentifier: userIdentifier,
             userId: userId,
             callType: callType,
+            countryName: countryName,
           );
         }
       }
@@ -238,7 +242,7 @@ class IsmCallMqttController extends GetxController {
               meetingId: meetingId,
               fromMqtt: true,
             );
-            // IsmCallHelper.callEndByHost(meetingId);
+            IsmCallHelper.callEndByHost(meetingId);
           }
           break;
         case 'meetingEndedDueToRejectionByAll':

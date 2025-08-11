@@ -68,21 +68,21 @@ class IsmCallHelper {
     String? imageUrl,
     String? ip,
     String? callType,
+    String? countryName,
   }) async {
-    IsmCallLog('Here ');
     if (callId != null) {
       await endCall();
     }
     var callKitParams = CallKitParams(
       id: callId,
-      nameCaller: name,
+      nameCaller: countryName,
       appName: 'CallQwik',
       avatar: imageUrl,
-      handle: ip,
+      handle: name,
       type: 0,
       textAccept: 'Accept',
       textDecline: 'Decline',
-      duration: 1000,
+      duration: 60000,
       extra: <String, dynamic>{
         'id': id,
         'meetingId': meetingId,
@@ -269,7 +269,7 @@ class IsmCallHelper {
   }
 
   static void callEndByHost(String meetingId) {
-    if (ongoingMeetingId != meetingId) {
+    if ((!ongoingMeetingId.isNullOrEmpty) && ongoingMeetingId != meetingId) {
       return;
     }
     final showOpponentCallEnded =
@@ -315,7 +315,10 @@ class IsmCallHelper {
 
     if (!isMissed) {
       unawaited(FlutterCallkitIncoming.endCall($callId ?? ''));
-      unawaited(IsmCallChannelHandler.handleCallEnd($callId ?? ''));
+      if (GetPlatform.isIOS) {
+        unawaited(IsmCallChannelHandler.handleCallEnd($callId ?? ''));
+      }
+
       IsmCallHelper.ongoingCall = null;
     }
   }
@@ -335,7 +338,10 @@ class IsmCallHelper {
     if (!incomingCalls.containsKey(id)) {
       return;
     }
-    unawaited(IsmCallChannelHandler.handleCallEnd(id));
+    if (GetPlatform.isIOS) {
+      unawaited(IsmCallChannelHandler.handleCallEnd(id));
+    }
+
     incomingCalls.remove(id);
     IsmCallHelper.ongoingCall = null;
     _controller.disconnectCall(
@@ -369,11 +375,13 @@ class IsmCallHelper {
   ]) async {
     try {
       hasCall = true;
-      if (isAccepted) {
-        ongoingCall = call;
-        unawaited(IsmCallChannelHandler.handleCallStarted(call.id));
-      } else {
-        unawaited(IsmCallChannelHandler.handleCallDeclined(call.id));
+      if (GetPlatform.isIOS) {
+        if (isAccepted) {
+          ongoingCall = call;
+          unawaited(IsmCallChannelHandler.handleCallStarted(call.id));
+        } else {
+          unawaited(IsmCallChannelHandler.handleCallDeclined(call.id));
+        }
       }
 
       var meetingId = call.extra.meetingId;
