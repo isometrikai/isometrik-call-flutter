@@ -211,7 +211,6 @@ class IsmCallHelper {
         case Event.actionCallCustom:
           break;
         case Event.actionCallConnected:
-          // TODO: Handle this case.
           throw UnimplementedError();
       }
     });

@@ -3,5 +3,4 @@ class IsmCallLocalKeys {
 
   static const String apnsToken = 'APNSToken';
   static const String config = 'Config';
-
 }

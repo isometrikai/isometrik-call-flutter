@@ -53,15 +53,23 @@ class IsmCallUserInfoModel {
   String toJson() => json.encode(toMap());
 
   @override
-  String toString() => 'IsmCallUserInfoModel(userName: $userName, userId: $userId, userIdentifier: $userIdentifier, imageUrl: $imageUrl)';
+  String toString() =>
+      'IsmCallUserInfoModel(userName: $userName, userId: $userId, userIdentifier: $userIdentifier, imageUrl: $imageUrl)';
 
   @override
   bool operator ==(covariant IsmCallUserInfoModel other) {
     if (identical(this, other)) return true;
 
-    return other.userName == userName && other.userId == userId && other.userIdentifier == userIdentifier && other.imageUrl == imageUrl;
+    return other.userName == userName &&
+        other.userId == userId &&
+        other.userIdentifier == userIdentifier &&
+        other.imageUrl == imageUrl;
   }
 
   @override
-  int get hashCode => userName.hashCode ^ userId.hashCode ^ userIdentifier.hashCode ^ imageUrl.hashCode;
+  int get hashCode =>
+      userName.hashCode ^
+      userId.hashCode ^
+      userIdentifier.hashCode ^
+      imageUrl.hashCode;
 }

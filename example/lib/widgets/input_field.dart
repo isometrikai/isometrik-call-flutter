@@ -226,7 +226,7 @@ class CustomInputField extends StatelessWidget {
   final bool showBorder;
   final bool autofocus;
 
-  InputDecorationTheme _decorationTheme(BuildContext context) =>
+  InputDecorationThemeData _decorationTheme(BuildContext context) =>
       context.theme.inputDecorationTheme;
 
   InputBorder _border(BuildContext context) => !showBorder

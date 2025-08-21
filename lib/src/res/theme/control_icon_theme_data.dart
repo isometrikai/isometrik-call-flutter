@@ -17,7 +17,10 @@ class IsmCallControlIconThemeData with Diagnosticable {
     properties.add(ColorProperty('inactiveColor', inactiveColor));
   }
 
-  IsmCallControlIconThemeData lerp(covariant IsmCallControlIconThemeData? other, double t) {
+  IsmCallControlIconThemeData lerp(
+    covariant IsmCallControlIconThemeData? other,
+    double t,
+  ) {
     if (other is! IsmCallControlIconThemeData) {
       return this;
     }
@@ -27,7 +30,12 @@ class IsmCallControlIconThemeData with Diagnosticable {
     );
   }
 
-  IsmCallControlIconThemeData copyWith({Color? activeColor, Color? inactiveColor, Color? disableColor, BorderRadius? borderRadius}) =>
+  IsmCallControlIconThemeData copyWith({
+    Color? activeColor,
+    Color? inactiveColor,
+    Color? disableColor,
+    BorderRadius? borderRadius,
+  }) =>
       IsmCallControlIconThemeData(
         activeColor: activeColor ?? this.activeColor,
         inactiveColor: inactiveColor ?? this.inactiveColor,

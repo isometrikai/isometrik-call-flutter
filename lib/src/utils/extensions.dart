@@ -96,7 +96,7 @@ extension MapExtension on Map<String, dynamic> {
 }
 
 extension IsmCallColorExtension on Color {
-  String get hexCode => '#${value.toRadixString(16)}';
+  String get hexCode => '#${toARGB32().toRadixString(16)}';
 
   Color applyOpacity(double value) => withValues(alpha: value);
 }

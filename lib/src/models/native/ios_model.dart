@@ -29,9 +29,11 @@ class IsmCallIosModel {
         supportsUngrouping: map['supportsUngrouping'] as bool? ?? false,
         iconName: map['iconName'] as String? ?? '',
         maximumCallsPerCallGroup: map['maximumCallsPerCallGroup'] as int? ?? 1,
-        audioSessionPreferredIOBufferDuration: map['audioSessionPreferredIOBufferDuration'] as double? ?? 0,
+        audioSessionPreferredIOBufferDuration:
+            map['audioSessionPreferredIOBufferDuration'] as double? ?? 0,
         configureAudioSession: map['configureAudioSession'] as bool? ?? false,
-        audioSessionPreferredSampleRate: map['audioSessionPreferredSampleRate'] as double? ?? 0,
+        audioSessionPreferredSampleRate:
+            map['audioSessionPreferredSampleRate'] as double? ?? 0,
         handleType: map['handleType'] as String? ?? '',
         ringtonePath: map['ringtonePath'] as String? ?? '',
         maximumCallGroups: map['maximumCallGroups'] as int? ?? 1,
@@ -87,15 +89,21 @@ class IsmCallIosModel {
         supportsHolding: supportsHolding ?? this.supportsHolding,
         supportsUngrouping: supportsUngrouping ?? this.supportsUngrouping,
         iconName: iconName ?? this.iconName,
-        maximumCallsPerCallGroup: maximumCallsPerCallGroup ?? this.maximumCallsPerCallGroup,
-        audioSessionPreferredIOBufferDuration: audioSessionPreferredIOBufferDuration ?? this.audioSessionPreferredIOBufferDuration,
-        configureAudioSession: configureAudioSession ?? this.configureAudioSession,
-        audioSessionPreferredSampleRate: audioSessionPreferredSampleRate ?? this.audioSessionPreferredSampleRate,
+        maximumCallsPerCallGroup:
+            maximumCallsPerCallGroup ?? this.maximumCallsPerCallGroup,
+        audioSessionPreferredIOBufferDuration:
+            audioSessionPreferredIOBufferDuration ??
+                this.audioSessionPreferredIOBufferDuration,
+        configureAudioSession:
+            configureAudioSession ?? this.configureAudioSession,
+        audioSessionPreferredSampleRate: audioSessionPreferredSampleRate ??
+            this.audioSessionPreferredSampleRate,
         handleType: handleType ?? this.handleType,
         ringtonePath: ringtonePath ?? this.ringtonePath,
         maximumCallGroups: maximumCallGroups ?? this.maximumCallGroups,
         supportsGrouping: supportsGrouping ?? this.supportsGrouping,
-        includesCallsInRecents: includesCallsInRecents ?? this.includesCallsInRecents,
+        includesCallsInRecents:
+            includesCallsInRecents ?? this.includesCallsInRecents,
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -107,7 +115,8 @@ class IsmCallIosModel {
         'supportsUngrouping': supportsUngrouping,
         'iconName': iconName,
         'maximumCallsPerCallGroup': maximumCallsPerCallGroup,
-        'audioSessionPreferredIOBufferDuration': audioSessionPreferredIOBufferDuration,
+        'audioSessionPreferredIOBufferDuration':
+            audioSessionPreferredIOBufferDuration,
         'configureAudioSession': configureAudioSession,
         'audioSessionPreferredSampleRate': audioSessionPreferredSampleRate,
         'handleType': handleType,
@@ -135,9 +144,11 @@ class IsmCallIosModel {
         other.supportsUngrouping == supportsUngrouping &&
         other.iconName == iconName &&
         other.maximumCallsPerCallGroup == maximumCallsPerCallGroup &&
-        other.audioSessionPreferredIOBufferDuration == audioSessionPreferredIOBufferDuration &&
+        other.audioSessionPreferredIOBufferDuration ==
+            audioSessionPreferredIOBufferDuration &&
         other.configureAudioSession == configureAudioSession &&
-        other.audioSessionPreferredSampleRate == audioSessionPreferredSampleRate &&
+        other.audioSessionPreferredSampleRate ==
+            audioSessionPreferredSampleRate &&
         other.handleType == handleType &&
         other.ringtonePath == ringtonePath &&
         other.maximumCallGroups == maximumCallGroups &&
