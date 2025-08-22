@@ -346,7 +346,7 @@ class IsmCallViewState extends State<IsmCallView> {
                                   Alignment.bottomCenter;
 
                               // First build the controls list
-                              final controls = [
+                              final controls = <Widget>[
                                 if (context.properties?.callControlsBuilder !=
                                     null) ...[
                                   ...context.properties?.callControlsBuilder
