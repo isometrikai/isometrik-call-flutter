@@ -28,7 +28,7 @@ class IsmCallHelper {
   static final IsmCallDebouncer _onEndCallDebouncer =
       IsmCallDebouncer(milliseconds: 500);
 
-  static String? get callId => ongoingCall?.id;
+  static String? get callId => ongoingCall?.uuid;
 
   static String? get ongoingMeetingId => ongoingCall?.extra.meetingId;
 
