@@ -338,35 +338,42 @@ class IsmCallViewState extends State<IsmCallView> {
                               ),
                         if (!isFloating &&
                             context.properties?.allowedCallActions.isNotEmpty ==
-                                true)
+                                true) ...[
                           Builder(
                             builder: (context) {
                               final alignment = context
                                       .properties?.controlsPosition.alignment ??
                                   Alignment.bottomCenter;
+
+                              // First build the controls list
+                              final controls = [
+                                if (context.properties?.callControlsBuilder !=
+                                    null) ...[
+                                  ...context.properties?.callControlsBuilder
+                                          ?.call(context) ??
+                                      [],
+                                ],
+                                ...ismCallControlFeatures(),
+                              ];
+
+                              // Then generate dynamic collapseIndexOrder based on controls length
+                              final collapseIndexOrder = _generateCollapseOrder(
+                                controls.length,
+                                isMobile,
+                              );
                               return Align(
                                 alignment: alignment,
                                 child: IsmCallControlSheet(
                                   isMobile: isMobile,
                                   key: collapsedKey,
                                   isControlsBottom: isControlsBottom,
-                                  controls: [
-                                    if (context
-                                            .properties?.callControlsBuilder !=
-                                        null) ...[
-                                      ...context.properties?.callControlsBuilder
-                                              ?.call(context) ??
-                                          [],
-                                    ],
-                                    ...ismCallControlFeatures(),
-                                  ],
-                                  collapseIndexOrder: isMobile
-                                      ? const [6, 3, 1, 2, 5]
-                                      : const [6, 3, 1, 2, 5, 4, 0],
+                                  controls: controls,
+                                  collapseIndexOrder: collapseIndexOrder,
                                 ),
                               );
                             },
                           ),
+                        ],
                         if (!isFloating &&
                             controller.participantTracks.length > 1)
                           Positioned(
@@ -519,5 +526,21 @@ class IsmCallViewState extends State<IsmCallView> {
       }
     }
     return features;
+  }
+
+  List<int> _generateCollapseOrder(int controlsCount, bool isMobile) {
+    // Base order for known controls
+    final baseOrder = isMobile ? [6, 3, 1, 2, 5] : [6, 3, 1, 2, 5, 4, 0];
+
+    // Filter out indices that don't exist in current controls
+    final validOrder =
+        baseOrder.where((index) => index < controlsCount).toList();
+
+    // Add any remaining indices that weren't in base order
+    for (var i = 0; i < controlsCount; i++) {
+      if (!validOrder.contains(i)) validOrder.add(i);
+    }
+
+    return validOrder;
   }
 }
