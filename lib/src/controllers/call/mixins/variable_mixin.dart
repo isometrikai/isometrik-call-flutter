@@ -27,9 +27,8 @@ mixin IsmCallVariableMixin {
   final Rx<Duration> _callDuration = Duration.zero.obs;
   Duration get callDuration => _callDuration.value;
   set callDuration(Duration value) {
-    if (value == callDuration) {
-      return;
-    }
+    if (value == callDuration) return;
+    if (value.isNegative) value = Duration.zero;
     _callDuration.value = value;
   }
 

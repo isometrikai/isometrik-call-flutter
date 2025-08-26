@@ -209,31 +209,19 @@ class IsmCallViewState extends State<IsmCallView> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Builder(
-                                    builder: (context) {
-                                      final data = controller
-                                                  .participantTracks.isEmpty ||
-                                              controller.participantTracks
-                                                      .length ==
-                                                  1
-                                          ? isAccepted
-                                              ? Get.context?.translations
-                                                      ?.joining ??
-                                                  IsmCallStrings.joining
-                                              : Get.context?.translations
-                                                      ?.ringing ??
-                                                  IsmCallStrings.ringing
-                                          : controller.callDuration
-                                                      .inMicroseconds <
-                                                  0
-                                              ? ''
-                                              : controller
-                                                  .callDuration.formatTime;
-                                      if (data.isEmpty) {
-                                        return const SizedBox();
-                                      }
-                                      return Text(data);
-                                    },
+                                  Text(
+                                    controller.participantTracks.isEmpty ||
+                                            controller
+                                                    .participantTracks.length ==
+                                                1
+                                        ? isAccepted
+                                            ? Get.context?.translations
+                                                    ?.joining ??
+                                                IsmCallStrings.joining
+                                            : Get.context?.translations
+                                                    ?.ringing ??
+                                                IsmCallStrings.ringing
+                                        : controller.callDuration.formatTime,
                                   ),
                                   if (controller.isRecording) ...[
                                     IsmCallDimens.boxWidth8,
