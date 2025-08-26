@@ -107,13 +107,12 @@ extension IsmCallMaterialStateExtension on Set<WidgetState> {
 
 extension IsmCallDurationExtension on Duration {
   String get formatTime {
-    // Handle negative durations
-    final isNegative = inMicroseconds < 0;
-    final absoluteDuration = isNegative ? -this : this;
+    // Handle negative durations - show as zero
+    if (inMicroseconds < 0) return '00:00';
 
-    final totalHours = absoluteDuration.inHours;
-    final minutes = absoluteDuration.inMinutes % 60;
-    final seconds = absoluteDuration.inSeconds % 60;
+    final totalHours = inHours;
+    final minutes = inMinutes % 60;
+    final seconds = inSeconds % 60;
 
     // Format components
     final h = totalHours.toString().padLeft(2, '0');
@@ -121,10 +120,7 @@ extension IsmCallDurationExtension on Duration {
     final s = seconds.toString().padLeft(2, '0');
 
     // Build time string
-    final result = [if (h != '00') h, m, s].join(':');
-
-    // Add negative sign if needed
-    return isNegative ? '-$result' : result;
+    return [if (h != '00') h, m, s].join(':');
   }
 
   String get formatDuration {
