@@ -1,4 +1,3 @@
-
 import 'package:call_qwik_example/data/data.dart';
 import 'package:call_qwik_example/res/res.dart';
 import 'package:call_qwik_example/utils/device_config.dart';

@@ -47,24 +47,6 @@ class IsmCallViewState extends State<IsmCallView> {
         IsmCallLog.success('onDetach');
         _controller.disconnectCall(meetingId: _controller.meetingId);
       },
-      onHide: () {
-        IsmCallLog.success('onHide');
-      },
-      onInactive: () {
-        IsmCallLog.success('onInactive');
-      },
-      onPause: () {
-        IsmCallLog.success('onPause');
-      },
-      onRestart: () {
-        IsmCallLog.success('onRestart');
-      },
-      onResume: () {
-        IsmCallLog.success('onResume');
-      },
-      onShow: () {
-        IsmCallLog.success('onShow');
-      },
     );
 
     if (!Get.isRegistered<IsmCallController>()) {

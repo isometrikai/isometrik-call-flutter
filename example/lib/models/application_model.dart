@@ -31,7 +31,9 @@ class ApplicationModel {
         json.decode(source) as Map<String, dynamic>,
       );
 
-  String get name => businessName.trim().isNotEmpty ? businessName.trim() : [firstName, lastName].join(' ').trim();
+  String get name => businessName.trim().isNotEmpty
+      ? businessName.trim()
+      : [firstName, lastName].join(' ').trim();
 
   final String clientName;
   final String businessName;

@@ -40,7 +40,8 @@ class ContactCreatorModel {
   final String phoneIsoCodde;
   final String userId;
 
-  String get fullName => name.trim().isNotEmpty ? name : [firstName, lastName].join(' ').trim();
+  String get fullName =>
+      name.trim().isNotEmpty ? name : [firstName, lastName].join(' ').trim();
 
   ContactCreatorModel copyWith({
     String? countryCode,
