@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
 class IsmCallNoVideoWidget extends StatelessWidget {
@@ -30,10 +29,7 @@ class IsmCallNoVideoWidget extends StatelessWidget {
             IsmCallDimens.boxHeight10,
             Text(
               name,
-              style: (isLargeVideo
-                      ? context.textTheme.titleMedium
-                      : context.textTheme.bodySmall)
-                  ?.copyWith(color: IsmCallColors.white),
+              style: const TextStyle(color: IsmCallColors.white),
               textAlign: TextAlign.center,
             ),
           ],
