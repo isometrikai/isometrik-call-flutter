@@ -187,7 +187,7 @@ class IsmCallViewState extends State<IsmCallView> {
                             centerTitle: true,
                             automaticallyImplyLeading: false,
                             title: Text(
-                              'End-to-end Encrypted',
+                              'End-to-end encrypted',
                               style: context.textTheme.bodyMedium,
                             ),
                             leading:
