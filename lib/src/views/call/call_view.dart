@@ -366,58 +366,51 @@ class IsmCallViewState extends State<IsmCallView> {
                                   ? null
                                   : controller.toggleLargeVideo,
                               child: SafeArea(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                    IsmCallDimens.eight,
-                                  ),
-                                  child: Builder(
-                                    builder: (context) {
-                                      final size = MediaQuery.of(context).size;
-                                      final isWeb = size.width > 600;
-                                      final boxWidth = isWeb
-                                          ? size.width * 0.20
-                                          : size.width * 0.25;
-                                      final boxHeight = boxWidth * (9 / 16);
-                                      return SizedBox(
-                                        height: boxHeight,
-                                        width: boxWidth,
-                                        child: ListView.builder(
-                                          itemCount: _smallVideoTrack.length,
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemBuilder: (_, index) =>
-                                              IsmCallParticipantView(
-                                            _smallVideoTrack[index],
-                                            isLargeVideo: false,
-                                            imageUrl: _smallVideoTrack[index]
-                                                        .participant
-                                                    is LocalParticipant
-                                                ? IsmCall.i.config?.userConfig
-                                                        .userProfile ??
-                                                    ''
-                                                : controller.userInfoModel
-                                                        ?.imageUrl ??
-                                                    '',
-                                            name: _smallVideoTrack[index]
-                                                        .participant
-                                                    is LocalParticipant
-                                                ? IsmCall.i.config?.userConfig
-                                                        .fullName ??
-                                                    ''
-                                                : controller.userInfoModel
-                                                        ?.userName ??
-                                                    '',
-                                            videoOffBackgroundColor: context
-                                                    .callTheme
-                                                    ?.videoOffCardColor ??
-                                                IsmCallColors.card,
-                                          ),
+                                child: ListView.builder(
+                                  itemCount: _smallVideoTrack.length,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (_, index) {
+                                    final size = MediaQuery.of(context).size;
+                                    final boxWidth = size.width > 600
+                                        ? size.width * 0.20
+                                        : size.width * 0.25;
+                                    final boxHeight = boxWidth * (9 / 16);
+                                    return Container(
+                                      height: boxHeight,
+                                      width: boxWidth,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          IsmCallDimens.eight,
                                         ),
-                                      );
-                                    },
-                                  ),
+                                      ),
+                                      child: IsmCallParticipantView(
+                                        _smallVideoTrack[index],
+                                        isLargeVideo: false,
+                                        imageUrl: _smallVideoTrack[index]
+                                                .participant is LocalParticipant
+                                            ? IsmCall.i.config?.userConfig
+                                                    .userProfile ??
+                                                ''
+                                            : controller
+                                                    .userInfoModel?.imageUrl ??
+                                                '',
+                                        name: _smallVideoTrack[index]
+                                                .participant is LocalParticipant
+                                            ? IsmCall.i.config?.userConfig
+                                                    .fullName ??
+                                                ''
+                                            : controller
+                                                    .userInfoModel?.userName ??
+                                                '',
+                                        videoOffBackgroundColor: context
+                                                .callTheme?.videoOffCardColor ??
+                                            IsmCallColors.card,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
