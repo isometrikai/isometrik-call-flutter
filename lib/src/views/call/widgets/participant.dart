@@ -59,7 +59,7 @@ class _IsmCallParticipantViewState extends State<IsmCallParticipantView> {
   bool get isVideoOn => activeVideoTrack != null && !activeVideoTrack!.muted;
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => DecoratedBox(
         decoration: BoxDecoration(
           color: (isVideoOn
                   ? widget.backgroundColor

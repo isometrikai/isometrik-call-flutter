@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:custom_will_pop_scope/custom_will_pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -358,7 +356,7 @@ class IsmCallViewState extends State<IsmCallView> {
                           ),
                         ],
                         if (!isFloating &&
-                            controller.participantTracks.length > 1)
+                            controller.participantTracks.length > 1) ...[
                           Positioned(
                             left: controller.videoPositionX,
                             top: controller.videoPositionY,
@@ -372,57 +370,63 @@ class IsmCallViewState extends State<IsmCallView> {
                                   borderRadius: BorderRadius.circular(
                                     IsmCallDimens.eight,
                                   ),
-                                  child: SizedBox(
-                                    height: min(
-                                      Get.height * 0.25,
-                                      isMobile
-                                          ? IsmCallDimens.oneHundredSeventy
-                                          : IsmCallDimens.oneHundredFifty,
-                                    ),
-                                    child: ListView.builder(
-                                      itemCount: _smallVideoTrack.length,
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemBuilder: (_, index) {
-                                        final participant =
-                                            _smallVideoTrack[index];
-                                        return AspectRatio(
-                                          aspectRatio:
-                                              isMobile ? 9 / 16 : 3 / 4,
-                                          child: IsmCallParticipantView(
-                                            participant,
-                                            isLargeVideo: false,
-                                            imageUrl: participant.participant
-                                                    is LocalParticipant
-                                                ? IsmCall.i.config?.userConfig
-                                                        .userProfile ??
-                                                    ''
-                                                : controller.userInfoModel
-                                                        ?.imageUrl ??
-                                                    '',
-                                            name: participant.participant
-                                                    is LocalParticipant
-                                                ? IsmCall.i.config?.userConfig
-                                                        .fullName ??
-                                                    ''
-                                                : controller.userInfoModel
-                                                        ?.userName ??
-                                                    '',
-                                            videoOffBackgroundColor: context
-                                                    .callTheme
-                                                    ?.videoOffCardColor ??
-                                                IsmCallColors.card,
+                                  child: Builder(
+                                    builder: (context) {
+                                      final size = MediaQuery.of(context).size;
+                                      final isWeb = size.width > 600;
+                                      final boxWidth = isWeb
+                                          ? size.width * 0.20
+                                          : size.width * 0.25;
+                                      final boxHeight = boxWidth * (9 / 16);
+                                      return SizedBox(
+                                        height: boxHeight,
+                                        width: boxWidth,
+                                        child: ListView.builder(
+                                          itemCount: _smallVideoTrack.length,
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (_, index) =>
+                                              AspectRatio(
+                                            aspectRatio:
+                                                isMobile ? 9 / 16 : 3 / 4,
+                                            child: IsmCallParticipantView(
+                                              _smallVideoTrack[index],
+                                              isLargeVideo: false,
+                                              imageUrl: _smallVideoTrack[index]
+                                                          .participant
+                                                      is LocalParticipant
+                                                  ? IsmCall.i.config?.userConfig
+                                                          .userProfile ??
+                                                      ''
+                                                  : controller.userInfoModel
+                                                          ?.imageUrl ??
+                                                      '',
+                                              name: _smallVideoTrack[index]
+                                                          .participant
+                                                      is LocalParticipant
+                                                  ? IsmCall.i.config?.userConfig
+                                                          .fullName ??
+                                                      ''
+                                                  : controller.userInfoModel
+                                                          ?.userName ??
+                                                      '',
+                                              videoOffBackgroundColor: context
+                                                      .callTheme
+                                                      ?.videoOffCardColor ??
+                                                  IsmCallColors.card,
+                                            ),
                                           ),
-                                        );
-                                      },
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
                             ),
                           ),
+                        ],
                       ],
                     ),
                   ),
