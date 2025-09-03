@@ -30,9 +30,10 @@ class IsmCallNoVideoWidget extends StatelessWidget {
             IsmCallDimens.boxHeight10,
             Text(
               name,
-              style: isLargeVideo
-                  ? context.textTheme.titleMedium
-                  : context.textTheme.bodySmall,
+              style: (isLargeVideo
+                      ? context.textTheme.titleMedium
+                      : context.textTheme.bodySmall)
+                  ?.copyWith(color: IsmCallColors.white),
               textAlign: TextAlign.center,
             ),
           ],
