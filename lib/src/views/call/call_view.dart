@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:custom_will_pop_scope/custom_will_pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -366,51 +368,55 @@ class IsmCallViewState extends State<IsmCallView> {
                                   ? null
                                   : controller.toggleLargeVideo,
                               child: SafeArea(
-                                child: ListView.builder(
-                                  itemCount: _smallVideoTrack.length,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemBuilder: (_, index) {
-                                    final size = MediaQuery.of(context).size;
-                                    final boxWidth = size.width > 600
-                                        ? size.width * 0.20
-                                        : size.width * 0.25;
-                                    final boxHeight = boxWidth * (9 / 16);
-                                    return Container(
-                                      height: boxHeight,
-                                      width: boxWidth,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          IsmCallDimens.eight,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                    IsmCallDimens.eight,
+                                  ),
+                                  child: SizedBox(
+                                    height: min(
+                                      Get.height * 0.25,
+                                      isMobile
+                                          ? IsmCallDimens.oneHundredSeventy
+                                          : IsmCallDimens.oneHundredFifty,
+                                    ),
+                                    child: ListView.builder(
+                                      itemCount: _smallVideoTrack.length,
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (_, index) => AspectRatio(
+                                        aspectRatio: isMobile ? 9 / 16 : 3 / 4,
+                                        child: IsmCallParticipantView(
+                                          _smallVideoTrack[index],
+                                          isLargeVideo: false,
+                                          imageUrl: _smallVideoTrack[index]
+                                                      .participant
+                                                  is LocalParticipant
+                                              ? IsmCall.i.config?.userConfig
+                                                      .userProfile ??
+                                                  ''
+                                              : controller.userInfoModel
+                                                      ?.imageUrl ??
+                                                  '',
+                                          name:
+                                              _smallVideoTrack[index]
+                                                          .participant
+                                                      is LocalParticipant
+                                                  ? IsmCall.i.config?.userConfig
+                                                          .fullName ??
+                                                      ''
+                                                  : controller.userInfoModel
+                                                          ?.userName ??
+                                                      '',
+                                          videoOffBackgroundColor: context
+                                                  .callTheme
+                                                  ?.videoOffCardColor ??
+                                              IsmCallColors.card,
                                         ),
                                       ),
-                                      child: IsmCallParticipantView(
-                                        _smallVideoTrack[index],
-                                        isLargeVideo: false,
-                                        imageUrl: _smallVideoTrack[index]
-                                                .participant is LocalParticipant
-                                            ? IsmCall.i.config?.userConfig
-                                                    .userProfile ??
-                                                ''
-                                            : controller
-                                                    .userInfoModel?.imageUrl ??
-                                                '',
-                                        name: _smallVideoTrack[index]
-                                                .participant is LocalParticipant
-                                            ? IsmCall.i.config?.userConfig
-                                                    .fullName ??
-                                                ''
-                                            : controller
-                                                    .userInfoModel?.userName ??
-                                                '',
-                                        videoOffBackgroundColor: context
-                                                .callTheme?.videoOffCardColor ??
-                                            IsmCallColors.card,
-                                      ),
-                                    );
-                                  },
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
