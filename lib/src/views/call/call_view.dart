@@ -388,35 +388,31 @@ class IsmCallViewState extends State<IsmCallView> {
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           itemBuilder: (_, index) =>
-                                              AspectRatio(
-                                            aspectRatio:
-                                                isMobile ? 9 / 16 : 3 / 4,
-                                            child: IsmCallParticipantView(
-                                              _smallVideoTrack[index],
-                                              isLargeVideo: false,
-                                              imageUrl: _smallVideoTrack[index]
-                                                          .participant
-                                                      is LocalParticipant
-                                                  ? IsmCall.i.config?.userConfig
-                                                          .userProfile ??
-                                                      ''
-                                                  : controller.userInfoModel
-                                                          ?.imageUrl ??
-                                                      '',
-                                              name: _smallVideoTrack[index]
-                                                          .participant
-                                                      is LocalParticipant
-                                                  ? IsmCall.i.config?.userConfig
-                                                          .fullName ??
-                                                      ''
-                                                  : controller.userInfoModel
-                                                          ?.userName ??
-                                                      '',
-                                              videoOffBackgroundColor: context
-                                                      .callTheme
-                                                      ?.videoOffCardColor ??
-                                                  IsmCallColors.card,
-                                            ),
+                                              IsmCallParticipantView(
+                                            _smallVideoTrack[index],
+                                            isLargeVideo: false,
+                                            imageUrl: _smallVideoTrack[index]
+                                                        .participant
+                                                    is LocalParticipant
+                                                ? IsmCall.i.config?.userConfig
+                                                        .userProfile ??
+                                                    ''
+                                                : controller.userInfoModel
+                                                        ?.imageUrl ??
+                                                    '',
+                                            name: _smallVideoTrack[index]
+                                                        .participant
+                                                    is LocalParticipant
+                                                ? IsmCall.i.config?.userConfig
+                                                        .fullName ??
+                                                    ''
+                                                : controller.userInfoModel
+                                                        ?.userName ??
+                                                    '',
+                                            videoOffBackgroundColor: context
+                                                    .callTheme
+                                                    ?.videoOffCardColor ??
+                                                IsmCallColors.card,
                                           ),
                                         ),
                                       );
