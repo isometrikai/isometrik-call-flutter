@@ -377,7 +377,7 @@ class IsmCallViewState extends State<IsmCallView> {
                                       Get.height * 0.25,
                                       isMobile
                                           ? IsmCallDimens.oneHundredSeventy
-                                          : IsmCallDimens.oneHundredFifty,
+                                          : IsmCallDimens.twoHundred,
                                     ),
                                     child: ListView.builder(
                                       itemCount: _smallVideoTrack.length,
