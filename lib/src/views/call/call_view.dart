@@ -190,15 +190,16 @@ class IsmCallViewState extends State<IsmCallView> {
                               'End-to-end encrypted',
                               style: context.textTheme.bodyMedium,
                             ),
-                            leading:
-                                _buildContext.properties?.startPipOuter == false
-                                    ? IconButton(
-                                        onPressed: startPip,
-                                        icon: const Icon(
-                                          Icons.arrow_back_ios_rounded,
-                                        ),
-                                      )
-                                    : null,
+                            leading: isMobile &&
+                                    _buildContext.properties?.startPipOuter ==
+                                        false
+                                ? IconButton(
+                                    onPressed: startPip,
+                                    icon: const Icon(
+                                      Icons.arrow_back_ios_rounded,
+                                    ),
+                                  )
+                                : null,
                             bottom: PreferredSize(
                               preferredSize: Size(
                                 double.maxFinite,
