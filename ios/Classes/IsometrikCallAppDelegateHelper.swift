@@ -100,6 +100,20 @@ public class IsometrikCallAppDelegateHelper: NSObject, PKPushRegistryDelegate {
         pushRegistry = PKPushRegistry(queue: DispatchQueue.main)
         pushRegistry?.delegate = self
         pushRegistry?.desiredPushTypes = Set([.voIP])
+        
+        // Validate CallKit plugin availability during setup
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.validateCallKitSetup()
+        }
+    }
+    
+    private func validateCallKitSetup() {
+        guard SwiftFlutterCallkitIncomingPlugin.sharedInstance != nil else {
+            print("IsometrikCall: WARNING - FlutterCallkitIncomingPlugin not initialized. CallKit functionality may not work properly.")
+            print("IsometrikCall: Ensure flutter_callkit_incoming plugin is properly registered in your AppDelegate.")
+            return
+        }
+        print("IsometrikCall: CallKit plugin validation successful")
     }
     
     // MARK: - Flutter Engine Management
@@ -125,6 +139,7 @@ public class IsometrikCallAppDelegateHelper: NSObject, PKPushRegistryDelegate {
     public func pushRegistry(_ registry: PKPushRegistry, didUpdate credentials: PKPushCredentials, for type: PKPushType) {
         print("IsometrikCall: didUpdatePushTokenFor")
         let deviceToken = credentials.token.map { String(format: "%02x", $0) }.joined()
+        print("IsometrikCall: didUpdatePushTokenFor \(deviceToken)")
         SwiftFlutterCallkitIncomingPlugin.sharedInstance?.setDevicePushTokenVoIP(deviceToken)
     }
     
@@ -134,8 +149,9 @@ public class IsometrikCallAppDelegateHelper: NSObject, PKPushRegistryDelegate {
     }
     
     public func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
+        print("IsometrikCall: didReceiveIncomingPushWith 1 \(payload.dictionaryPayload)")
         guard type == .voIP else { return }
-        
+        print("IsometrikCall: didReceiveIncomingPushWith 2 \(payload.dictionaryPayload)")
         handleIncomingPush(with: payload)
         
         DispatchQueue.main.asyncAfter(deadline: .now()) {
@@ -244,15 +260,36 @@ public class IsometrikCallAppDelegateHelper: NSObject, PKPushRegistryDelegate {
     
     private func startRinging(call: IncomingCall, payload: PKPushPayload) {
         print("IsometrikCall: startRinging \(call.id)")
-        SwiftFlutterCallkitIncomingPlugin.sharedInstance?.showCallkitIncoming(call.data, fromPushKit: true)
+        
+        // Validate CallKit plugin availability before showing call
+        guard let callkitPlugin = SwiftFlutterCallkitIncomingPlugin.sharedInstance else {
+            print("IsometrikCall: ERROR - FlutterCallkitIncomingPlugin not available")
+            handleCallKitError(for: call)
+            return
+        }
+        
+        // Show CallKit incoming call with error handling
+        do {
+            callkitPlugin.showCallkitIncoming(call.data, fromPushKit: true)
+            print("IsometrikCall: Successfully initiated CallKit UI for call \(call.id)")
+        } catch {
+            print("IsometrikCall: ERROR - Failed to show CallKit incoming: \(error)")
+            handleCallKitError(for: call)
+            return
+        }
+        
         startFlutterEngineIfNeeded(payload)
-        removeCall(call.id)
+        
+        // Remove call after successful CallKit initiation, not before
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.removeCall(call.id)
+        }
         
         checkIsLoggedIn { [weak self] result in
             guard let self = self else { return }
             if !result {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.endCall(call: call)
+                    self.endCallSafely(call: call)
                     self.invalidateAndReRegister()
                 }
             }
@@ -261,6 +298,40 @@ public class IsometrikCallAppDelegateHelper: NSObject, PKPushRegistryDelegate {
     
     private func endCall(call: IncomingCall) {
         SwiftFlutterCallkitIncomingPlugin.sharedInstance?.endCall(call.data)
+    }
+    
+    private func endCallSafely(call: IncomingCall) {
+        guard let callkitPlugin = SwiftFlutterCallkitIncomingPlugin.sharedInstance else {
+            print("IsometrikCall: WARNING - Cannot end call, CallKit plugin not available")
+            return
+        }
+        
+        do {
+            callkitPlugin.endCall(call.data)
+            print("IsometrikCall: Successfully ended call \(call.id)")
+        } catch {
+            print("IsometrikCall: ERROR - Failed to end call: \(error)")
+        }
+    }
+    
+    private func handleCallKitError(for call: IncomingCall) {
+        print("IsometrikCall: Handling CallKit error for call \(call.id)")
+        
+        // Remove the problematic call from queue
+        removeCall(call.id)
+        
+        // Try to process next call in queue if any
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.checkCallQueue()
+        }
+        
+        // Notify Flutter about the failed call attempt
+        DispatchQueue.main.async {
+            self.methodChannel?.invokeMethod("callKitError", arguments: [
+                "callId": call.id,
+                "error": "CallKit provider not available - transaction failed"
+            ])
+        }
     }
     
     private func checkCallQueue() {
