@@ -12,9 +12,31 @@ public class IsometrikCallFlutterPlugin: NSObject, FlutterPlugin {
     switch call.method {
     case "getPlatformVersion":
       result("iOS " + UIDevice.current.systemVersion)
+    case "setupCallHandling":
+      result("Call handling setup completed")
     default:
       result(FlutterMethodNotImplemented)
     }
+  }
+  
+  /// Convenience method for easy AppDelegate integration
+  /// Call this in your AppDelegate's didFinishLaunchingWithOptions
+  public static func setupWithAppDelegate(
+    _ application: UIApplication,
+    window: UIWindow?,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    IsometrikCallAppDelegateHelper.shared.setupWith(
+      application,
+      window: window,
+      didFinishLaunchingWithOptions: launchOptions
+    )
+    return true
+  }
+  
+  /// Alternative method for manual setup with FlutterViewController
+  public static func setupWithController(_ controller: FlutterViewController) {
+    IsometrikCallAppDelegateHelper.shared.setupMethodChannelOnly(with: controller)
   }
 }
 
