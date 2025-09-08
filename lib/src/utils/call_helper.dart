@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_callkit_incoming/entities/entities.dart';
-import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
+// import 'package:flutter_callkit_incoming/entities/entities.dart';
+// import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 import 'package:get/get.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
 
@@ -70,154 +70,153 @@ class IsmCallHelper {
     String? callType,
     String? countryName,
   }) async {
-    if (callId != null) {
-      await endCall();
-    }
-    var callKitParams = CallKitParams(
-      id: callId,
-      nameCaller: countryName,
-      appName: 'CallQwik',
-      avatar: imageUrl,
-      handle: name,
-      type: 0,
-      textAccept: 'Accept',
-      textDecline: 'Decline',
-      duration: 60000,
-      extra: <String, dynamic>{
-        'id': id,
-        'meetingId': meetingId,
-        'name': name,
-        'imageUrl': imageUrl,
-        'ip': ip,
-        'userIdentifier': userIdentifier,
-        'userId': userId,
-        'callType': callType ?? 'audio',
-        'platform': 'flutter',
-      },
-      android: AndroidParams(
-        isCustomNotification: false,
-        isShowLogo: true,
-        ringtonePath: 'system_ringtone_default',
-        backgroundColor: IsmCallColors.background.hexCode,
-        backgroundUrl: imageUrl,
-        actionColor: IsmCallColors.primary.hexCode,
-        textColor: IsmCallColors.white.hexCode,
-        incomingCallNotificationChannelName: 'Incoming Call',
-        isShowCallID: false,
-      ),
-      ios: const IOSParams(
-        iconName: 'CallKitLogo',
-        handleType: 'generic',
-        supportsVideo: true,
-        maximumCallGroups: 2,
-        maximumCallsPerCallGroup: 1,
-        audioSessionMode: 'default',
-        audioSessionActive: true,
-        audioSessionPreferredSampleRate: 44100.0,
-        audioSessionPreferredIOBufferDuration: 0.005,
-        supportsDTMF: true,
-        supportsHolding: true,
-        supportsGrouping: false,
-        supportsUngrouping: false,
-        ringtonePath: 'system_ringtone_default',
-      ),
-    );
-    await FlutterCallkitIncoming.showCallkitIncoming(callKitParams);
+    if (callId != null) await endCall();
+    // var callKitParams = CallKitParams(
+    //   id: callId,
+    //   nameCaller: countryName,
+    //   appName: 'CallQwik',
+    //   avatar: imageUrl,
+    //   handle: name,
+    //   type: 0,
+    //   textAccept: 'Accept',
+    //   textDecline: 'Decline',
+    //   duration: 60000,
+    //   extra: <String, dynamic>{
+    //     'id': id,
+    //     'meetingId': meetingId,
+    //     'name': name,
+    //     'imageUrl': imageUrl,
+    //     'ip': ip,
+    //     'userIdentifier': userIdentifier,
+    //     'userId': userId,
+    //     'callType': callType ?? 'audio',
+    //     'platform': 'flutter',
+    //   },
+    //   android: AndroidParams(
+    //     isCustomNotification: false,
+    //     isShowLogo: true,
+    //     ringtonePath: 'system_ringtone_default',
+    //     backgroundColor: IsmCallColors.background.hexCode,
+    //     backgroundUrl: imageUrl,
+    //     actionColor: IsmCallColors.primary.hexCode,
+    //     textColor: IsmCallColors.white.hexCode,
+    //     incomingCallNotificationChannelName: 'Incoming Call',
+    //     isShowCallID: false,
+    //   ),
+    //   ios: const IOSParams(
+    //     iconName: 'CallKitLogo',
+    //     handleType: 'generic',
+    //     supportsVideo: true,
+    //     maximumCallGroups: 2,
+    //     maximumCallsPerCallGroup: 1,
+    //     audioSessionMode: 'default',
+    //     audioSessionActive: true,
+    //     audioSessionPreferredSampleRate: 44100.0,
+    //     audioSessionPreferredIOBufferDuration: 0.005,
+    //     supportsDTMF: true,
+    //     supportsHolding: true,
+    //     supportsGrouping: false,
+    //     supportsUngrouping: false,
+    //     ringtonePath: 'system_ringtone_default',
+    //   ),
+    // );
+    // await FlutterCallkitIncoming.showCallkitIncoming(callKitParams);
   }
 
   static void requestNotification() {
-    FlutterCallkitIncoming.requestNotificationPermission({
-      'rationaleMessagePermission':
-          'Notification permission is required, to show notification.',
-      'postNotificationMessageRequired':
-          'Notification permission is required, Please allow notification permission from setting.',
-    });
+    // FlutterCallkitIncoming.requestNotificationPermission({
+    //   'rationaleMessagePermission':
+    //       'Notification permission is required, to show notification.',
+    //   'postNotificationMessageRequired':
+    //       'Notification permission is required, Please allow notification permission from setting.',
+    // });
   }
 
   static void listenCallEvents() {
-    FlutterCallkitIncoming.onEvent.listen((event) async {
-      if (event == null) {
-        return;
-      }
-      var call = IsmNativeCallModel.fromMap(event.body as Map<String, dynamic>);
+    // FlutterCallkitIncoming.onEvent.listen((event) async {
+    //   if (event == null) {
+    //     return;
+    //   }
+    //   var call = IsmNativeCallModel.fromMap(event.body as Map<String, dynamic>);
 
-      try {
-        IsmCallLog.highlight(
-          'NativeCallEvent - ${event.event}\n${call.toJson()}',
-        );
-      } catch (e, st) {
-        IsmCallLog.error(e, st);
-      }
-      switch (event.event) {
-        case Event.actionCallIncoming:
-          incomingMetaData = call.extra.metaData;
-          startRinging(call);
-          break;
-        case Event.actionCallStart:
-          incomingMetaData = call.extra.metaData;
-          _handleCallStarted();
-          break;
-        case Event.actionCallAccept:
-          incomingMetaData = call.extra.metaData;
-          $answerCall(call, true);
-          break;
-        case Event.actionCallDecline:
-          incomingMetaData = call.extra.metaData;
-          $answerCall(call, false);
-          break;
-        case Event.actionCallEnded:
-          incomingMetaData = call.extra.metaData;
-          onEndCall(call);
-          break;
-        case Event.actionCallTimeout:
-          if (GetPlatform.isIOS) {
-            unawaited(IsmCallChannelHandler.handleTimeout(call.extra.uid));
-          }
-          callTriggerStatusStream.add(
-            (
-              status: IsmCallStatus.callMissed,
-              meetingId: call.id,
-              data: {},
-            ),
-          );
-          break;
-        case Event.actionCallCallback:
-          // only Android - click action `Call back` from missed call notification
-          break;
-        case Event.actionCallToggleHold:
-          // only iOS
-          break;
-        case Event.actionCallToggleMute:
-          _controller.toggleMic(
-            value: !call.isMuted,
-            fromPushKit: true,
-          );
-          break;
-        case Event.actionCallToggleDmtf:
-          // only iOS
-          break;
-        case Event.actionCallToggleGroup:
-          // only iOS
-          break;
-        case Event.actionCallToggleAudioSession:
-          // only iOS
-          break;
-        case Event.actionDidUpdateDevicePushTokenVoip:
-          if (GetPlatform.isIOS) {
-            var token = await getPushToken();
-            unawaited(_controller.updatePushToken(token));
-          }
-          break;
-        case Event.actionCallCustom:
-          break;
-        case Event.actionCallConnected:
-          throw UnimplementedError();
-      }
-    });
+    //   try {
+    //     IsmCallLog.highlight(
+    //       'NativeCallEvent - ${event.event}\n${call.toJson()}',
+    //     );
+    //   } catch (e, st) {
+    //     IsmCallLog.error(e, st);
+    //   }
+    //   switch (event.event) {
+    //     case Event.actionCallIncoming:
+    //       incomingMetaData = call.extra.metaData;
+    //       startRinging(call);
+    //       break;
+    //     case Event.actionCallStart:
+    //       incomingMetaData = call.extra.metaData;
+    //       _handleCallStarted();
+    //       break;
+    //     case Event.actionCallAccept:
+    //       incomingMetaData = call.extra.metaData;
+    //       $answerCall(call, true);
+    //       break;
+    //     case Event.actionCallDecline:
+    //       incomingMetaData = call.extra.metaData;
+    //       $answerCall(call, false);
+    //       break;
+    //     case Event.actionCallEnded:
+    //       incomingMetaData = call.extra.metaData;
+    //       onEndCall(call);
+    //       break;
+    //     case Event.actionCallTimeout:
+    //       if (GetPlatform.isIOS) {
+    //         unawaited(IsmCallChannelHandler.handleTimeout(call.extra.uid));
+    //       }
+    //       callTriggerStatusStream.add(
+    //         (
+    //           status: IsmCallStatus.callMissed,
+    //           meetingId: call.id,
+    //           data: {},
+    //         ),
+    //       );
+    //       break;
+    //     case Event.actionCallCallback:
+    //       // only Android - click action `Call back` from missed call notification
+    //       break;
+    //     case Event.actionCallToggleHold:
+    //       // only iOS
+    //       break;
+    //     case Event.actionCallToggleMute:
+    //       _controller.toggleMic(
+    //         value: !call.isMuted,
+    //         fromPushKit: true,
+    //       );
+    //       break;
+    //     case Event.actionCallToggleDmtf:
+    //       // only iOS
+    //       break;
+    //     case Event.actionCallToggleGroup:
+    //       // only iOS
+    //       break;
+    //     case Event.actionCallToggleAudioSession:
+    //       // only iOS
+    //       break;
+    //     case Event.actionDidUpdateDevicePushTokenVoip:
+    //       if (GetPlatform.isIOS) {
+    //         var token = await getPushToken();
+    //         unawaited(_controller.updatePushToken(token));
+    //       }
+    //       break;
+    //     case Event.actionCallCustom:
+    //       break;
+    //     case Event.actionCallConnected:
+    //       throw UnimplementedError();
+    //   }
+    // });
   }
 
-  static Future<dynamic> getPushToken() =>
-      FlutterCallkitIncoming.getDevicePushTokenVoIP();
+  static Future<dynamic> getPushToken() async {
+    // return FlutterCallkitIncoming.getDevicePushTokenVoIP();
+  }
 
   static void startRinging(IsmNativeCallModel call) {
     _ringingDebouncer.run(() => _startRinging(call));
@@ -233,13 +232,16 @@ class IsmCallHelper {
     }
   }
 
-  static Future<void> toggleMic(bool value) => FlutterCallkitIncoming.muteCall(
-        callId ?? '',
-        isMuted: !value,
-      );
+  static Future<void> toggleMic(bool value) async {
+    // return FlutterCallkitIncoming.muteCall(
+    //     callId ?? '',
+    //     isMuted: !value,
+    //   );
+  }
 
-  static Future<void> pickCall() =>
-      FlutterCallkitIncoming.setCallConnected(callId ?? '');
+  static Future<void> pickCall() async {
+    // return FlutterCallkitIncoming.setCallConnected(callId ?? '');
+  }
 
   static void pickedByOther() {
     endCall();
@@ -258,7 +260,7 @@ class IsmCallHelper {
       );
     }
     incomingCalls.remove(meetingId);
-    unawaited(FlutterCallkitIncoming.endCall(meetingId));
+    // unawaited(FlutterCallkitIncoming.endCall(meetingId));
     if (GetPlatform.isIOS) {
       unawaited(IsmCallChannelHandler.handleCallEnd(meetingId));
     }
@@ -313,7 +315,7 @@ class IsmCallHelper {
     }
 
     if (!isMissed) {
-      unawaited(FlutterCallkitIncoming.endCall($callId ?? ''));
+      // unawaited(FlutterCallkitIncoming.endCall($callId ?? ''));
       if (GetPlatform.isIOS) {
         unawaited(IsmCallChannelHandler.handleCallEnd($callId ?? ''));
       }
@@ -322,7 +324,9 @@ class IsmCallHelper {
     }
   }
 
-  static Future<void> _endAllCalls() => FlutterCallkitIncoming.endAllCalls();
+  static Future<void> _endAllCalls() async {
+    // return FlutterCallkitIncoming.endAllCalls();
+  }
 
   static void onEndCall(IsmNativeCallModel call) async {
     _onEndCallDebouncer.run(() => _onEndCall(call));
@@ -465,9 +469,5 @@ class IsmCallHelper {
         ),
       );
     }
-  }
-
-  static void _handleCallStarted() {
-    _endAllCalls();
   }
 }

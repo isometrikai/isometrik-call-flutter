@@ -238,14 +238,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_background:
-    dependency: "direct main"
-    description:
-      name: flutter_background
-      sha256: "8dad66e3102da2b4046cc3adcf70625578809827170bd78e36e5890c074287d2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.0+1"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -254,14 +246,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
-  flutter_callkit_incoming:
-    dependency: "direct main"
-    description:
-      name: flutter_callkit_incoming
-      sha256: "993fb0f0cd990961072f0d13ff815a91773f92bfa1895be17d3366b2225ec9cd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.5.8"
   flutter_driver:
     dependency: transitive
     description: flutter
@@ -526,14 +510,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
-  json_annotation:
-    dependency: transitive
-    description:
-      name: json_annotation
-      sha256: "1ce844379ca14835a50d2f019a3099f419082cfdd231cd86a142af94dd5c6bb1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.9.0"
   just_audio:
     dependency: "direct main"
     description:

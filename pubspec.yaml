@@ -15,8 +15,8 @@ dependencies:
   custom_will_pop_scope: ^2.1.1
   flutter:
     sdk: flutter
-  flutter_background: ^1.2.0
-  flutter_callkit_incoming: ^2.5.8
+  # flutter_background: ^1.2.0
+  # flutter_callkit_incoming: ^2.5.8
   flutter_screenutil: ^5.9.3
   flutter_secure_storage: ^9.2.2
   flutter_svg: ^2.0.10+1

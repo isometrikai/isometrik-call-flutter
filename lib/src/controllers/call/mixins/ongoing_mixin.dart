@@ -156,25 +156,25 @@ mixin IsmCallOngoingMixin {
   Future<bool> _requestBackgroundPermission([bool isRetry = false]) async {
     // Required for android screenshare.
     try {
-      var hasPermissions = await FlutterBackground.hasPermissions;
+      // var hasPermissions = await FlutterBackground.hasPermissions;
       if (!isRetry) {
-        final appName =
-            Get.context?.translations?.appName ?? IsmCallConstants.appName;
-        final androidConfig = FlutterBackgroundAndroidConfig(
-          notificationTitle: 'Screen Sharing',
-          notificationText: '$appName is sharing the screen.',
-          notificationIcon: const AndroidResource(
-            name: 'ic_launcher',
-            defType: 'mipmap',
-          ),
-        );
-        hasPermissions = await FlutterBackground.initialize(
-          androidConfig: androidConfig,
-        );
+        // final appName =
+        //     Get.context?.translations?.appName ?? IsmCallConstants.appName;
+        // final androidConfig = FlutterBackgroundAndroidConfig(
+        //   notificationTitle: 'Screen Sharing',
+        //   notificationText: '$appName is sharing the screen.',
+        //   notificationIcon: const AndroidResource(
+        //     name: 'ic_launcher',
+        //     defType: 'mipmap',
+        //   ),
+        // );
+        // hasPermissions = await FlutterBackground.initialize(
+        //   androidConfig: androidConfig,
+        // );
       }
-      if (hasPermissions && !FlutterBackground.isBackgroundExecutionEnabled) {
-        return await FlutterBackground.enableBackgroundExecution();
-      }
+      // if (hasPermissions && !FlutterBackground.isBackgroundExecutionEnabled) {
+      //   return await FlutterBackground.enableBackgroundExecution();
+      // }
       return false;
     } catch (e, st) {
       if (!isRetry) {
@@ -221,7 +221,7 @@ mixin IsmCallOngoingMixin {
         false,
       );
       if (GetPlatform.isAndroid) {
-        await FlutterBackground.disableBackgroundExecution();
+        // await FlutterBackground.disableBackgroundExecution();
       }
     } catch (e, st) {
       IsmCallLog.error(e, st);
