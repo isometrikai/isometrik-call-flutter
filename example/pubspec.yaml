@@ -9,21 +9,21 @@ environment:
 dependencies:
   cached_network_image: ^3.3.1
   collection: ^1.18.0
-  connectivity_plus: ^6.0.3
+  connectivity_plus: ^7.0.0
   country_picker: ^2.0.26
   custom_will_pop_scope: ^2.1.1
   device_info_plus: ^11.3.3
   flutter:
     sdk: flutter
   flutter_background: ^1.2.0
-  flutter_callkit_incoming: ^2.0.4+1
+  flutter_callkit_incoming: ^3.0.0
   flutter_screenutil: ^5.9.3
   flutter_secure_storage: ^9.2.2
   flutter_svg: ^2.0.10+1
   flutter_web_plugins:
     sdk: flutter
-  flutter_webrtc: ^1.0.0
-  fluttertoast: ^8.2.6
+  flutter_webrtc: ^1.2.0
+  fluttertoast: ^9.0.0
   get: ^4.6.6
   google_fonts: ^6.2.1
   http: ^1.2.1
@@ -33,7 +33,7 @@ dependencies:
   isometrik_call_flutter:
     path: ../
   just_audio: ^0.10.0
-  livekit_client: ^2.4.8
+  livekit_client: ^2.5.1
   path_provider: ^2.1.3
   pin_code_fields: ^8.0.1
   pip_view: ^0.9.7
@@ -41,6 +41,9 @@ dependencies:
   shared_preferences: ^2.2.3
   url_launcher: ^6.3.0
   uuid: ^4.4.0
+
+dependency_overrides:
+  connectivity_plus: ^7.0.0
 
 dev_dependencies:
   flutter_lints: ^5.0.0
