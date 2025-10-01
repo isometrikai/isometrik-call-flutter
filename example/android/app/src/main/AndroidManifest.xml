@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <application
         android:label="Call Qwik"
@@ -56,6 +57,24 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        
+        <!-- Foreground service for media projection -->
+        <service
+            android:name="com.cloudwebrtc.webrtc.MediaProjectionService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
+        
+        <!-- Custom media projection service -->
+        <service
+            android:name="ai.isometrik.isometrik_call_flutter.MediaProjectionService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
+        
+        <!-- Additional media projection service for newer versions -->
+        <service
+            android:name="com.cloudwebrtc.webrtc.ScreenCaptureService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility?hl=en and

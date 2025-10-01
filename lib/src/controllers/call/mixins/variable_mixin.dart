@@ -142,4 +142,14 @@ mixin IsmCallVariableMixin {
   }
 
   IsmCallUserInfoModel? userInfoModel;
+
+  // Reactive screen sharing state to drive UI updates in GetX builders
+  final RxBool _isScreenSharingRx = false.obs;
+  bool get isScreenSharing => _isScreenSharingRx.value;
+  set isScreenSharing(bool value) {
+    if (value == isScreenSharing) {
+      return;
+    }
+    _isScreenSharingRx.value = value;
+  }
 }

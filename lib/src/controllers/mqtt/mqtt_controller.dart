@@ -170,15 +170,20 @@ class IsmCallMqttController extends GetxController {
     if (event.topic.contains('User')) {
       final metaData = payload['metaData'] as Map<String, dynamic>?;
       final callType = metaData?['callType'] as String?;
-      final body = payload['body'] != null
-          ? jsonDecode(payload['body']) as Map<String, dynamic>? ?? {}
-          : {};
-      final countryFlag = body['countryFlag'] as String? ?? '';
-      final countryName = body['countryName'] as String? ?? 'U';
-      final id = body['reqId'] as String?;
-      final ip = body['ip'] as String? ?? '';
-      final meetingId =
-          payload['messageId'] as String? ?? body['meetingId'] as String?;
+      // final body = payload['body'] != null
+      //     ? jsonDecode(payload['body']) as Map<String, dynamic>? ?? {}
+      //     : {};
+      // final countryFlag = body['countryFlag'] as String? ?? '';
+      // final countryName = body['countryName'] as String? ?? 'U';
+      // final id = body['reqId'] as String?;
+      // final ip = body['ip'] as String? ?? '';
+      // final meetingId =
+      //     payload['messageId'] as String? ?? body['meetingId'] as String?;
+      final countryFlag = metaData?['countryFlag'] as String? ?? '';
+      final countryName = metaData?['countryName'] as String? ?? 'U';
+      final id = metaData?['reqId'] as String?;
+      final ip = metaData?['ip'] as String? ?? '';
+      final meetingId = metaData?['meetingId'] as String?;
       final userIdentifier = payload['userIdentifier'] as String? ?? '';
       final userId = payload['userId'] as String? ?? '';
       final userName = payload['userName'] as String? ?? countryName;

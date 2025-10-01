@@ -67,8 +67,15 @@ mixin IsmCallJoinMixin {
     // Add small delay before camera initialization
     await Future.delayed(const Duration(milliseconds: 500));
 
+    // Ensure microphone permission before creating/publishing audio
+    bool allowAudio = trackType.hasAudio;
+    if (allowAudio) {
+      allowAudio = await IsmCallUtility.ensureMicrophonePermission();
+      _controller.isMicOn = allowAudio;
+    }
+
     final tracks = await Future.wait([
-      if (trackType.hasAudio) ...[
+      if (allowAudio) ...[
         LocalAudioTrack.create(),
       ],
       if (trackType.hasVideo) ...[
@@ -79,17 +86,22 @@ mixin IsmCallJoinMixin {
     LocalAudioTrack? localAudio;
     LocalVideoTrack? localVideo;
 
-    if (trackType.hasAudio) {
-      localAudio = tracks[0] as LocalAudioTrack;
+    if (allowAudio) {
+      localAudio = tracks.isNotEmpty && trackType.hasVideo
+          ? tracks.firstWhere((e) => e is LocalAudioTrack) as LocalAudioTrack
+          : tracks[0] as LocalAudioTrack;
     }
     if (trackType.hasVideo) {
-      var index = trackType.hasAudio ? 1 : 0;
-      localVideo = tracks[index] as LocalVideoTrack;
+      if (allowAudio) {
+        localVideo = tracks[1] as LocalVideoTrack;
+      } else {
+        localVideo = tracks[0] as LocalVideoTrack;
+      }
     }
 
     await Future.wait<dynamic>([
-      if (trackType.hasAudio) ...[
-        _controller.room!.localParticipant!.publishAudioTrack(localAudio!),
+      if (allowAudio && localAudio != null) ...[
+        _controller.room!.localParticipant!.publishAudioTrack(localAudio),
       ],
       if (trackType.hasVideo && localVideo != null) ...[
         _controller.room!.localParticipant!.publishVideoTrack(localVideo),
@@ -103,7 +115,8 @@ mixin IsmCallJoinMixin {
         _controller.room!.localParticipant!.setCameraEnabled(true),
       ],
       if (trackType.hasAudio) ...[
-        _controller.room!.localParticipant!.setMicrophoneEnabled(true),
+        _controller.room!.localParticipant!
+            .setMicrophoneEnabled(_controller.isMicOn),
       ],
     ]);
   }
@@ -288,6 +301,24 @@ mixin IsmCallJoinMixin {
       if (event.reason == DisconnectReason.roomDeleted) {
         IsmCallLog.success('Room Deleted');
       }
+    })
+    ..on<LocalTrackUnpublishedEvent>((event) async {
+      // If user stops screen sharing from the system notification,
+      // LiveKit will unpublish the local screen share track.
+      try {
+        final src = event.publication.source;
+        final isScreenShare = src == TrackSource.screenShareVideo ||
+            src == TrackSource.screenShareAudio;
+        if (isScreenShare) {
+          if (GetPlatform.isAndroid) {
+            // Update local state by calling the public method
+            _controller.toggleScreenShare(false);
+
+            await FlutterBackground.disableBackgroundExecution();
+            await MediaProjectionHelper.stopMediaProjectionService();
+          }
+        }
+      } catch (_) {}
     })
     ..on<ParticipantEvent>((event) {
       IsmCallLog.highlight('ParticipantEvent: $event');

@@ -61,7 +61,16 @@ class IsmCallViewState extends State<IsmCallView> {
     _controller.meetingId =
         widget.meetingId ?? arguments['meetingId'] as String? ?? '';
     _controller.isRecording = false;
-    _controller.isMicOn = true;
+    _controller.isMicOn = false;
+    // Ensure mic permission at call view init and reflect in UI state
+    IsmCallUtility.ensureMicrophonePermission().then((granted) {
+      // Do not override user action; only keep mic on if still desired and permission granted
+      final shouldBeOn = _controller.isMicOn && granted;
+      _controller.isMicOn = shouldBeOn;
+      if (_controller.room?.localParticipant != null) {
+        _controller.room!.localParticipant!.setMicrophoneEnabled(shouldBeOn);
+      }
+    });
     _controller.showFullVideo = true;
     _controller.isFrontCamera = true;
     _controller.setUpListeners(_controller.meetingId);
@@ -451,7 +460,8 @@ class IsmCallViewState extends State<IsmCallView> {
         features.add(
           controlProperties?.videoControl ??
               VideoControl(
-                onChange: (value) {}, //controller.toggleVideo
+                key: ValueKey<bool>(controller.isVideoOn),
+                onChange: null, // handled in controller
                 isActive: controller.isVideoOn,
               ),
         );
@@ -460,9 +470,8 @@ class IsmCallViewState extends State<IsmCallView> {
         features.add(
           controlProperties?.micControl ??
               MicControl(
-                onChange: (value) {
-                  // controller.toggleMic(value: value);
-                },
+                key: ValueKey<bool>(controller.isMicOn),
+                onChange: null,
                 isActive: controller.isMicOn,
               ),
         );
@@ -480,6 +489,7 @@ class IsmCallViewState extends State<IsmCallView> {
         features.add(
           controlProperties?.screenShareControl ??
               ScreenShareControl(
+                key: ValueKey<bool>(controller.isScreenSharing),
                 onChange: (_) {}, // controller.toggleScreenShare,
                 isActive: controller.isScreenSharing,
               ),

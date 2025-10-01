@@ -28,7 +28,7 @@ dependencies:
   http: ^1.2.2
   intl: ^0.20.1
   livekit_client:
-    ^2.4.9
+    ^2.5.0
     # mqtt_helper: ^1.0.2
   mqtt_helper:
     git:
@@ -38,6 +38,7 @@ dependencies:
   plugin_platform_interface: ^2.0.2
   pull_to_refresh: ^2.0.0
   uuid: ^4.4.2
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_lints: ^5.0.0

@@ -4,5 +4,6 @@ export 'debouncer.dart';
 export 'enums.dart';
 export 'extensions.dart';
 export 'log.dart';
+export 'media_projection_helper.dart';
 export 'typedef.dart';
 export 'utility.dart';

@@ -1,2 +1,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Permissions for screen sharing -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    
+    <!-- Feature declarations -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.microphone" />
+    
+    <application>
+        <!-- Foreground service for media projection -->
+        <service
+            android:name="com.cloudwebrtc.webrtc.MediaProjectionService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
+        
+        <!-- Alternative media projection service -->
+        <service
+            android:name="ai.isometrik.isometrik_call_flutter.MediaProjectionService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
+        
+        <!-- Additional media projection service for newer versions -->
+        <service
+            android:name="com.cloudwebrtc.webrtc.ScreenCaptureService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false" />
+    </application>
 </manifest>

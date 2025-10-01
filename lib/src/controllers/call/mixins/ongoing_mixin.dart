@@ -22,9 +22,21 @@ mixin IsmCallOngoingMixin {
     if (_controller.room == null) {
       return;
     }
-    _controller.isMicOn = value ?? !_controller.isMicOn;
-    _controller.room!.localParticipant!
-        .setMicrophoneEnabled(_controller.isMicOn);
+    final requested = value ?? !_controller.isMicOn;
+    if (requested) {
+      // Ensure permission before turning mic on
+      IsmCallUtility.ensureMicrophonePermission().then((granted) {
+        _controller.isMicOn = granted;
+        _controller.room!.localParticipant!
+            .setMicrophoneEnabled(_controller.isMicOn);
+        if (!fromPushKit) {
+          IsmCallHelper.toggleMic(_controller.isMicOn);
+        }
+      });
+      return;
+    }
+    _controller.isMicOn = false;
+    _controller.room!.localParticipant!.setMicrophoneEnabled(false);
     if (!fromPushKit) {
       IsmCallHelper.toggleMic(_controller.isMicOn);
     }
@@ -34,26 +46,39 @@ mixin IsmCallOngoingMixin {
     if (_controller.room == null) {
       return;
     }
-    _controller.isVideoOn = value ?? !_controller.isVideoOn;
-    if (_controller.isVideoOn) {
-      var participant = _controller.participantTracks
-          .cast<IsmCallParticipantTrack?>()
-          .firstWhere(
-            (e) => e?.id == _controller.room?.localParticipant?.sid,
-            orElse: () => null,
-          );
 
-      if (participant != null && !participant.hasVideo) {
-        final enablingVideo = Get.context?.translations?.enablingVideo ??
-            IsmCallStrings.enablingVideo;
-        IsmCallUtility.showLoader(enablingVideo);
-        await _controller.publishTracks(IsmCallTrackType.video);
-        IsmCallUtility.closeLoader();
-      }
+    final requested = value ?? !_controller.isVideoOn;
+    if (requested) {
+      // Ensure camera permission before turning video on
+      IsmCallUtility.ensureCameraPermission().then((granted) async {
+        _controller.isVideoOn = granted;
+        if (_controller.isVideoOn) {
+          var participant = _controller.participantTracks
+              .cast<IsmCallParticipantTrack?>()
+              .firstWhere(
+                (e) => e?.id == _controller.room?.localParticipant?.sid,
+                orElse: () => null,
+              );
+
+          if (participant != null && !participant.hasVideo) {
+            final enablingVideo = Get.context?.translations?.enablingVideo ??
+                IsmCallStrings.enablingVideo;
+            IsmCallUtility.showLoader(enablingVideo);
+            await _controller.publishTracks(IsmCallTrackType.video);
+            IsmCallUtility.closeLoader();
+          }
+        }
+        unawaited(
+          _controller.room!.localParticipant!
+              .setCameraEnabled(_controller.isVideoOn),
+        );
+      });
+      return;
     }
+
+    _controller.isVideoOn = false;
     unawaited(
-      _controller.room!.localParticipant!
-          .setCameraEnabled(_controller.isVideoOn),
+      _controller.room!.localParticipant!.setCameraEnabled(false),
     );
   }
 
@@ -141,8 +166,10 @@ mixin IsmCallOngoingMixin {
     _controller.isProcessingRecording = false;
   }
 
-  bool get isScreenSharing =>
-      _controller.room?.localParticipant?.isScreenShareEnabled() ?? false;
+  Timer? _screenShareMonitorTimer;
+  bool _localScreenSharingState = false; // Track actual Android state
+
+  bool get isScreenSharing => _localScreenSharingState;
 
   void toggleScreenShare([bool? value]) {
     final shouldEnable = value ?? !isScreenSharing;
@@ -196,21 +223,179 @@ mixin IsmCallOngoingMixin {
         return;
       }
 
-      var isExecuting =
-          GetPlatform.isIOS || await _requestBackgroundPermission();
-      if (!isExecuting) {
-        isExecuting = GetPlatform.isIOS || await _requestBackgroundPermission();
+      // For Android, ensure we have the proper permissions and service running
+      if (GetPlatform.isAndroid) {
+        // Start the media projection service first
+        final serviceStarted =
+            await MediaProjectionHelper.startMediaProjectionService();
+        if (!serviceStarted) {
+          IsmCallLog.error('Failed to start media projection service');
+          IsmCallUtility.closeLoader();
+          return;
+        }
+
+        // Ensure the service is running as a foreground service
+        final isForeground =
+            await MediaProjectionHelper.ensureForegroundService();
+        if (!isForeground) {
+          IsmCallLog.error('Failed to ensure foreground service');
+          await MediaProjectionHelper.stopMediaProjectionService();
+          IsmCallUtility.closeLoader();
+          return;
+        }
+
+        // Wait a bit for service to start
+        await Future.delayed(const Duration(milliseconds: 300));
+
+        var isExecuting = await _requestBackgroundPermission();
+        if (!isExecuting) {
+          // Try again with a delay
+          await Future.delayed(const Duration(milliseconds: 500));
+          isExecuting = await _requestBackgroundPermission();
+        }
+
+        if (!isExecuting) {
+          IsmCallLog.error(
+              'Failed to get background permissions for screen sharing');
+          await MediaProjectionHelper.stopMediaProjectionService();
+          IsmCallUtility.closeLoader();
+          return;
+        }
+
+        // Explicitly show the Android system capture permission dialog.
+        // Only continue if the user accepts. If cancelled, clean up and exit without toggling UI state.
+        final permissionGranted =
+            await MediaProjectionHelper.showPermissionDialog();
+        if (permissionGranted != true) {
+          IsmCallLog.highlight('Screen share permission dialog cancelled');
+          try {
+            await FlutterBackground.disableBackgroundExecution();
+          } catch (_) {}
+          await MediaProjectionHelper.stopMediaProjectionService();
+          IsmCallUtility.closeLoader();
+          return;
+        }
+
+        // Start periodic check for screen sharing status
+        IsmCallLog.highlight('Starting screen share monitoring');
+        _startScreenShareMonitoring();
+
+        // Start immediate monitoring for MediaProjection state changes
+        IsmCallLog.highlight('Starting MediaProjection monitoring');
+        await MediaProjectionHelper.startMediaProjectionMonitoring();
       }
-      if (isExecuting) {
-        await _controller.room!.localParticipant!.setScreenShareEnabled(
-          true,
-          captureScreenAudio: true,
-        );
+
+      // Enable screen sharing
+      await _controller.room!.localParticipant!.setScreenShareEnabled(
+        true,
+        captureScreenAudio: true,
+      );
+
+      // Verify that screen sharing actually started (especially on Android)
+      bool active = true;
+      if (GetPlatform.isAndroid) {
+        // Allow a short delay for projection to become active
+        await Future.delayed(const Duration(milliseconds: 200));
+        active = await MediaProjectionHelper.isScreenSharingActive();
       }
+
+      if (!active) {
+        IsmCallLog.highlight(
+            'Screen share not active after enabling, reverting');
+        await _disableLiveKitScreenShare();
+        _localScreenSharingState = false;
+        _controller.update([IsmCallView.updateId]);
+        return;
+      }
+
+      // Update local and reactive state only when confirmed active
+      _localScreenSharingState = true;
+      _controller.isScreenSharing = true;
+      _controller.update([IsmCallView.updateId]);
     } catch (e, st) {
-      IsmCallLog.error(e, st);
+      IsmCallLog.error('Screen sharing error: $e', st);
+      // Try to disable screen sharing if it was partially enabled
+      try {
+        await _controller.room!.localParticipant!.setScreenShareEnabled(false);
+        if (GetPlatform.isAndroid) {
+          await MediaProjectionHelper.stopMediaProjectionService();
+        }
+      } catch (disableError) {
+        IsmCallLog.error(
+            'Failed to disable screen sharing after error: $disableError');
+      }
     } finally {
       IsmCallUtility.closeLoader();
+    }
+  }
+
+  void _startScreenShareMonitoring() {
+    _screenShareMonitorTimer?.cancel();
+    IsmCallLog.highlight('Starting periodic screen share monitoring (500ms)');
+    _screenShareMonitorTimer =
+        Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      if (!isScreenSharing) {
+        IsmCallLog.highlight('Screen sharing stopped, canceling timer');
+        timer.cancel();
+        return;
+      }
+
+      // Check if screen sharing is actually active
+      if (GetPlatform.isAndroid) {
+        _checkScreenShareStatus();
+      }
+    });
+  }
+
+  void _checkScreenShareStatus() async {
+    try {
+      // Check if screen sharing is actually active
+      final isActive = await MediaProjectionHelper.isScreenSharingActive();
+      IsmCallLog.highlight(
+          'Screen share status check: isActive=$isActive, localState=$_localScreenSharingState');
+
+      if (!isActive && _localScreenSharingState) {
+        // Screen sharing stopped by system, update state and disable LiveKit
+        IsmCallLog.highlight(
+            'Screen sharing stopped by system, updating state');
+        _localScreenSharingState = false;
+        await _disableLiveKitScreenShare();
+
+        // Force UI update
+        _controller.update([IsmCallView.updateId]);
+      }
+    } catch (e) {
+      // If check fails, assume screen sharing stopped
+      IsmCallLog.error('Error checking screen share status: $e');
+      if (_localScreenSharingState) {
+        _localScreenSharingState = false;
+        await _disableLiveKitScreenShare();
+
+        // Force UI update
+        _controller.update([IsmCallView.updateId]);
+      }
+    }
+  }
+
+  Future<void> _disableLiveKitScreenShare() async {
+    try {
+      // Only disable LiveKit screen sharing, don't stop the monitoring
+      await _controller.room!.localParticipant!.setScreenShareEnabled(false);
+      if (GetPlatform.isAndroid) {
+        await FlutterBackground.disableBackgroundExecution();
+        await MediaProjectionHelper.stopMediaProjectionService();
+      }
+
+      // Stop the monitoring timer
+      _screenShareMonitorTimer?.cancel();
+      _screenShareMonitorTimer = null;
+
+      // Ensure UI reflects stopped state
+      _localScreenSharingState = false;
+      _controller.isScreenSharing = false;
+      _controller.update([IsmCallView.updateId]);
+    } catch (e, st) {
+      IsmCallLog.error('Error disabling LiveKit screen share: $e', st);
     }
   }
 
@@ -222,7 +407,19 @@ mixin IsmCallOngoingMixin {
       );
       if (GetPlatform.isAndroid) {
         await FlutterBackground.disableBackgroundExecution();
+        await MediaProjectionHelper.stopMediaProjectionService();
       }
+
+      // Update local state
+      _localScreenSharingState = false;
+      _controller.isScreenSharing = false;
+
+      // Stop the monitoring timer
+      _screenShareMonitorTimer?.cancel();
+      _screenShareMonitorTimer = null;
+
+      // Force UI update so controls reflect stopped state
+      _controller.update([IsmCallView.updateId]);
     } catch (e, st) {
       IsmCallLog.error(e, st);
     } finally {
@@ -259,7 +456,8 @@ mixin IsmCallOngoingMixin {
 
     await Future.wait([
       if (!fromPushKit) ...[
-        IsmCallHelper.endCall(),
+        // Pass meetingId if available so the correct native notification ends
+        IsmCallHelper.endCall(meetingId: meetingId),
       ],
       (IsmCall.i.endCall ?? _controller.endCall).call(
         meetingId,

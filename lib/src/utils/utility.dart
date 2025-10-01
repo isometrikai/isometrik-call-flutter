@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:isometrik_call_flutter/isometrik_call_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class IsmCallUtility {
   const IsmCallUtility._();
@@ -157,5 +158,111 @@ class IsmCallUtility {
   /// Close any open snackbar
   static void closeSnackbar() {
     if (Get.isSnackbarOpen) Get.back<void>();
+  }
+
+  /// Check and request microphone permission.
+  /// Returns true when permission is granted.
+  static Future<bool> ensureMicrophonePermission() async {
+    if (GetPlatform.isWeb) {
+      return true;
+    }
+    final status = await Permission.microphone.status;
+    if (status.isGranted) return true;
+
+    // If permanently denied/restricted, show explanation and route to settings
+    if (status.isPermanentlyDenied || status.isRestricted) {
+      await _showPermissionSettingsDialog();
+      return false;
+    }
+
+    // Request permission
+    final req = await Permission.microphone.request();
+    if (req.isGranted) return true;
+
+    // If user permanently denied after request, prompt to open settings
+    if (req.isPermanentlyDenied || req.isRestricted) {
+      await _showPermissionSettingsDialog();
+    }
+    return false;
+  }
+
+  /// Check and request camera permission.
+  /// Returns true when permission is granted.
+  static Future<bool> ensureCameraPermission() async {
+    if (GetPlatform.isWeb) {
+      return true;
+    }
+    final status = await Permission.camera.status;
+    if (status.isGranted) return true;
+
+    // If permanently denied/restricted, show explanation and route to settings
+    if (status.isPermanentlyDenied || status.isRestricted) {
+      await _showCameraPermissionSettingsDialog();
+      return false;
+    }
+
+    // Request permission
+    final req = await Permission.camera.request();
+    if (req.isGranted) return true;
+
+    // If user permanently denied after request, prompt to open settings
+    if (req.isPermanentlyDenied || req.isRestricted) {
+      await _showCameraPermissionSettingsDialog();
+    }
+    return false;
+  }
+
+  static Future<void> _showPermissionSettingsDialog() async {
+    await Get.dialog(
+      CupertinoAlertDialog(
+        title: const Text('Microphone Permission Required'),
+        content: const Text(
+          'Please enable microphone access in Settings to unmute your mic.',
+        ),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: Get.back,
+            isDefaultAction: true,
+            child: const Text('Cancel'),
+          ),
+          CupertinoDialogAction(
+            onPressed: () async {
+              await openAppSettings();
+              Get.back();
+            },
+            isDefaultAction: true,
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    );
+  }
+
+  static Future<void> _showCameraPermissionSettingsDialog() async {
+    await Get.dialog(
+      CupertinoAlertDialog(
+        title: const Text('Camera Permission Required'),
+        content: const Text(
+          'Please enable camera access in Settings to turn on your camera.',
+        ),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: Get.back,
+            isDefaultAction: true,
+            child: const Text('Cancel'),
+          ),
+          CupertinoDialogAction(
+            onPressed: () async {
+              await openAppSettings();
+              Get.back();
+            },
+            isDefaultAction: true,
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    );
   }
 }

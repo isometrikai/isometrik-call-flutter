@@ -100,9 +100,13 @@ class VideoControl extends IsmCallUserControl {
                 IsmCallAssets.videoOff,
                 isActive: false,
               ),
-          onToggle: (value) {
-            onChange?.call(value);
-            Get.find<IsmCallController>().toggleVideo(value);
+          // Align behavior with MicControl: do not optimistically toggle UI
+          shouldUpdate: false,
+          onToggle: (_) {
+            final controller = Get.find<IsmCallController>();
+            final requested = !controller.isVideoOn;
+            onChange?.call(requested);
+            controller.toggleVideo(requested);
           },
           initiallyActive: isActive,
         );
@@ -129,9 +133,12 @@ class MicControl extends IsmCallUserControl {
                 IsmCallAssets.micOff,
                 isActive: false,
               ),
-          onToggle: (value) {
-            onChange?.call(value);
-            Get.find<IsmCallController>().toggleMic(value: value);
+          shouldUpdate: false,
+          onToggle: (_) {
+            final controller = Get.find<IsmCallController>();
+            final requested = !controller.isMicOn;
+            onChange?.call(requested);
+            controller.toggleMic(value: requested);
           },
           initiallyActive: isActive,
         );

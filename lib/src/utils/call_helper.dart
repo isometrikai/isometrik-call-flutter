@@ -309,6 +309,8 @@ class IsmCallHelper {
     }
 
     if ($callId.isNullOrEmpty) {
+      // Fallback: ensure any lingering native notifications are dismissed
+      unawaited(_endAllCalls());
       return;
     }
 
@@ -381,6 +383,12 @@ class IsmCallHelper {
         } else {
           unawaited(IsmCallChannelHandler.handleCallDeclined(call.id));
         }
+      }
+
+      // Ensure ongoing call is tracked on Android as well so we can
+      // correctly dismiss the native notification on call end.
+      if (isAccepted && GetPlatform.isAndroid) {
+        ongoingCall = call;
       }
 
       var meetingId = call.extra.meetingId;

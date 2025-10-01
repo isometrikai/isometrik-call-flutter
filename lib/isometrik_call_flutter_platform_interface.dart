@@ -3,7 +3,9 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 abstract class IsometrikCallFlutterPlatform extends PlatformInterface {
   /// Constructs a IsometrikCallFlutterPlatform.
-  IsometrikCallFlutterPlatform() : super(token: _token);
+  IsometrikCallFlutterPlatform() : super(token: _token) {
+    // This will be overridden in subclasses but we can log here
+  }
 
   static final Object _token = Object();
 
