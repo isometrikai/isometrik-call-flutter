@@ -144,8 +144,10 @@ extension TimeoutExtension on Timeouts {
     Duration? publish,
     Duration? peerConnection,
     Duration? iceRestart,
+    Duration? subscribe,
   }) =>
       Timeouts(
+        subscribe: subscribe ?? this.subscribe,
         connection: connection ?? this.connection,
         debounce: debounce ?? this.debounce,
         publish: publish ?? this.publish,
